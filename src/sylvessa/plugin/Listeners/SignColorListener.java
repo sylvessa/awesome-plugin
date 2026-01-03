@@ -1,0 +1,19 @@
+package sylvessa.plugin.Listeners;
+
+import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.block.SignChangeEvent;
+
+public class SignColorListener extends BlockListener {
+    private String translate(String s) {
+        return s.replace("\\\\", "§");
+    }
+
+    public void onSignChange(SignChangeEvent event) {
+        for(int i = 0; i < 4; i++) {
+            String line = event.getLine(i);
+            if(line == null) continue;
+
+            event.setLine(i, translate(line));
+        }
+    }
+}

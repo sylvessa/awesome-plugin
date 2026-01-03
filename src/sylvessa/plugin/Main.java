@@ -6,6 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.plugin.java.JavaPlugin;
 import sylvessa.plugin.Listeners.ChatListener;
 import sylvessa.plugin.Listeners.JoinListener;
+import sylvessa.plugin.Listeners.SignColorListener;
 import sylvessa.plugin.commands.PluginCommand;
 import sylvessa.plugin.discord.Bot;
 
@@ -92,6 +93,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, new ChatListener(), Event.Priority.Normal,this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, new JoinListener(this), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, new JoinListener(this), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.SIGN_CHANGE, new SignColorListener(), Event.Priority.Normal, this);
 
         discordBot = new Bot(this);
         discordBot.start();
