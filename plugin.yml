@@ -9,3 +9,5 @@ commands:
     description: Shows help info
   chatcolor:
     description: Lets you change your chat color.
+  playerlist:
+    description: yo

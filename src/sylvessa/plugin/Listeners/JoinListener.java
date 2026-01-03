@@ -26,18 +26,10 @@ public class JoinListener extends PlayerListener {
 
         String color = uc.getString("color", "f");
 
-        //event.getPlayer().sendMessage("you have joined " + (joins + 1) + " times");
-
-
-        event.setJoinMessage("§e"
-                +
-                (!color.equals("f") ? "§" + color : "")  // show color if  custom
-                +
+        event.setJoinMessage("§e" + (!color.equals("f") ? "§" + color : "")  +
                 name
                 +
-                "§e joined the game. §8(Joined " +
-                joins
-                + " time" + (joins != 1 ? "s" : "") + ")§f");
+                "§e joined the game. §8(Joined " + joins + " time" + (joins != 1 ? "s" : "") + ")§f");
     }
 
 
@@ -51,8 +43,12 @@ public class JoinListener extends PlayerListener {
             uc.save();
         }
 
+        String color = uc.getString("color", "f");
+
         plugin.getUserConfigs().remove(name);
 
         Log.info("Saved " + name + "'s data!");
+
+        event.setQuitMessage("§e" + (!color.equals("f") ? "§" + color : "") + name + "§e has left the game.");
     }
 }

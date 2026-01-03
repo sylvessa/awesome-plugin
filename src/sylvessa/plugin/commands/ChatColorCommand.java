@@ -3,7 +3,6 @@ package sylvessa.plugin.commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import sylvessa.plugin.Main;
-import sylvessa.plugin.commands.PluginCommand;
 import sylvessa.plugin.UserConfig;
 
 public class ChatColorCommand implements PluginCommand {
