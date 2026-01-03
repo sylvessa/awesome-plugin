@@ -11,3 +11,5 @@ commands:
     description: Lets you change your chat color.
   playerlist:
     description: yo
+  hat:
+    description: a
