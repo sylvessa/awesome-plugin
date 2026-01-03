@@ -7,3 +7,5 @@ commands:
     description: Fucjkkkui8954iy89534u8t3u4t3uioy5hguiyh045tg
   help:
     description: Shows help info
+  chatcolor:
+    description: Lets you change your chat color.

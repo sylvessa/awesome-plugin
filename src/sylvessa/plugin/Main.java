@@ -2,8 +2,11 @@ package sylvessa.plugin;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import sylvessa.plugin.Listeners.ChatListener;
+import sylvessa.plugin.Listeners.JoinListener;
 import sylvessa.plugin.commands.PluginCommand;
 
 import java.io.File;
@@ -13,9 +16,10 @@ import java.util.HashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-@SuppressWarnings("unused")
 public class Main extends JavaPlugin {
-    private final HashMap<String, PluginCommand> commands = new HashMap<>();
+    private static Main instance;
+    private static final HashMap<String, PluginCommand> commands = new HashMap<>();
+    private final HashMap<String, UserConfig> userConfigs = new HashMap<>();
 
     // bad bad bad!!!
     // should I move to manual registration?
@@ -47,8 +51,28 @@ public class Main extends JavaPlugin {
         }
     }
 
+    // helpers
+    public HashMap<String, UserConfig> getUserConfigs() {
+        return userConfigs;
+    }
 
+    public UserConfig getUserConfig(String playerName) {
+        return userConfigs.get(playerName.toLowerCase());
+    }
+
+    public static Main getInstance() {
+        return instance;
+    }
+
+    public static HashMap<String, PluginCommand> getCommands() {
+        return commands;
+    }
+
+
+
+    // binds
     public void onEnable() {
+        instance = this;
         Log.info("Initializing!");
 
         try {
@@ -58,14 +82,9 @@ public class Main extends JavaPlugin {
             Log.info("FAILED TO REGISTER COMMANDS");
         }
 
-        ChatListener chatListener = new ChatListener();
-        PluginManager pm = getServer().getPluginManager();
-        pm.registerEvent(
-                org.bukkit.event.Event.Type.PLAYER_CHAT,
-                chatListener,
-                org.bukkit.event.Event.Priority.Normal,
-                this
-        );
+        getServer().getPluginManager().registerEvent( Event.Type.PLAYER_CHAT, new ChatListener(), Event.Priority.Normal,this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, new JoinListener(this), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, new JoinListener(this), Event.Priority.Normal, this);
 
         Log.info("Done!");
     }

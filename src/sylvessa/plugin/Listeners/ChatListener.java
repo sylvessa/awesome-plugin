@@ -1,20 +1,20 @@
-package sylvessa.plugin;
+package sylvessa.plugin.Listeners;
 
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerChatEvent;
+import sylvessa.plugin.Main;
+import sylvessa.plugin.UserConfig;
 
 public class ChatListener extends PlayerListener {
-    public static String getPlayerColor(String username) {
-        switch(username.toLowerCase()) {
-            case "scorner": return "c";  // red
-            case "cirrusmutatus": return "d"; // pink
-            default: return "f"; // white
-        }
-    }
-
     public void onPlayerChat(PlayerChatEvent event) {
         String username = event.getPlayer().getName();
-        String color = getPlayerColor(username);
+
+        UserConfig uc = Main.getInstance().getUserConfig(username);
+
+        String color = "f";
+        if (uc != null) {
+            color = uc.getString("color", "f");
+        }
 
         String displayName = "§" + color + username + "§f";
 

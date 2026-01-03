@@ -6,6 +6,10 @@ public class TestCommand implements PluginCommand {
         return "testc";
     }
 
+    public boolean hidden() {
+        return true;
+    }
+
     public void execute(CommandSender sender, String[] args) {
         sender.sendMessage("Whats Good " + sender.getName());
     }
