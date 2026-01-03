@@ -1,0 +1,9 @@
+name: SylvessaPlugin
+main: sylvessa.plugin.Main
+version: b1.2_02
+
+commands:
+  testc:
+    description: Fucjkkkui8954iy89534u8t3u4t3uioy5hguiyh045tg
+  help:
+    description: Shows help info

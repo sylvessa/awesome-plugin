@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="uberbukkit">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dep/uberbukkit.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/dep/uberbukkit.jar!/" />
+    </SOURCES>
+  </library>
+</component>
