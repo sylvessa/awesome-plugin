@@ -1,6 +1,7 @@
 package sylvessa.plugin.commands;
 import org.bukkit.command.CommandSender;
 
+@SuppressWarnings("unused")
 public class TestCommand implements PluginCommand {
     public String name() {
         return "testc";

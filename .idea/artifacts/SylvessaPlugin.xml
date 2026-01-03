@@ -4,6 +4,7 @@
     <root id="archive" name="SylvessaPlugin.jar">
       <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
       <element id="module-output" name="UberBukkit Plugin" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/dep/JDA-6.2.1-withDependencies.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

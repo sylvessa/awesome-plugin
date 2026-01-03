@@ -1,25 +1,24 @@
 package sylvessa.plugin;
 
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserConfig {
+public class PluginConfig {
     private final Configuration config;
+    private final Map<String, Object> defaults = new HashMap<>();
 
-    public UserConfig(Player player, JavaPlugin plugin) {
-        Map<String, Object> defaults = new HashMap<>();
-        defaults.put("joins", 0);
-        defaults.put("color", "f");
+    public PluginConfig(Main plugin) {
+        defaults.put("discord.webhook-url", "");
+        defaults.put("discord.bot-token", "");
+        defaults.put("discord.channel-id", "");
 
-        File folder = new File(plugin.getDataFolder(), "users");
-        if(!folder.exists()) folder.mkdirs();
+        File dataFolder = plugin.getDataFolder();
+        if (!dataFolder.exists()) dataFolder.mkdirs();
 
-        File file = new File(folder, player.getName() + ".yml");
+        File file = new File(dataFolder, "config.yml");
         config = new Configuration(file);
         config.load();
 
@@ -32,11 +31,6 @@ public class UserConfig {
         config.save();
     }
 
-
-    public void set(String path, Object value) {
-        config.setProperty(path, value);
-    }
-
     public Object get(String path, Object def) {
         if(config.getAll().containsKey(path)) {
             return config.getProperty(path);
@@ -44,9 +38,14 @@ public class UserConfig {
         return def;
     }
 
+    public boolean getBoolean(String path, boolean def) {
+        Object val = get(path, def);
+        if(val instanceof Boolean) return (boolean) val;
+        return Boolean.parseBoolean(val.toString());
+    }
+
     public int getInt(String path, int def) {
         Object val = get(path, def);
-        if(val instanceof Integer) return (int) val;
         try { return Integer.parseInt(val.toString()); }
         catch(Exception e) { return def; }
     }
@@ -54,6 +53,10 @@ public class UserConfig {
     public String getString(String path, String def) {
         Object val = get(path, def);
         return val.toString();
+    }
+
+    public void set(String path, Object value) {
+        config.setProperty(path, value);
     }
 
     public void save() {

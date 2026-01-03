@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import sylvessa.plugin.Main;
 import sylvessa.plugin.UserConfig;
 
+@SuppressWarnings("unused")
 public class ChatColorCommand implements PluginCommand {
     public String name() {
         return "chatcolor";

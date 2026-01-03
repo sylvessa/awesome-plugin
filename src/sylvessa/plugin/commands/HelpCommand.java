@@ -3,6 +3,7 @@ package sylvessa.plugin.commands;
 import org.bukkit.command.CommandSender;
 import sylvessa.plugin.Main;
 
+@SuppressWarnings("unused")
 public class HelpCommand implements PluginCommand {
     public String name() {
         return "help";
