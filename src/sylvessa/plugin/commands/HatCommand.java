@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+@SuppressWarnings("unused")
 public class HatCommand implements PluginCommand {
     public String name() {
         return "hat";

@@ -13,3 +13,7 @@ commands:
     description: yo
   hat:
     description: a
+  sethome:
+    description: a
+  home:
+    description: a

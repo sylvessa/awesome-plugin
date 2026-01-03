@@ -51,6 +51,14 @@ public class UserConfig {
         catch(Exception e) { return def; }
     }
 
+    public double getDouble(String path, double def) {
+        Object val = get(path, def);
+        if(val instanceof Double) return (double) val;
+        if(val instanceof Integer) return ((Integer) val).doubleValue();
+        try { return Double.parseDouble(val.toString()); }
+        catch(Exception e) { return def; }
+    }
+
     public String getString(String path, String def) {
         Object val = get(path, def);
         return val.toString();
