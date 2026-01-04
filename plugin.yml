@@ -31,3 +31,5 @@ commands:
     description: a
   tptoggle:
     description: a
+  poop:
+    description: a

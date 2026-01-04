@@ -17,6 +17,7 @@ public class UserConfig {
         defaults.put("color", "f");
         defaults.put("home.world", null);
         defaults.put("tpa.enabled", true);
+        defaults.put("poop.last", 0);
 
         File folder = new File(plugin.getDataFolder(), "users");
         if(!folder.exists()) folder.mkdirs();
@@ -58,6 +59,24 @@ public class UserConfig {
         if(val instanceof Double) return (double) val;
         if(val instanceof Integer) return ((Integer) val).doubleValue();
         try { return Double.parseDouble(val.toString()); }
+        catch(Exception e) { return def; }
+    }
+
+    public float getFloat(String path, float def) {
+        Object val = get(path, def);
+        if(val instanceof Float) return (float) val;
+        if(val instanceof Double) return ((Double) val).floatValue();
+        if(val instanceof Integer) return ((Integer) val).floatValue();
+        try { return Float.parseFloat(val.toString()); }
+        catch(Exception e) { return def; }
+    }
+
+    public long getLong(String path, long def) {
+        Object val = get(path, def);
+        if(val instanceof Long) return (long) val;
+        if(val instanceof Integer) return ((Integer) val).longValue();
+        if(val instanceof Double) return ((Double) val).longValue();
+        try { return Long.parseLong(val.toString()); }
         catch(Exception e) { return def; }
     }
 
