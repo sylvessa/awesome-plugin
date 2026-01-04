@@ -63,7 +63,16 @@ public class Main extends JavaPlugin {
     }
 
     public UserConfig getUserConfig(String playerName) {
-        return userConfigs.get(playerName.toLowerCase());
+        String key = playerName.toLowerCase();
+        UserConfig uc = userConfigs.get(key);
+        if (uc != null) return uc;
+
+        File file = new File(getDataFolder(), "users" + File.separator + key + ".yml");
+        if (!file.exists()) return null;
+
+        uc = new UserConfig(playerName, this);
+        userConfigs.put(key, uc);
+        return uc;
     }
 
     public static Main getInstance() {

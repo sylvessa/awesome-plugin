@@ -11,18 +11,24 @@ import java.util.Map;
 public class UserConfig {
     private final Configuration config;
 
+    // legacy
     public UserConfig(Player player, JavaPlugin plugin) {
+        this(player.getName(), plugin);
+    }
+
+    public UserConfig(String playerName, JavaPlugin plugin) {
         Map<String, Object> defaults = new HashMap<>();
         defaults.put("joins", 0);
         defaults.put("color", "f");
         defaults.put("home.world", null);
+        defaults.put("home.public", false);
         defaults.put("tpa.enabled", true);
         defaults.put("poop.last", 0);
 
         File folder = new File(plugin.getDataFolder(), "users");
         if(!folder.exists()) folder.mkdirs();
 
-        File file = new File(folder, player.getName() + ".yml");
+        File file = new File(folder, playerName + ".yml");
         config = new Configuration(file);
         config.load();
 
@@ -34,7 +40,6 @@ public class UserConfig {
 
         config.save();
     }
-
 
     public void set(String path, Object value) {
         config.setProperty(path, value);
