@@ -57,8 +57,4 @@ public class Bot {
             Log.info("Discord bot shut down.");
         }
     }
-
-    public JDA getJda() {
-        return jda;
-    }
 }

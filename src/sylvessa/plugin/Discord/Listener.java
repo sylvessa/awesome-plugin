@@ -13,11 +13,21 @@ public class Listener extends ListenerAdapter {
 
     public void onMessageReceived(MessageReceivedEvent event) {
         if(!event.getChannel().getId().equals(channelId)) return;
-
         if(event.getAuthor().isBot()) return;
 
         String user = event.getAuthor().getGlobalName();
         String content = event.getMessage().getContentDisplay();
+
+        content = content.replaceAll(
+                "https?://(cdn\\.discordapp\\.com|media\\.discordapp\\.net|discord\\.com)/\\S+",
+                "[Attachment]"
+        );
+
+        if(!event.getMessage().getAttachments().isEmpty()) {
+            if(!content.contains("[Attachment]")) {
+                content = content + " [Attachment]";
+            }
+        }
 
         Log.info("[Discord][" + user + "] " + content);
 
