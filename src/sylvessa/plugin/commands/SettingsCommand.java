@@ -60,6 +60,6 @@ public class SettingsCommand implements PluginCommand {
             p.sendMessage("§7Type §e/settings <page> §7to view other pages.");
         }
 
-        p.sendMessage("§7To change a setting: §e/setting <alias> <value>");
+        p.sendMessage("§7To change a setting: §e/setting <name> <value>");
     }
 }
