@@ -16,7 +16,7 @@ public class HatCommand implements PluginCommand {
 
     public void execute(CommandSender sender, String[] args) {
         if(!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use this command.");
+            sender.sendMessage("§cOnly players can use this command.");
             return;
         }
 
@@ -24,7 +24,7 @@ public class HatCommand implements PluginCommand {
         ItemStack hand = player.getItemInHand();
 
         if (hand == null || hand.getTypeId() == 0) {
-            player.sendMessage("You must be holding an item.");
+            player.sendMessage("§cYou must be holding an item.");
             return;
         }
 

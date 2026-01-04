@@ -23,6 +23,8 @@ public class Main extends JavaPlugin {
     private Bot discordBot;
     private static final HashMap<String, PluginCommand> commands = new HashMap<>();
     private final HashMap<String, UserConfig> userConfigs = new HashMap<>();
+    private final HashMap<String, TpaRequest> tpaRequests = new HashMap<>();
+
 
     // bad bad bad!!!
     // should I move to manual registration?
@@ -73,6 +75,10 @@ public class Main extends JavaPlugin {
 
     public PluginConfig getPluginConfig() {
         return pluginConfig;
+    }
+
+    public HashMap<String, TpaRequest> getTpaRequests() {
+        return tpaRequests;
     }
 
 

@@ -15,6 +15,8 @@ public class UserConfig {
         Map<String, Object> defaults = new HashMap<>();
         defaults.put("joins", 0);
         defaults.put("color", "f");
+        defaults.put("home.world", null);
+        defaults.put("tpa.enabled", true);
 
         File folder = new File(plugin.getDataFolder(), "users");
         if(!folder.exists()) folder.mkdirs();
@@ -61,7 +63,16 @@ public class UserConfig {
 
     public String getString(String path, String def) {
         Object val = get(path, def);
+        if(val == null) return def;
         return val.toString();
+    }
+
+    public boolean getBoolean(String path, boolean def) {
+        Object val = get(path, def);
+        if(val instanceof Boolean) return (boolean) val;
+        if(val instanceof String) return Boolean.parseBoolean((String) val);
+        if(val instanceof Integer) return ((Integer) val) != 0;
+        return def;
     }
 
     public void save() {

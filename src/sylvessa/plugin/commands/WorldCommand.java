@@ -5,6 +5,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+@SuppressWarnings("unused")
 public class WorldCommand implements PluginCommand {
     public String name() {
         return "world";

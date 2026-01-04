@@ -19,26 +19,26 @@ public class HomeCommand implements PluginCommand {
 
     public void execute(CommandSender sender, String[] args) {
         if(!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use this command.");
+            sender.sendMessage("§cOnly players can use this command.");
             return;
         }
 
         Player p = (Player) sender;
         UserConfig uc = Main.getInstance().getUserConfig(p.getName());
         if(uc == null) {
-            sender.sendMessage("Config not loaded.");
+            sender.sendMessage("§cConfig not loaded.");
             return;
         }
 
         String worldName = uc.getString("home.world", null);
         if(worldName == null) {
-            sender.sendMessage("You do not have a home set.");
+            sender.sendMessage("§eYou do not have a home set.");
             return;
         }
 
         World w = Bukkit.getWorld(worldName);
         if(w == null) {
-            sender.sendMessage("Home world no longer exists.");
+            sender.sendMessage("§cHome world no longer exists.");
             return;
         }
 
@@ -51,6 +51,6 @@ public class HomeCommand implements PluginCommand {
         Location loc = new Location(w, x, y, z, yaw, pitch);
         p.teleport(loc);
 
-        sender.sendMessage("Teleported home.");
+        sender.sendMessage("§aTeleported home.");
     }
 }

@@ -19,5 +19,15 @@ commands:
     description: a
   createworld:
     description: a
-  world:
+#  world:
+#    description: a
+  tpa:
+    description: a
+  tpahere:
+    description: a
+  tpaccept:
+    description: a
+  tpdeny:
+    description: a
+  tptoggle:
     description: a

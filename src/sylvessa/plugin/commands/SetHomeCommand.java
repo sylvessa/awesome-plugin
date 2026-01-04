@@ -17,14 +17,14 @@ public class SetHomeCommand implements PluginCommand {
 
     public void execute(CommandSender sender, String[] args) {
         if(!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use this command.");
+            sender.sendMessage("§cOnly players can use this command.");
             return;
         }
 
         Player p = (Player)sender;
         UserConfig uc = Main.getInstance().getUserConfig(p.getName());
         if(uc == null) {
-            sender.sendMessage("Config not loaded.");
+            sender.sendMessage("§cConfig not loaded.");
             return;
         }
 
@@ -36,6 +36,6 @@ public class SetHomeCommand implements PluginCommand {
         uc.set("home.pitch", p.getLocation().getPitch());
         uc.save();
 
-        sender.sendMessage("Home set.");
+        sender.sendMessage("§aHome set.");
     }
 }
