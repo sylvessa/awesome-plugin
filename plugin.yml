@@ -29,7 +29,9 @@ commands:
     description: a
   tpdeny:
     description: a
-  tptoggle:
-    description: a
   poop:
+    description: a
+  settings:
+    description: a
+  setting:
     description: a

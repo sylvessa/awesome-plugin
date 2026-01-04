@@ -9,7 +9,7 @@ import sylvessa.plugin.Listeners.JoinListener;
 import sylvessa.plugin.Listeners.SignColorListener;
 import sylvessa.plugin.Listeners.TreeMobSpawnListener;
 import sylvessa.plugin.commands.PluginCommand;
-import sylvessa.plugin.discord.Bot;
+import sylvessa.plugin.Discord.Bot;
 
 import java.io.File;
 import java.net.URL;

@@ -1,4 +1,4 @@
-package sylvessa.plugin.discord;
+package sylvessa.plugin.Discord;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
