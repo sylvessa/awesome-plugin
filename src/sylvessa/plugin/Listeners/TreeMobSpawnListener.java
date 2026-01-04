@@ -23,7 +23,7 @@ public class TreeMobSpawnListener implements Listener {
                 return;
         }
 
-        Log.info("Mob spawned");
+        //Log.info("Mob spawned");
 
         Block b = event.getLocation().getBlock();
         boolean onLeaves = b.getType() == Material.LEAVES;
