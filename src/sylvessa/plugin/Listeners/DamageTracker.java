@@ -41,12 +41,9 @@ public class DamageTracker implements Listener {
         Entity damager = e.getDamager();
 
         if (damager instanceof Player) {
-            Log.info("Damaged by " + ((Player) damager).getName());
             lastAttacker.put(key, ((Player) damager).getName());
         } else if (damager instanceof LivingEntity) {
-            Log.info("Damaged by " + damager.toString());
             lastAttacker.put(key, formatMobName(damager));
-
         }
     }
 
