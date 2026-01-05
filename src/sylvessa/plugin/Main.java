@@ -4,10 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.java.JavaPlugin;
-import sylvessa.plugin.Listeners.ChatListener;
-import sylvessa.plugin.Listeners.JoinListener;
-import sylvessa.plugin.Listeners.SignColorListener;
-import sylvessa.plugin.Listeners.TreeMobSpawnListener;
+import sylvessa.plugin.Listeners.*;
 import sylvessa.plugin.commands.PluginCommand;
 import sylvessa.plugin.Discord.Bot;
 
@@ -111,6 +108,9 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, new JoinListener(this), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.SIGN_CHANGE, new SignColorListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvents(new TreeMobSpawnListener(), this);
+        getServer().getPluginManager().registerEvents(new DamageTracker(), this);
+        getServer().getPluginManager().registerEvents(new DeathListener(), this);
+
 
         discordBot = new Bot(this);
         discordBot.start();
