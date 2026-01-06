@@ -16,7 +16,7 @@ public class Listener extends ListenerAdapter {
         if(event.getAuthor().isBot()) return;
 
         String user = event.getAuthor().getGlobalName();
-        if(user == null || user.isEmpty() || user == "null")
+        if(user == null || user.isEmpty() || user.equals("null"))
             user = event.getAuthor().getName();
 
         String content = event.getMessage().getContentDisplay();
