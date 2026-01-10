@@ -5,6 +5,8 @@ import org.bukkit.event.player.PlayerChatEvent;
 import sylvessa.plugin.Log;
 import sylvessa.plugin.Main;
 import sylvessa.plugin.UserConfig;
+import sylvessa.plugin.Teams.TeamManager;
+import sylvessa.plugin.Types.Team;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -19,13 +21,25 @@ public class ChatListener extends PlayerListener {
         Main plugin = Main.getInstance();
         UserConfig uc = plugin.getUserConfig(username);
 
-        String color = "f";
+        String playerColor = "f";
         if(uc != null) {
-            color = uc.getString("color", "f");
+            playerColor = uc.getString("color", "f");
         }
 
-        String displayName = "§" + color + username + "§f";
-        event.setFormat("<" + displayName + "> " + message);
+        TeamManager teamManager = plugin.getTeamManager();
+        Team team = teamManager.getPlayerTeam(username);
+
+        String prefix = "";
+        if(team != null) {
+            String tag = team.getTag() != null ? team.getTag() : "";
+            String tagColor = team.getColor() != null ? team.getColor() : "f";
+            if(!tag.isEmpty()) {
+                prefix = "§" + tagColor + "[" + tag + "] §f";
+            }
+        }
+
+        String displayName = prefix + "§" + playerColor + username + "§f";
+        event.setFormat(displayName + ": " + message);
 
         String webhook = plugin.getPluginConfig().getString("discord.webhook-url", "");
         if(!webhook.isEmpty()) {
@@ -37,7 +51,6 @@ public class ChatListener extends PlayerListener {
         new Thread(() -> {
             try {
                 URL u = new URL(url);
-
                 HttpURLConnection con = (HttpURLConnection) u.openConnection();
 
                 con.setRequestMethod("POST");
@@ -46,11 +59,10 @@ public class ChatListener extends PlayerListener {
                 con.setDoOutput(true);
 
                 String json = "{\"username\":\"" + escape(username) + "\"," +
-                                "\"avatar_url\":\"https://mc-heads.net/avatar/" + escape(username) + "\"," +
-                                "\"content\":\"" + escape(message) + "\"}";
+                        "\"avatar_url\":\"https://mc-heads.net/avatar/" + escape(username) + "\"," +
+                        "\"content\":\"" + escape(message) + "\"}";
 
                 OutputStream os = con.getOutputStream();
-
                 os.write(json.getBytes(StandardCharsets.UTF_8));
                 os.flush();
                 os.close();
@@ -64,7 +76,6 @@ public class ChatListener extends PlayerListener {
             }
         }).start();
     }
-
 
     private String escape(String s) {
         return s.replace("\\", "\\\\")

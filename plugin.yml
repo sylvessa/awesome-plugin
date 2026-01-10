@@ -37,3 +37,11 @@ commands:
     description: a
   playerhomes:
     description: a
+  rtp:
+    description: a
+  give2:
+    description: a
+  team:
+    description: a
+  teams:
+    description: a

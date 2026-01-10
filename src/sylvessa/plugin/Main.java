@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.java.JavaPlugin;
 import sylvessa.plugin.Listeners.*;
+import sylvessa.plugin.Teams.TeamManager;
 import sylvessa.plugin.commands.PluginCommand;
 import sylvessa.plugin.Discord.Bot;
 
@@ -22,6 +23,7 @@ public class Main extends JavaPlugin {
     private static final HashMap<String, PluginCommand> commands = new HashMap<>();
     private final HashMap<String, UserConfig> userConfigs = new HashMap<>();
     private final HashMap<String, TpaRequest> tpaRequests = new HashMap<>();
+    private TeamManager teamManager;
 
 
     // bad bad bad!!!
@@ -88,6 +90,7 @@ public class Main extends JavaPlugin {
         return tpaRequests;
     }
 
+    public TeamManager getTeamManager() { return teamManager; }
 
     // binds
     public void onEnable() {
@@ -95,6 +98,7 @@ public class Main extends JavaPlugin {
 
         instance = this;
         pluginConfig = new PluginConfig(this);
+        teamManager = new TeamManager(this);
 
         try {
             autoRegisterCommands();
@@ -110,6 +114,8 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new TreeMobSpawnListener(), this);
         getServer().getPluginManager().registerEvents(new DamageTracker(), this);
         getServer().getPluginManager().registerEvents(new DeathListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerMilkListener(), this);
+
 
 
         discordBot = new Bot(this);
