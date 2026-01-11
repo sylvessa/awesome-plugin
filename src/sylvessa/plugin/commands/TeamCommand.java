@@ -149,6 +149,7 @@ public class TeamCommand implements PluginCommand {
         sender.sendMessage("§7/team settings tag <tag>");
         sender.sendMessage("§7/team settings color <0-9a-f>");
         sender.sendMessage("§7/team settings freejoin <true|false>");
+        sender.sendMessage("§7/team settings pvp <true|false>");
     }
 
     private void handleSettings(Team st, CommandSender sender, String[] args) {
@@ -227,6 +228,7 @@ public class TeamCommand implements PluginCommand {
             sender.sendMessage("§7/team settings tag <tag>");
             sender.sendMessage("§7/team settings color <0-9a-f>");
             sender.sendMessage("§7/team settings freejoin <true|false>");
+            sender.sendMessage("§7/team settings pvp <true|false>");
             sender.sendMessage("§7/team help - view all other commands");
         } else {
             sender.sendMessage("§7Use §e/team leave §7to leave this team.");

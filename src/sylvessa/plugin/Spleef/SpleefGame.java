@@ -3,14 +3,11 @@ package sylvessa.plugin.Spleef;
 import java.io.File;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.Note.Tone;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import sylvessa.plugin.ChunkGenerators.Void;
-import sylvessa.plugin.Log;
 import sylvessa.plugin.Main;
 
 public class SpleefGame {
@@ -36,6 +33,9 @@ public class SpleefGame {
     private final int airHeight = 4;
     private final int width = 20;
     private final int length = 20;
+
+    private Location noteBlockP1;
+    private Location noteBlockP2;
 
     public SpleefGame(Player p1, Player p2) {
         this.p1 = p1;
@@ -92,19 +92,23 @@ public class SpleefGame {
 
         int topLayerY = baseY + (layers - 1) * (layerHeight + airHeight);
 
-        double edgeOffsetX = width / 2.0 - 1;
-        double edgeOffsetZ = length / 2.0 - 1;
+        double centerX = 0.0;
+        double zOffset = length / 2.0 - 1;
 
-        Location loc1 = new Location(world, -edgeOffsetX, topLayerY + 1, -edgeOffsetZ);
-        loc1.setYaw(-90f);
+        Location loc1 = new Location(world, centerX, topLayerY + 1, -zOffset);
+        loc1.setYaw(0);
         loc1.setPitch(0f);
 
-        Location loc2 = new Location(world, edgeOffsetX, topLayerY + 1, edgeOffsetZ);
-        loc2.setYaw(90f);
+        Location loc2 = new Location(world, centerX, topLayerY + 1, zOffset);
+        loc2.setYaw(180f);
         loc2.setPitch(0f);
 
         p1.teleport(loc1);
         p2.teleport(loc2);
+
+        noteBlockP1 = placeNoteBlockBehind(p1);
+        noteBlockP2 = placeNoteBlockBehind(p2);
+
     }
 
     private void startCountdown() {
@@ -117,11 +121,20 @@ public class SpleefGame {
                         p2.sendMessage("§aGO");
                         Bukkit.getServer().getScheduler().cancelTask(taskId);
 
+                        p1.playNote(noteBlockP1, Instrument.PIANO, new Note((byte)1, Tone.C, false));
+                        p2.playNote(noteBlockP2, Instrument.PIANO, new Note((byte)1, Tone.C, false));
+
+                        noteBlockP1.getBlock().setType(Material.AIR);
+                        noteBlockP2.getBlock().setType(Material.AIR);
+
                         return;
                     }
 
                     p1.sendMessage("§e" + countdown);
                     p2.sendMessage("§e" + countdown);
+
+                    p1.playNote(noteBlockP1, Instrument.PIANO, new Note((byte)1, Tone.G, false));
+                    p2.playNote(noteBlockP2, Instrument.PIANO, new Note((byte)1, Tone.G, false));
                     countdown--;
                 },
                 0L,
@@ -129,6 +142,22 @@ public class SpleefGame {
         );
     }
 
+    private Location placeNoteBlockBehind(Player p) {
+        Location l = p.getLocation();
+        float yaw = l.getYaw();
+        int dx = 0;
+        int dz = 0;
+
+        if(yaw >= -45 && yaw < 45) dz = -1;
+        else if(yaw >= 45 && yaw < 135) dx = -1;
+        else if(yaw >= -135 && yaw < -45) dx = 1;
+        else dz = 1;
+
+        Location b = l.clone().add(dx, -2, dz);
+
+        b.getBlock().setType(Material.NOTE_BLOCK);
+        return b;
+    }
 
     public boolean isFrozen(Player p) {
         return !started && (p == p1 || p == p2);
@@ -189,10 +218,7 @@ public class SpleefGame {
 
         File worldFolder = new File(".", w.getName());
 
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
-            deleteWorld(worldFolder);
-        }, 100L);
-
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> deleteWorld(worldFolder), 100L);
     }
 
     private void deleteWorld(File f) {
