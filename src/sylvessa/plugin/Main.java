@@ -117,9 +117,6 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DeathListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerMilkListener(), this);
 
-
-
-
         discordBot = new Bot(this);
         discordBot.start();
 

@@ -1,7 +1,5 @@
 package sylvessa.plugin.Listeners;
 
-import net.minecraft.server.EntityTypes;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.LivingEntity;
@@ -9,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import sylvessa.plugin.Log;
 import sylvessa.plugin.Main;
 import sylvessa.plugin.Types.Team;
 
