@@ -45,6 +45,20 @@ public class SpleefListener implements Listener {
     }
 
     @EventHandler
+    public void onFallDamage(EntityDamageEvent e) {
+        if (!(e.getEntity() instanceof Player)) return;
+
+        Player p = (Player) e.getEntity();
+
+        SpleefGame game = SpleefManager.get(p);
+        if (game != null) {
+            if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                e.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
     public void onPlace(BlockPlaceEvent e) {
         if(SpleefManager.get(e.getPlayer()) != null) {
             e.setCancelled(true);

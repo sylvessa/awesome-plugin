@@ -50,6 +50,7 @@ public class DamageTracker implements Listener {
 
             if (vt == null || at == null) return;
             if (!vt.getName().equalsIgnoreCase(at.getName())) return;
+            if (vt.isPvpEnabled()) return;
 
             e.setCancelled(true);
         } else if (damager instanceof LivingEntity) {

@@ -30,6 +30,13 @@ public class SpleefGame {
     private Location locP1;
     private Location locP2;
 
+    private final int baseY = 64;
+    private final int layers = 3;
+    private final int layerHeight = 1;
+    private final int airHeight = 4;
+    private final int width = 20;
+    private final int length = 20;
+
     public SpleefGame(Player p1, Player p2) {
         this.p1 = p1;
         this.p2 = p2;
@@ -44,9 +51,18 @@ public class SpleefGame {
 
         world = Bukkit.getServer().createWorld(name, org.bukkit.World.Environment.NORMAL, new Void());
 
-        for(int x=-10; x<10; x++) {
-            for(int z=-10; z<10; z++) {
-                world.getBlockAt(x, 64, z).setType(org.bukkit.Material.SNOW_BLOCK);
+        int halfWidth = width / 2;
+        int halfLength = length / 2;
+
+        for(int l = 0; l < layers; l++) {
+            int y = baseY + l * (layerHeight + airHeight);
+            for(int x = -halfWidth; x < halfWidth; x++) {
+                for(int z = -halfLength; z < halfLength; z++) {
+                    world.getBlockAt(x, y, z).setType(Material.SNOW_BLOCK);
+                    for(int ay = 1; ay <= airHeight; ay++) {
+                        world.getBlockAt(x, y + ay, z).setType(Material.AIR);
+                    }
+                }
             }
         }
     }
@@ -74,11 +90,16 @@ public class SpleefGame {
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(),
                 () -> p2.setItemInHand(new ItemStack(277, 1, (short)0)), 1L);
 
-        Location loc1 = new Location(world, -8.5, 65, 0.5);
+        int topLayerY = baseY + (layers - 1) * (layerHeight + airHeight);
+
+        double edgeOffsetX = width / 2.0 - 1;
+        double edgeOffsetZ = length / 2.0 - 1;
+
+        Location loc1 = new Location(world, -edgeOffsetX, topLayerY + 1, -edgeOffsetZ);
         loc1.setYaw(-90f);
         loc1.setPitch(0f);
 
-        Location loc2 = new Location(world, 8.5, 65, 0.5);
+        Location loc2 = new Location(world, edgeOffsetX, topLayerY + 1, edgeOffsetZ);
         loc2.setYaw(90f);
         loc2.setPitch(0f);
 

@@ -142,6 +142,7 @@ public class TeamCommand implements PluginCommand {
         sender.sendMessage("§7Free Join: §e" + st.isFreeJoin());
         sender.sendMessage("§7Members: §e" + String.join(", ", st.getMembers()));
         sender.sendMessage("§7Invited: §e" + (st.getInvited().isEmpty() ? "None" : String.join(", ", st.getInvited())));
+        sender.sendMessage("§7PvP Enabled: §e" + (st.isPvpEnabled() ? "true" : "false"));
         sender.sendMessage("§7Tag Last Changed: §e" + (st.getLastTagChange() == 0 ? "Never" : new java.util.Date(st.getLastTagChange())));
 
         sender.sendMessage("§e--- Change Settings ---");
@@ -188,6 +189,11 @@ public class TeamCommand implements PluginCommand {
                 st.setFreeJoin(Boolean.parseBoolean(args[2]));
                 sender.sendMessage("§aTeam freejoin set to " + args[2]);
                 break;
+            case "pvp":
+                if (args.length < 3) { sender.sendMessage("§7Current PvP: " + st.isPvpEnabled()); return; }
+                st.setPvpEnabled(Boolean.parseBoolean(args[2]));
+                sender.sendMessage("§aTeam PvP set to " + args[2]);
+                break;
             default:
                 sender.sendMessage("§7Unknown setting.");
         }
@@ -214,6 +220,7 @@ public class TeamCommand implements PluginCommand {
         sender.sendMessage("§7Owner: §e" + t.getOwner());
         sender.sendMessage("§7Members (§e" + t.getMembers().size() + "§7): §e" + String.join(", ", t.getMembers()));
         sender.sendMessage("§7Free Join: §e" + t.isFreeJoin());
+        sender.sendMessage("§7PvP Enabled: §e" + (t.isPvpEnabled() ? "true" : "false"));
 
         if (t.getOwner().equals(p.getName())) {
             sender.sendMessage("§e--- Owner Commands ---");

@@ -18,6 +18,7 @@ public class Team {
     private boolean freeJoin;
     private final List<String> members;
     private final List<String> invited;
+    private boolean pvpEnabled;
     private long lastTagChange;
 
     public Team(File file) {
@@ -31,7 +32,8 @@ public class Team {
         this.color = config.getString("color", "f");
         this.freeJoin = config.getBoolean("freeJoin", false);
         this.members = config.getStringList("members", new ArrayList<>());
-        this.invited = config.getStringList("invited", new ArrayList<>()); // load invited
+        this.invited = config.getStringList("invited", new ArrayList<>());
+        this.pvpEnabled = config.getBoolean("pvp", false);
 
         String lastTag = config.getString("lastTagChange", "0");
         try { this.lastTagChange = Long.parseLong(lastTag); } catch(Exception e) { this.lastTagChange = 0; }
@@ -47,6 +49,7 @@ public class Team {
         this.members.add(owner);
         this.invited = new ArrayList<>();
         this.lastTagChange = 0;
+        this.pvpEnabled = false;
 
         File folder = new File(Main.getInstance().getDataFolder(), "/teams");
         if(!folder.exists()) folder.mkdirs();
@@ -63,6 +66,7 @@ public class Team {
         config.setProperty("color", color);
         config.setProperty("freeJoin", freeJoin);
         config.setProperty("members", members);
+        config.setProperty("pvp", pvpEnabled);
         config.setProperty("invited", invited);
         config.setProperty("lastTagChange", String.valueOf(lastTagChange));
         config.save();
@@ -85,12 +89,14 @@ public class Team {
     public void setColor(String color) { this.color = color; save(); }
     public boolean isFreeJoin() { return freeJoin; }
     public void setFreeJoin(boolean freeJoin) { this.freeJoin = freeJoin; save(); }
+    public boolean isPvpEnabled() { return pvpEnabled; }
+    public void setPvpEnabled(boolean pvpEnabled) { this.pvpEnabled = pvpEnabled; save(); }
 
     public List<String> getMembers() { return members; }
     public void addMember(String player) {
         if(!members.contains(player)) {
             members.add(player);
-            invited.remove(player); // auto-remove if accepted
+            invited.remove(player);
             save();
         }
     }
