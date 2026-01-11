@@ -8,7 +8,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -28,19 +27,6 @@ public class SpleefListener implements Listener {
             g.markFall(p);
         }
     }
-
-//    @EventHandler
-//    public void onBlockBreak(BlockBreakEvent e) {
-//        Player p = e.getPlayer();
-//        SpleefGame game = SpleefManager.get(p);
-//        if(game == null || !game.hasStarted()) return;
-//
-//        if(e.getBlock().getType() == Material.SNOW_BLOCK) {
-//            e.getBlock().setType(Material.AIR); // insta break
-//        }
-//
-//        e.setCancelled(true);
-//    }
 
     @EventHandler
     public void onBreak(BlockBreakEvent e) {
@@ -73,15 +59,6 @@ public class SpleefListener implements Listener {
             e.setDamage(0);
         }
     }
-//
-//    @EventHandler
-//    public void onHit(EntityDamageByEntityEvent e) {
-//        if(!(e.getDamager() instanceof Player)) return;
-//        Player p = (Player)e.getDamager();
-//        if(SpleefManager.get(p) != null) {
-//            e.setDamage(0);
-//        }
-//    }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
@@ -91,12 +68,4 @@ public class SpleefListener implements Listener {
             g.markFall(p);
         }
     }
-
-//    @EventHandler
-//    public void onPlayerItemDamage(PlayerItemDamageEvent e) {
-//        if (e.getPlayer().getWorld().getName().startsWith("spleef_")) {
-//            e.setCancelled(true);
-//        }
-//    }
-
 }
