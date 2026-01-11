@@ -45,3 +45,5 @@ commands:
     description: a
   teams:
     description: a
+  spleef:
+    description: a
