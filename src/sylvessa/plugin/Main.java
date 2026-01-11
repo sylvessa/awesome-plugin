@@ -111,10 +111,12 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, new JoinListener(this), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, new JoinListener(this), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.SIGN_CHANGE, new SignColorListener(), Event.Priority.Normal, this);
+
         getServer().getPluginManager().registerEvents(new TreeMobSpawnListener(), this);
         getServer().getPluginManager().registerEvents(new DamageTracker(), this);
         getServer().getPluginManager().registerEvents(new DeathListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerMilkListener(), this);
+
 
 
 

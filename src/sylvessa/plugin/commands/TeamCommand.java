@@ -166,6 +166,11 @@ public class TeamCommand implements PluginCommand {
                     return;
                 }
 
+                if (newTag.length() > 5) {
+                    sender.sendMessage("§cTags can only be up to 5 characters long.");
+                    return;
+                }
+
                 if (st.setTag(newTag)) {
                     sender.sendMessage("§aTag set to §e[" + newTag + "]");
                 } else {
@@ -240,7 +245,7 @@ public class TeamCommand implements PluginCommand {
         }
         return sb.toString();
     }
-    
+
     private boolean isTagTaken(String tag) {
         if (tag.isEmpty()) return false;
 

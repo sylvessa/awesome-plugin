@@ -10,6 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import sylvessa.plugin.Log;
+import sylvessa.plugin.Main;
+import sylvessa.plugin.Types.Team;
 
 import java.util.HashMap;
 
@@ -42,6 +44,17 @@ public class DamageTracker implements Listener {
 
         if (damager instanceof Player) {
             lastAttacker.put(key, ((Player) damager).getName());
+            Player attacker = (Player) e.getDamager();
+
+            if (victim.getName().equals(attacker.getName())) return;
+
+            Team vt = Main.getInstance().getTeamManager().getPlayerTeam(victim.getName());
+            Team at = Main.getInstance().getTeamManager().getPlayerTeam(attacker.getName());
+
+            if (vt == null || at == null) return;
+            if (!vt.getName().equalsIgnoreCase(at.getName())) return;
+
+            e.setCancelled(true);
         } else if (damager instanceof LivingEntity) {
             lastAttacker.put(key, formatMobName(damager));
         }
