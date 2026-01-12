@@ -2,6 +2,7 @@ package sylvessa.plugin.Duels;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 public abstract class DuelGame {
 
@@ -19,7 +20,7 @@ public abstract class DuelGame {
     public abstract DuelType getType();
     public abstract void start();
     public abstract void onMove(Player p);
-    public abstract void onDamage(Player p);
+    public abstract void onDamage(Player p, EntityDamageEvent e);
     public abstract void onQuit(Player p);
     public abstract boolean canBreak(Player p);
     public abstract boolean canPlace(Player p);

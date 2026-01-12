@@ -7,6 +7,7 @@ import org.bukkit.*;
 import org.bukkit.Note.Tone;
 import org.bukkit.entity.Player;
 
+import org.bukkit.event.entity.EntityDamageEvent;
 import sylvessa.plugin.ChunkGenerators.Void;
 import sylvessa.plugin.Duels.*;
 import sylvessa.plugin.Main;
@@ -157,7 +158,7 @@ public class SumoDuel extends DuelGame {
         }
     }
 
-    public void onDamage(Player p) {
+    public void onDamage(Player p, EntityDamageEvent e) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(
                 Main.getInstance(),
                 () -> {

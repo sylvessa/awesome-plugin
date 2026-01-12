@@ -35,7 +35,7 @@ public class DuelListener implements Listener {
         if(!(e.getEntity() instanceof Player)) return;
         Player p = (Player)e.getEntity();
         DuelGame g = DuelManager.get(p);
-        if(g != null) g.onDamage(p);
+        if(g != null) g.onDamage(p, e);
     }
 
     @EventHandler

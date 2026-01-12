@@ -6,6 +6,7 @@ import java.util.Random;
 import org.bukkit.*;
 import org.bukkit.Note.Tone;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 import sylvessa.plugin.ChunkGenerators.Void;
@@ -186,15 +187,8 @@ public class SpleefDuel extends DuelGame {
         }
     }
 
-    public void onDamage(Player p) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(
-                Main.getInstance(),
-                () -> {
-                    p.setHealth(20);
-                    p.setFireTicks(0);
-                },
-                1L
-        );
+    public void onDamage(Player p, EntityDamageEvent e) {
+        e.setCancelled(true);
     }
 
     public boolean canBreak(Player p) {
