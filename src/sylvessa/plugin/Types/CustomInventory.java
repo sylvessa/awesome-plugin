@@ -1,8 +1,10 @@
 package sylvessa.plugin.Types;
 
 import net.minecraft.server.*;
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import sylvessa.plugin.Main;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,9 +18,11 @@ public class CustomInventory {
     private final String title;
     private final ItemStack[] items;
     private final Map<Integer, Consumer<Player>> callbacks = new HashMap<>();
-    private Consumer<Player> closeCallback = null; // <-- added
+    private Consumer<Player> closeCallback = null;
     private final IInventory inv;
     private boolean readOnly = false;
+
+    private int windowId;
 
     public CustomInventory(String title, int size) {
         this.size = size;
@@ -30,11 +34,7 @@ public class CustomInventory {
             public ItemStack getItem(int i) { return items[i]; }
             public void setItem(int i, ItemStack itemstack) { items[i] = itemstack; }
             public String getName() { return title; }
-            public boolean c(EntityHuman entityhuman) { return true; }
             public void update() {}
-            public boolean a(int i, ItemStack itemstack) { items[i] = itemstack; return true; }
-            public void startOpen() {}
-            public void closeContainer() {}
             public ItemStack splitStack(int i, int j) {
                 if (items[i] != null) {
                     ItemStack stack = items[i];
@@ -43,7 +43,6 @@ public class CustomInventory {
                 }
                 return null;
             }
-            public ItemStack splitWithoutUpdate(int i) { return null; }
             public int getMaxStackSize() { return 64; }
             public boolean a_(EntityHuman entityhuman) { return true; }
             public ItemStack[] getContents() { return items; }
@@ -70,46 +69,51 @@ public class CustomInventory {
         return items[slot];
     }
 
-    public void open(Player p) {
-        EntityPlayer ep = ((CraftPlayer) p).getHandle();
+    public void open(final Player p) {
+        final EntityPlayer ep = ((CraftPlayer) p).getHandle();
+        windowId = nextWindowId++;
 
         ContainerChest container = new ContainerChest(ep.inventory, inv) {
             @Override
             public ItemStack a(int slotNum, int button, boolean shift, EntityHuman human) {
                 if (human instanceof EntityPlayer) {
-                    Player bukkitPlayer = (Player)((EntityPlayer) human).getBukkitEntity();
+                    Player bukkitPlayer = (Player) human.getBukkitEntity();
                     Consumer<Player> cb = callbacks.get(slotNum);
                     if (cb != null) cb.accept(bukkitPlayer);
 
-                    if (readOnly) {
-                        return null;
-                    }
+                    if (readOnly) return null;
                 }
                 return super.a(slotNum, button, shift, human);
             }
-
-            @Override
-            public boolean b(EntityHuman human) {
-                boolean b = super.b(human);
-                if (closeCallback != null && human instanceof EntityPlayer && !b) {
-                    Player p = (Player)((EntityPlayer) human).getBukkitEntity();
-                    closeCallback.accept(p);
-                }
-                return b;
-            }
         };
 
-
-        int windowId = nextWindowId++;
         container.windowId = windowId;
         ep.activeContainer = container;
 
-        Packet100OpenWindow packet = new Packet100OpenWindow(windowId, 0, inv.getName(), inv.getSize());
-        ep.netServerHandler.sendPacket(packet);
+        Packet100OpenWindow openPacket = new Packet100OpenWindow(windowId, 0, inv.getName(), inv.getSize());
+        ep.netServerHandler.sendPacket(openPacket);
 
         for (int i = 0; i < inv.getSize(); i++) {
             Packet103SetSlot slotPacket = new Packet103SetSlot(windowId, i, inv.getItem(i));
             ep.netServerHandler.sendPacket(slotPacket);
+        }
+
+        // theres no proper way to like, detect when closed
+        // for now do polling
+        if (closeCallback != null) {
+            final int[] taskId = new int[1];
+            taskId[0] = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(
+                    Main.getInstance(),
+                    () -> {
+                        EntityPlayer currentEP = ((CraftPlayer) p).getHandle();
+                        if (currentEP.activeContainer.windowId != windowId) {
+                            closeCallback.accept(p);
+                            Bukkit.getServer().getScheduler().cancelTask(taskId[0]);
+                        }
+                    },
+                    1L,
+                    1L
+            );
         }
     }
 }

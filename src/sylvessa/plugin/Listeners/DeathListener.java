@@ -1,6 +1,10 @@
 package sylvessa.plugin.Listeners;
 
+import net.minecraft.server.EntityPlayer;
+import net.minecraft.server.Packet9Respawn;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;

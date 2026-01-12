@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import sylvessa.plugin.Main;
 
 public class SpleefListener implements Listener {
     @EventHandler
@@ -70,7 +71,11 @@ public class SpleefListener implements Listener {
         if(!(e.getEntity() instanceof Player)) return;
         Player p = (Player)e.getEntity();
         if(SpleefManager.get(p) != null) {
-            e.setDamage(0);
+            //e.setDamage(0);
+            Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
+                p.setHealth(20);
+                p.setFireTicks(0);
+            }, 1L);
         }
     }
 

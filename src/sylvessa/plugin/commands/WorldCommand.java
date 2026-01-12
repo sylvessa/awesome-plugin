@@ -5,6 +5,8 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
+
 @SuppressWarnings("unused")
 public class WorldCommand implements PluginCommand {
     public String name() {
@@ -31,7 +33,7 @@ public class WorldCommand implements PluginCommand {
             return;
         }
 
-        if (args[0] == "world" || args[0] == "world_nether") {
+        if (Objects.equals(args[0], "world") || Objects.equals(args[0], "world_nether")) {
             sender.sendMessage("world not found");
             return;
         }

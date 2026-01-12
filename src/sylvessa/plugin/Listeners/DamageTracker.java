@@ -1,5 +1,8 @@
 package sylvessa.plugin.Listeners;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.LivingEntity;
@@ -29,10 +32,24 @@ public class DamageTracker implements Listener {
         if (!(event.getEntity() instanceof Player)) return;
 
         Player victim = (Player) event.getEntity();
+
         String key = victim.getName().toLowerCase();
 
         lastCause.put(key, event.getCause());
         lastAttacker.remove(key);
+
+//        double finalHealth = victim.getHealth() - event.getDamage();
+//
+//        if (finalHealth <= 0) {
+//            event.setCancelled(true);
+//
+//            victim.setHealth(20);
+//            victim.setFireTicks(0);
+//
+//            World spawnWorld = Bukkit.getWorlds().get(0);
+//            Location spawnLoc = spawnWorld.getSpawnLocation();
+//            victim.teleport(spawnLoc);
+//        }
 
         if (!(event instanceof EntityDamageByEntityEvent)) return;
 
