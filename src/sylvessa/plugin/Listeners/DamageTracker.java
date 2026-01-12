@@ -10,6 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import sylvessa.plugin.Duels.DuelGame;
+import sylvessa.plugin.Duels.DuelManager;
 import sylvessa.plugin.Main;
 import sylvessa.plugin.Types.Team;
 
@@ -68,6 +70,9 @@ public class DamageTracker implements Listener {
             if (vt == null || at == null) return;
             if (!vt.getName().equalsIgnoreCase(at.getName())) return;
             if (vt.isPvpEnabled()) return;
+
+            DuelGame fromGame = DuelManager.get(victim);
+            if (fromGame != null) return;
 
             e.setCancelled(true);
         } else if (damager instanceof LivingEntity) {
