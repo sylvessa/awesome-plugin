@@ -3,9 +3,9 @@ package sylvessa.plugin.commands;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import sylvessa.plugin.Duels.DuelGame;
+import sylvessa.plugin.Duels.DuelManager;
 import sylvessa.plugin.Main;
-import sylvessa.plugin.Spleef.SpleefGame;
-import sylvessa.plugin.Spleef.SpleefManager;
 import sylvessa.plugin.TpaRequest;
 
 @SuppressWarnings("unused")
@@ -18,9 +18,9 @@ public class TpacceptCommand implements PluginCommand {
 
         Player target = (Player) sender;
 
-        SpleefGame fromGame = SpleefManager.get(target);
+        DuelGame fromGame = DuelManager.get(target);
         if (fromGame != null) {
-            target.sendMessage("§cYou cannot use this command while in a Spleef game!");
+            target.sendMessage("§cYou cannot use this command while in a duel!");
             return;
         }
 

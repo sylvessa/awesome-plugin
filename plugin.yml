@@ -49,3 +49,5 @@ commands:
     description: a
   summon:
     description: a
+  duel:
+    description: a

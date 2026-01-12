@@ -3,9 +3,9 @@ package sylvessa.plugin.commands;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import sylvessa.plugin.Duels.DuelGame;
+import sylvessa.plugin.Duels.DuelManager;
 import sylvessa.plugin.Main;
-import sylvessa.plugin.Spleef.SpleefGame;
-import sylvessa.plugin.Spleef.SpleefManager;
 import sylvessa.plugin.TpaRequest;
 import sylvessa.plugin.UserConfig;
 
@@ -23,9 +23,9 @@ public class TpaHereCommand implements PluginCommand {
 
         Player from = (Player) sender;
 
-        SpleefGame fromGame = SpleefManager.get(from);
+        DuelGame fromGame = DuelManager.get(from);
         if (fromGame != null) {
-            from.sendMessage("§cYou cannot use this command while in a Spleef game!");
+            from.sendMessage("§cYou cannot use this command while in a duel!");
             return;
         }
 
@@ -41,9 +41,9 @@ public class TpaHereCommand implements PluginCommand {
             return;
         }
 
-        SpleefGame toGame = SpleefManager.get(to);
+        DuelGame toGame = DuelManager.get(to);
         if (toGame != null) {
-            from.sendMessage("§cThat player is in a Spleef game and cannot receive TPA requests.");
+            from.sendMessage("§cThat player is in a duel and cannot receive TPA requests.");
             return;
         }
 

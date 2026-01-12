@@ -2,9 +2,9 @@ package sylvessa.plugin.commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import sylvessa.plugin.Duels.DuelGame;
+import sylvessa.plugin.Duels.DuelManager;
 import sylvessa.plugin.Main;
-import sylvessa.plugin.Spleef.SpleefGame;
-import sylvessa.plugin.Spleef.SpleefManager;
 import sylvessa.plugin.UserConfig;
 
 @SuppressWarnings("unused")
@@ -25,9 +25,9 @@ public class SetHomeCommand implements PluginCommand {
 
         Player p = (Player)sender;
 
-        SpleefGame fromGame = SpleefManager.get(p);
+        DuelGame fromGame = DuelManager.get(p);
         if (fromGame != null) {
-            p.sendMessage("§cYou cannot use this command while in a Spleef game!");
+            p.sendMessage("§cYou cannot use this command while in a duel!");
             return;
         }
 

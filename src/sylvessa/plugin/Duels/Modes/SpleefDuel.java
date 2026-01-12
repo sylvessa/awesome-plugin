@@ -1,4 +1,4 @@
-package sylvessa.plugin.Spleef;
+package sylvessa.plugin.Duels.Modes;
 
 import java.io.File;
 import java.util.Random;
@@ -7,16 +7,13 @@ import org.bukkit.*;
 import org.bukkit.Note.Tone;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
 import sylvessa.plugin.ChunkGenerators.Void;
+import sylvessa.plugin.Duels.*;
 import sylvessa.plugin.Main;
 
-public class SpleefGame {
+public class SpleefDuel extends DuelGame {
 
-    private final Player p1;
-    private final Player p2;
-    private World world;
-    private boolean started;
-    private boolean finished;
     private int countdown = 5;
     private int taskId = -1;
 
@@ -37,9 +34,15 @@ public class SpleefGame {
     private Location noteBlockP1;
     private Location noteBlockP2;
 
-    public SpleefGame(Player p1, Player p2) {
-        this.p1 = p1;
-        this.p2 = p2;
+    public SpleefDuel(Player p1, Player p2) {
+        super(p1, p2);
+    }
+
+    public DuelType getType() {
+        return DuelType.SPLEEF;
+    }
+
+    public void start() {
         createWorld();
         buildArena();
         preparePlayers();
@@ -47,9 +50,8 @@ public class SpleefGame {
     }
 
     private void createWorld() {
-        String name = "spleef_" + new Random().nextInt(1000000);
-
-        world = Bukkit.getServer().createWorld(name, org.bukkit.World.Environment.NORMAL, new Void());
+        String name = "duel_spleef_" + new Random().nextInt(1000000);
+        world = Bukkit.createWorld(name, World.Environment.NORMAL, new Void());
 
         int halfWidth = width / 2;
         int halfLength = length / 2;
@@ -85,48 +87,47 @@ public class SpleefGame {
         p1.getInventory().clear();
         p2.getInventory().clear();
 
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(),
-                () -> p1.setItemInHand(new ItemStack(277, 1, (short)0)), 1L);
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(),
-                () -> p2.setItemInHand(new ItemStack(277, 1, (short)0)), 1L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(
+                Main.getInstance(),
+                () -> p1.setItemInHand(new ItemStack(277, 1, (short)0)),
+                1L
+        );
+        Bukkit.getScheduler().scheduleSyncDelayedTask(
+                Main.getInstance(),
+                () -> p2.setItemInHand(new ItemStack(277, 1, (short)0)),
+                1L
+        );
 
         int topLayerY = baseY + (layers - 1) * (layerHeight + airHeight);
-
         double centerX = 0.0;
         double zOffset = length / 2.0 - 1;
 
-        Location loc1 = new Location(world, centerX, topLayerY + 1, -zOffset);
-        loc1.setYaw(0);
-        loc1.setPitch(0f);
+        Location l1 = new Location(world, centerX, topLayerY + 1, -zOffset, 0f, 0f);
+        Location l2 = new Location(world, centerX, topLayerY + 1, zOffset, 180f, 0f);
 
-        Location loc2 = new Location(world, centerX, topLayerY + 1, zOffset);
-        loc2.setYaw(180f);
-        loc2.setPitch(0f);
-
-        p1.teleport(loc1);
-        p2.teleport(loc2);
+        p1.teleport(l1);
+        p2.teleport(l2);
 
         noteBlockP1 = placeNoteBlockBehind(p1);
         noteBlockP2 = placeNoteBlockBehind(p2);
-
     }
 
     private void startCountdown() {
-        taskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(
+        taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(
                 Main.getInstance(),
                 () -> {
                     if(countdown == 0) {
                         started = true;
                         p1.sendMessage("§aGO");
                         p2.sendMessage("§aGO");
-                        Bukkit.getServer().getScheduler().cancelTask(taskId);
+
+                        Bukkit.getScheduler().cancelTask(taskId);
 
                         p1.playNote(noteBlockP1, Instrument.PIANO, new Note((byte)1, Tone.C, false));
                         p2.playNote(noteBlockP2, Instrument.PIANO, new Note((byte)1, Tone.C, false));
 
                         noteBlockP1.getBlock().setType(Material.AIR);
                         noteBlockP2.getBlock().setType(Material.AIR);
-
                         return;
                     }
 
@@ -135,6 +136,7 @@ public class SpleefGame {
 
                     p1.playNote(noteBlockP1, Instrument.PIANO, new Note((byte)1, Tone.G, false));
                     p2.playNote(noteBlockP2, Instrument.PIANO, new Note((byte)1, Tone.G, false));
+
                     countdown--;
                 },
                 0L,
@@ -154,24 +156,22 @@ public class SpleefGame {
         else dz = 1;
 
         Location b = l.clone().add(dx, -2, dz);
-
         b.getBlock().setType(Material.NOTE_BLOCK);
         return b;
     }
 
-    public boolean isFrozen(Player p) {
-        return !started && (p == p1 || p == p2);
+    public void onMove(Player p) {
+        if(!started && isParticipant(p)) {
+            p.teleport(p.getLocation());
+            return;
+        }
+
+        if(started && !finished && p.getWorld() == world && p.getLocation().getY() < 50) {
+            markFall(p);
+        }
     }
 
-    public boolean hasStarted() {
-        return started;
-    }
-
-    public boolean checkFall(Player p) {
-        return started && !finished && p.getWorld() == world && p.getLocation().getY() < 50;
-    }
-
-    public void markFall(Player p) {
+    private void markFall(Player p) {
         if(finished) return;
 
         if(p == p1) p1Fell = true;
@@ -191,11 +191,31 @@ public class SpleefGame {
 
             Bukkit.broadcastMessage("§a" + winner.getName() + " won a spleef duel against " + loser.getName());
 
-            makeBox(loser.getLocation());
-            makeBox(winner.getLocation());
-
             cleanup();
         }
+    }
+
+    public void onDamage(Player p) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(
+                Main.getInstance(),
+                () -> {
+                    p.setHealth(20);
+                    p.setFireTicks(0);
+                },
+                1L
+        );
+    }
+
+    public boolean canBreak(Player p) {
+        return started && world == p.getWorld() && p.getLocation().getBlock().getType() == Material.SNOW_BLOCK;
+    }
+
+    public boolean canPlace(Player p) {
+        return false;
+    }
+
+    public void onQuit(Player p) {
+        markFall(p);
     }
 
     private void cleanup() {
@@ -211,14 +231,17 @@ public class SpleefGame {
         p1.getInventory().setContents(inv1);
         p2.getInventory().setContents(inv2);
 
-        SpleefManager.end(this);
+        DuelManager.end(this);
 
         World w = world;
-        Bukkit.getServer().unloadWorld(w, true);
+        Bukkit.unloadWorld(w, true);
 
-        File worldFolder = new File(".", w.getName());
-
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> deleteWorld(worldFolder), 100L);
+        File folder = new File(".", w.getName());
+        Bukkit.getScheduler().scheduleSyncDelayedTask(
+                Main.getInstance(),
+                () -> deleteWorld(folder),
+                100L
+        );
     }
 
     private void deleteWorld(File f) {
@@ -227,22 +250,4 @@ public class SpleefGame {
         }
         f.delete();
     }
-
-
-    private void makeBox(Location l) {
-        int x = l.getBlockX();
-        int y = 70;
-        int z = l.getBlockZ();
-
-        for(int dx = -1; dx <= 1; dx++) {
-            for(int dy = 0; dy <= 2; dy++) {
-                for(int dz = -1; dz <= 1; dz++) {
-                    if(dx == 0 && dy == 1 && dz == 0) continue;
-                    l.getWorld().getBlockAt(x + dx, y + dy, z + dz).setType(Material.GLASS);
-                }
-            }
-        }
-    }
-    public Player getP1() { return p1; }
-    public Player getP2() { return p2; }
 }

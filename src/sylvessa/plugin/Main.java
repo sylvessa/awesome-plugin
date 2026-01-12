@@ -4,8 +4,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.java.JavaPlugin;
+import sylvessa.plugin.Duels.DuelListener;
 import sylvessa.plugin.Listeners.*;
-import sylvessa.plugin.Spleef.SpleefListener;
 import sylvessa.plugin.Teams.TeamManager;
 import sylvessa.plugin.commands.PluginCommand;
 import sylvessa.plugin.Discord.Bot;
@@ -108,7 +108,7 @@ public class Main extends JavaPlugin {
             Log.info("FAILED TO REGISTER COMMANDS");
         }
 
-        getServer().getPluginManager().registerEvents(new SpleefListener(), this);
+        getServer().getPluginManager().registerEvents(new DuelListener(), this);
 
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, new ChatListener(), Event.Priority.Normal,this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, new JoinListener(this), Event.Priority.Normal, this);
