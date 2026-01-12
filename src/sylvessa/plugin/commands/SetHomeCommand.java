@@ -3,6 +3,8 @@ package sylvessa.plugin.commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import sylvessa.plugin.Main;
+import sylvessa.plugin.Spleef.SpleefGame;
+import sylvessa.plugin.Spleef.SpleefManager;
 import sylvessa.plugin.UserConfig;
 
 @SuppressWarnings("unused")
@@ -22,6 +24,13 @@ public class SetHomeCommand implements PluginCommand {
         }
 
         Player p = (Player)sender;
+
+        SpleefGame fromGame = SpleefManager.get(p);
+        if (fromGame != null) {
+            p.sendMessage("§cYou cannot use this command while in a Spleef game!");
+            return;
+        }
+
         UserConfig uc = Main.getInstance().getUserConfig(p.getName());
         if(uc == null) {
             sender.sendMessage("§cConfig not loaded.");

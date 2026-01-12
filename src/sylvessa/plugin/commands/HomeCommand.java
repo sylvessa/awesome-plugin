@@ -6,6 +6,8 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import sylvessa.plugin.Main;
+import sylvessa.plugin.Spleef.SpleefGame;
+import sylvessa.plugin.Spleef.SpleefManager;
 import sylvessa.plugin.UserConfig;
 
 public class HomeCommand implements PluginCommand {
@@ -25,6 +27,12 @@ public class HomeCommand implements PluginCommand {
         }
 
         Player p = (Player) sender;
+
+        SpleefGame fromGame = SpleefManager.get(p);
+        if (fromGame != null) {
+            p.sendMessage("§cYou cannot use this command while in a Spleef game!");
+            return;
+        }
 
         // /home -> own home
         if (args.length == 0) {

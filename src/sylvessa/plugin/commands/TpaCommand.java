@@ -5,6 +5,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import sylvessa.plugin.Log;
 import sylvessa.plugin.Main;
+import sylvessa.plugin.Spleef.SpleefGame;
+import sylvessa.plugin.Spleef.SpleefManager;
 import sylvessa.plugin.TpaRequest;
 import sylvessa.plugin.UserConfig;
 
@@ -21,6 +23,13 @@ public class TpaCommand implements PluginCommand {
         }
 
         Player from = (Player) sender;
+
+        SpleefGame fromGame = SpleefManager.get(from);
+        if (fromGame != null) {
+            from.sendMessage("§cYou cannot use this command while in a Spleef game!");
+            return;
+        }
+
         Player to = Bukkit.getPlayer(args[0]);
         if(to == null || from == to) {
             sender.sendMessage("§cPlayer not found.");
@@ -33,9 +42,14 @@ public class TpaCommand implements PluginCommand {
             return;
         }
 
+        SpleefGame toGame = SpleefManager.get(to);
+        if (toGame != null) {
+            from.sendMessage("§cThat player is in a Spleef game and cannot receive TPA requests.");
+            return;
+        }
+
         Main.getInstance().getTpaRequests()
                 .put(to.getName().toLowerCase(), new TpaRequest(from.getName(), false));
-
 
         UserConfig fromUc = Main.getInstance().getUserConfig(from.getName());
         String color = "f";

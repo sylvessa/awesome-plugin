@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import sylvessa.plugin.Main;
+import sylvessa.plugin.Spleef.SpleefGame;
+import sylvessa.plugin.Spleef.SpleefManager;
 import sylvessa.plugin.TpaRequest;
 
 @SuppressWarnings("unused")
@@ -15,6 +17,13 @@ public class TpacceptCommand implements PluginCommand {
         if(!(sender instanceof Player)) return;
 
         Player target = (Player) sender;
+
+        SpleefGame fromGame = SpleefManager.get(target);
+        if (fromGame != null) {
+            target.sendMessage("§cYou cannot use this command while in a Spleef game!");
+            return;
+        }
+
         TpaRequest req = Main.getInstance().getTpaRequests()
                 .remove(target.getName().toLowerCase());
 
