@@ -6,6 +6,8 @@ import java.util.Random;
 import org.bukkit.*;
 import org.bukkit.Note.Tone;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,12 +20,8 @@ public class SpleefDuel extends DuelGame {
     private int countdown = 5;
     private int taskId = -1;
 
-    private ItemStack[] inv1;
-    private ItemStack[] inv2;
     private boolean p1Fell;
     private boolean p2Fell;
-    private Location locP1;
-    private Location locP2;
 
     private final int baseY = 64;
     private final int layers = 3;
@@ -99,6 +97,9 @@ public class SpleefDuel extends DuelGame {
 
         p1.teleport(l1);
         p2.teleport(l2);
+
+        p1.setHealth(20);
+        p2.setHealth(20);
 
         noteBlockP1 = placeNoteBlockBehind(p1);
         noteBlockP2 = placeNoteBlockBehind(p2);
@@ -191,11 +192,11 @@ public class SpleefDuel extends DuelGame {
         e.setCancelled(true);
     }
 
-    public boolean canBreak(Player p) {
+    public boolean canBreak(Player p, BlockBreakEvent e) {
         return started;
     }
 
-    public boolean canPlace(Player p) {
+    public boolean canPlace(Player p, BlockPlaceEvent e) {
         return false;
     }
 

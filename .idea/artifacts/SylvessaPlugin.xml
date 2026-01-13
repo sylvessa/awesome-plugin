@@ -5,6 +5,9 @@
       <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
       <element id="module-output" name="UberBukkit Plugin" />
       <element id="extracted-dir" path="$PROJECT_DIR$/dep/JDA-6.2.1-withDependencies.jar" path-in-jar="/" />
+      <element id="directory" name="arenas">
+        <element id="dir-copy" path="$PROJECT_DIR$/arenas" />
+      </element>
     </root>
   </artifact>
 </component>

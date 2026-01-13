@@ -2,6 +2,8 @@ package sylvessa.plugin.Duels;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public abstract class DuelGame {
@@ -22,8 +24,9 @@ public abstract class DuelGame {
     public abstract void onMove(Player p);
     public abstract void onDamage(Player p, EntityDamageEvent e);
     public abstract void onQuit(Player p);
-    public abstract boolean canBreak(Player p);
-    public abstract boolean canPlace(Player p);
+    public abstract boolean canBreak(Player p, BlockBreakEvent e);
+    public abstract boolean canPlace(Player p, BlockPlaceEvent e);
+    public void onBowShoot(Player p) {}
 
     public boolean isParticipant(Player p) {
         return p == p1 || p == p2;

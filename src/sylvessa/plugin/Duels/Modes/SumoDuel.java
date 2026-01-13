@@ -7,18 +7,16 @@ import org.bukkit.*;
 import org.bukkit.Note.Tone;
 import org.bukkit.entity.Player;
 
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import sylvessa.plugin.ChunkGenerators.Void;
 import sylvessa.plugin.Duels.*;
 import sylvessa.plugin.Main;
 
 public class SumoDuel extends DuelGame {
-
     private int countdown = 5;
     private int taskId = -1;
-
-    private Location locP1;
-    private Location locP2;
 
     private Location noteBlockP1;
     private Location noteBlockP2;
@@ -68,6 +66,9 @@ public class SumoDuel extends DuelGame {
 
         p1.teleport(l1);
         p2.teleport(l2);
+
+        p1.setHealth(20);
+        p2.setHealth(20);
 
         noteBlockP1 = placeNoteBlockBehind(p1);
         noteBlockP2 = placeNoteBlockBehind(p2);
@@ -169,11 +170,11 @@ public class SumoDuel extends DuelGame {
         );
     }
 
-    public boolean canBreak(Player p) {
+    public boolean canBreak(Player p, BlockBreakEvent e) {
         return false;
     }
 
-    public boolean canPlace(Player p) {
+    public boolean canPlace(Player p, BlockPlaceEvent e) {
         return false;
     }
 

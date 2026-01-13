@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import sylvessa.plugin.Duels.Modes.BridgeDuel;
 import sylvessa.plugin.Duels.Modes.SpleefDuel;
 import sylvessa.plugin.Duels.Modes.SumoDuel;
 import sylvessa.plugin.Main;
@@ -34,7 +35,10 @@ public class DuelManager {
         saveState(p);
 
         challenger.getInventory().clear();
+        challenger.getInventory().setArmorContents(null);
+
         p.getInventory().clear();
+        p.getInventory().setArmorContents(null);
 
         DuelGame game = createGame(pd.type, challenger, p);
 
@@ -79,6 +83,8 @@ public class DuelManager {
     private static DuelGame createGame(DuelType type, Player p1, Player p2) {
         if(type == DuelType.SPLEEF) return new SpleefDuel(p1, p2);
         if(type == DuelType.SUMO) return new SumoDuel(p1, p2);
+        if(type == DuelType.BRIDGE) return new BridgeDuel(p1, p2);
+
         return null;
     }
 

@@ -10,7 +10,7 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class WorldCommand implements PluginCommand {
     public String name() {
-        return "world";
+        return "gwsdf";
     }
 
     public String description() {
