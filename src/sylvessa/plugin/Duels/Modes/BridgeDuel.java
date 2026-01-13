@@ -33,7 +33,7 @@ public class BridgeDuel extends DuelGame {
     private final Map<Location, ItemStack> arenaSnapshot = new HashMap<>();
     private final int arenaRadius = 5, arenaAbove = 5, arenaBelow = 2;
 
-    private final int redMinX = -157, redMaxX = -151, redMinY = 56, redMaxY = 57, redMinZ = -31, redMaxZ = -27;
+    private final int redMinX = -157, redMaxX = -151, redMinY = 56, redMaxY = 57, redMinZ = -32, redMaxZ = -27;
     private final int blueMinX = -157, blueMaxX = -151, blueMinY = 56, blueMaxY = 57, blueMinZ = 20, blueMaxZ = 24;
 
     public enum Team { RED, BLUE }
