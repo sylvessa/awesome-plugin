@@ -33,8 +33,8 @@ public class BridgeDuel extends DuelGame {
     private final Map<Location, ItemStack> arenaSnapshot = new HashMap<>();
     private final int arenaRadius = 5, arenaAbove = 5, arenaBelow = 2;
 
-    private final int redMinX = -156, redMaxX = -152, redMinY = 58, redMaxY = 58, redMinZ = -31, redMaxZ = -27;
-    private final int blueMinX = -156, blueMaxX = -152, blueMinY = 58, blueMaxY = 58, blueMinZ = 20, blueMaxZ = 24;
+    private final int redMinX = -157, redMaxX = -151, redMinY = 56, redMaxY = 57, redMinZ = -31, redMaxZ = -27;
+    private final int blueMinX = -157, blueMaxX = -151, blueMinY = 56, blueMaxY = 57, blueMinZ = 20, blueMaxZ = 24;
 
     public enum Team { RED, BLUE }
 
@@ -214,7 +214,7 @@ public class BridgeDuel extends DuelGame {
     public boolean canBreak(Player p, BlockBreakEvent e) { return started && e.getBlock().getType() == Material.WOOL; }
 
     public boolean canPlace(Player p, BlockPlaceEvent e) {
-        if (!started) return false;
+        if (!started || countdown > 0) return false;
         return !inZone(e.getBlockPlaced().getLocation(), redMinX, redMaxX, redMinY, redMaxY, redMinZ, redMaxZ)
                 && !inZone(e.getBlockPlaced().getLocation(), blueMinX, blueMaxX, blueMinY, blueMaxY, blueMinZ, blueMaxZ);
     }
