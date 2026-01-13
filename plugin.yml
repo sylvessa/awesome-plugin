@@ -51,3 +51,5 @@ commands:
     description: a
   duel:
     description: a
+  ride:
+    description: a

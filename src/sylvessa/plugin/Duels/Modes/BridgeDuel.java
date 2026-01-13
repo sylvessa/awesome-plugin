@@ -27,6 +27,8 @@ public class BridgeDuel extends DuelGame {
     private Location noteBlockP1, noteBlockP2;
     private Location player1Spawn, player2Spawn;
 
+    private final Map<UUID, Long> bowCooldown = new HashMap<>();
+
     private Team p1Team, p2Team;
     private int redScore = 0, blueScore = 0;
     private final int WIN_SCORE = 5;
@@ -255,7 +257,20 @@ public class BridgeDuel extends DuelGame {
     }
 
     @Override
-    public void onBowShoot(Player p) { Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> p.getInventory().setItem(8, new ItemStack(Material.ARROW, 1)), 70L); }
+    public void onBowShoot(Player p) {
+        long now = System.currentTimeMillis();
+        Long last = bowCooldown.get(p.getUniqueId());
+
+        if (last != null && now - last < 3500) return;
+
+        bowCooldown.put(p.getUniqueId(), now);
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(
+                Main.getInstance(),
+                () -> p.getInventory().setItem(8, new ItemStack(Material.ARROW, 1)),
+                70L
+        );
+    }
 
     public void refillItems(Player p) {
         Team team = (p == p1 ? p1Team : p2Team);

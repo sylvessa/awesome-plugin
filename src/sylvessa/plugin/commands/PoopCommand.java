@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import sylvessa.plugin.Main;
 import sylvessa.plugin.UserConfig;
 
+@SuppressWarnings("unused")
 public class PoopCommand implements PluginCommand {
     public String name() { return "poop"; }
     public String description() { return "Ewwwwwww"; }
