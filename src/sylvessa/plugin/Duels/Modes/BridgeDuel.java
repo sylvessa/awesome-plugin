@@ -232,7 +232,7 @@ public class BridgeDuel extends DuelGame {
         finished = true;
         Player winner = (winnerTeam == Team.RED ? (p1Team == Team.RED ? p1 : p2) : (p1Team == Team.BLUE ? p1 : p2));
         Player loser = winner == p1 ? p2 : p1;
-        Bukkit.broadcastMessage("§a" + winner.getName() + " won the bridge duel against " + loser.getName() + "!");
+        Bukkit.broadcastMessage("§a" + winner.getName() + " won a bridge duel against " + loser.getName() + "!");
 
         new DiscordWebhook()
                 .setUsername(winner.getName())

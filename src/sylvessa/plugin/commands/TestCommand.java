@@ -14,6 +14,7 @@ import sylvessa.plugin.Main;
 import sylvessa.plugin.Types.CustomInventory;
 import sylvessa.plugin.Types.FakePlayer;
 import sylvessa.plugin.Util.CustomWorldLoader;
+import uk.betacraft.uberbukkit.packet.Packet62Sound;
 
 import java.io.IOException;
 
@@ -43,13 +44,15 @@ public class TestCommand implements PluginCommand {
 
         sender.sendMessage("ok");
 
+//        Packet62Sound packet = new Packet62Sound("note.harp", p.getLocation().getBlockX(), p.getLocation().getBlockY(), p.getLocation().getBlockZ(), 1.0f, 1);
+//        ((CraftPlayer)p).getHandle().netServerHandler.sendPacket(packet);
 
-//        CustomInventory menu = new CustomInventory("AWESOME UI", 9);
-//        menu.setItem(4, new ItemStack(264, 1, 0));
-//        menu.setCallback(4, player -> player.sendMessage("clicked!"));
-//        menu.setCloseCallback(player -> player.sendMessage("closed inventory"));
-//        menu.setReadOnly(true);
-//        menu.open(p);
+        CustomInventory menu = new CustomInventory("AWESOME UI", 9);
+        menu.setItem(4, new ItemStack(264, 1, 0));
+        menu.setCallback(4, player -> player.sendMessage("clicked!"));
+        menu.setCloseCallback(player -> player.sendMessage("closed inventory"));
+        menu.setReadOnly(true);
+        menu.open(p);
 
 //        FakePlayer npc = new FakePlayer("npc1", p.getLocation());
 //        npc.spawn();
