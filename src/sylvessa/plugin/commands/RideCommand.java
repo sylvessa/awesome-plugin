@@ -1,6 +1,7 @@
 package sylvessa.plugin.commands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -28,34 +29,36 @@ public class RideCommand implements PluginCommand {
         if (args.length == 1 && args[0].equalsIgnoreCase("accept")) {
             Player requester = requests.remove(rider);
             if (requester == null) {
-                rider.sendMessage("no ride request");
+                rider.sendMessage(ChatColor.RED + "You have no pending ride requests.");
                 return;
             }
 
             rider.setPassenger(requester);
-            requester.sendMessage("you are now riding " + rider.getName());
-            rider.sendMessage("you are being ridden");
+            requester.sendMessage(ChatColor.GREEN + "You are now riding " + ChatColor.YELLOW + rider.getName() + ChatColor.GREEN + ".");
+            rider.sendMessage(ChatColor.AQUA + requester.getName() + ChatColor.GREEN + " is now riding you.");
             return;
         }
 
         if (args.length != 1) {
-            rider.sendMessage("/ride <player>");
+            rider.sendMessage(ChatColor.YELLOW + "Usage: " + ChatColor.WHITE + "/ride <player>");
+            rider.sendMessage(ChatColor.GRAY + "Send a request to ride another player.");
             return;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
-            rider.sendMessage("player not found");
+            rider.sendMessage(ChatColor.RED + "That player is not online.");
             return;
         }
 
         if (target == rider) {
-            rider.sendMessage("no");
+            rider.sendMessage(ChatColor.RED + "You cannot ride yourself.");
             return;
         }
 
         requests.put(target, rider);
-        rider.sendMessage("ride request sent to " + target.getName());
-        target.sendMessage(rider.getName() + " wants to ride you. /ride accept");
+        rider.sendMessage(ChatColor.GREEN + "Ride request sent to " + ChatColor.YELLOW + target.getName() + ChatColor.GREEN + ".");
+        target.sendMessage(ChatColor.AQUA + rider.getName() + ChatColor.YELLOW + " wants to ride you.");
+        target.sendMessage(ChatColor.GRAY + "Type " + ChatColor.GREEN + "/ride accept" + ChatColor.GRAY + " to accept it.");
     }
 }

@@ -208,7 +208,7 @@ public class TeamCommand implements PluginCommand {
         sender.sendMessage("§7/team settings <tag|color|freejoin> [value] §7- manage team settings");
         sender.sendMessage("§7/team invite <player> §7- invite player");
         sender.sendMessage("§7/team kick <player> §7- remove player");
-        sender.sendMessage("§7/team join <team> §7- join a team");
+        sender.sendMessage("§7/team join <team name/tag> §7- join a team");
         sender.sendMessage("§7/team leave §7- leave your team");
         sender.sendMessage("§7/team help §7- show this message");
     }
@@ -232,6 +232,7 @@ public class TeamCommand implements PluginCommand {
             sender.sendMessage("§7/team help - view all other commands");
         } else {
             sender.sendMessage("§7Use §e/team leave §7to leave this team.");
+            sender.sendMessage("§7Use §e/team help §7to view all other commands");
         }
     }
 

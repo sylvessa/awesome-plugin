@@ -11,8 +11,14 @@ public class SummonCommand implements PluginCommand {
 
     public String name() { return "summon"; }
     public String description() { return "Summon a mob"; }
+    public boolean hidden() { return true; }
 
     public void execute(CommandSender sender, String[] args) {
+        if (sender instanceof Player) {
+            sender.sendMessage("§cThis command can only be run from the console.");
+            return;
+        }
+
         if (args.length < 1) {
             sender.sendMessage("§7Usage: /summon <mob> [player|x y z]");
             return;

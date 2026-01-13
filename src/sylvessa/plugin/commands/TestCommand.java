@@ -1,8 +1,7 @@
 package sylvessa.plugin.commands;
 
 import net.minecraft.server.*;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.*;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -44,12 +43,17 @@ public class TestCommand implements PluginCommand {
 
         sender.sendMessage("ok");
 
-        CustomInventory menu = new CustomInventory("AWESOME UI", 9);
-        menu.setItem(4, new ItemStack(264, 1, 0));
-        menu.setCallback(4, player -> player.sendMessage("clicked!"));
-        menu.setCloseCallback(player -> player.sendMessage("closed inventory"));
-        menu.setReadOnly(true);
-        menu.open(p);
 
+//        CustomInventory menu = new CustomInventory("AWESOME UI", 9);
+//        menu.setItem(4, new ItemStack(264, 1, 0));
+//        menu.setCallback(4, player -> player.sendMessage("clicked!"));
+//        menu.setCloseCallback(player -> player.sendMessage("closed inventory"));
+//        menu.setReadOnly(true);
+//        menu.open(p);
+
+//        FakePlayer npc = new FakePlayer("npc1", p.getLocation());
+//        npc.spawn();
+//
+//        Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), npc::lookAtNearestPlayer, 0L, 5L);
     }
 }
