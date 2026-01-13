@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import sylvessa.plugin.ChunkGenerators.Void;
 import sylvessa.plugin.Duels.*;
 import sylvessa.plugin.Main;
+import sylvessa.plugin.Util.DiscordWebhook;
 
 public class SpleefDuel extends DuelGame {
 
@@ -183,6 +184,11 @@ public class SpleefDuel extends DuelGame {
             Player winner = loser == p1 ? p2 : p1;
 
             Bukkit.broadcastMessage("§a" + winner.getName() + " won a spleef duel against " + loser.getName());
+
+            new DiscordWebhook()
+                    .setUsername(winner.getName())
+                    .setAvatarUrl("https://mc-heads.net/avatar/" + winner.getName())
+                    .sendMessage(winner.getName() + " won a spleef duel against " + loser.getName(), 16776960);
 
             cleanup();
         }

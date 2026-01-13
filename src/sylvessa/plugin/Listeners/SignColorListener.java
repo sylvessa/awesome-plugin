@@ -5,7 +5,7 @@ import org.bukkit.event.block.SignChangeEvent;
 
 public class SignColorListener extends BlockListener {
     private String translate(String s) {
-        return s.replace("\\\\", "§");
+        return s.replace("&", "§");
     }
 
     public void onSignChange(SignChangeEvent event) {

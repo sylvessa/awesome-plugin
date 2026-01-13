@@ -14,6 +14,7 @@ import sylvessa.plugin.Duels.DuelManager;
 import sylvessa.plugin.Duels.DuelType;
 import sylvessa.plugin.Main;
 import sylvessa.plugin.Util.CustomWorldLoader;
+import sylvessa.plugin.Util.DiscordWebhook;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -230,12 +231,28 @@ public class BridgeDuel extends DuelGame {
         Player winner = (winnerTeam == Team.RED ? (p1Team == Team.RED ? p1 : p2) : (p1Team == Team.BLUE ? p1 : p2));
         Player loser = winner == p1 ? p2 : p1;
         Bukkit.broadcastMessage("§a" + winner.getName() + " won the bridge duel against " + loser.getName() + "!");
+
+        new DiscordWebhook()
+                .setUsername(winner.getName())
+                .setAvatarUrl("https://mc-heads.net/avatar/" + winner.getName())
+                .sendMessage(winner.getName() + " won a bridge duel against " + loser.getName(), 16776960);
         cleanup();
     }
 
     public void onQuit(Player p) { if (!finished) markLoser(p); }
-    private void markLoser(Player p) { finished = true; Player loser = p == p1 ? p1 : p2; Player winner = loser == p1 ? p2 : p1;
-        Bukkit.broadcastMessage("§a" + winner.getName() + " won a bridge duel against " + loser.getName()); cleanup(); }
+    private void markLoser(Player p) {
+        finished = true;
+        Player loser = p == p1 ? p1 : p2;
+        Player winner = loser == p1 ? p2 : p1;
+        Bukkit.broadcastMessage("§a" + winner.getName() + " won a bridge duel against " + loser.getName());
+
+        new DiscordWebhook()
+                .setUsername(winner.getName())
+                .setAvatarUrl("https://mc-heads.net/avatar/" + winner.getName())
+                .sendMessage(winner.getName() + " won a bridge duel against " + loser.getName(), 16776960);
+
+        cleanup();
+    }
 
     @Override
     public void onBowShoot(Player p) { Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> p.getInventory().setItem(8, new ItemStack(Material.ARROW, 1)), 70L); }

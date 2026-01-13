@@ -41,6 +41,8 @@ public class Bot {
                 jda.awaitReady();
                 Log.info("Discord bot online!");
 
+                BotMessageCreator.init(Main.getInstance(), jda);
+
                 jda.getTextChannelById(logChannel).sendMessage("**Server online!**").queue(
                         success -> Log.info("Startup message sent to Discord."),
                         error -> Log.info("Failed to send startup message: " + error)

@@ -11,8 +11,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import sylvessa.plugin.ChunkGenerators.Void;
+import sylvessa.plugin.Discord.BotMessageCreator;
 import sylvessa.plugin.Duels.*;
 import sylvessa.plugin.Main;
+import sylvessa.plugin.Util.DiscordWebhook;
 
 public class SumoDuel extends DuelGame {
     private int countdown = 5;
@@ -128,7 +130,6 @@ public class SumoDuel extends DuelGame {
             p.teleport(p.getLocation());
             return;
         }
-
         if(started && !finished && p.getWorld() == world && p.getLocation().getY() < baseY - 3) {
             markFall(p);
         }
@@ -154,6 +155,13 @@ public class SumoDuel extends DuelGame {
             Player winner = loser == p1 ? p2 : p1;
 
             Bukkit.broadcastMessage("§a" + winner.getName() + " won a sumo duel against " + loser.getName());
+
+            new DiscordWebhook()
+                    .setUsername(winner.getName())
+                    .setAvatarUrl("https://mc-heads.net/avatar/" + winner.getName())
+                    .sendMessage(winner.getName() + " won a sumo duel against " + loser.getName(), 16776960);
+
+            //BotMessageCreator.sendBotMessage("**" + winner.getName() + "** won a sumo duel against **" + loser.getName() + "**");
 
             cleanup();
         }
