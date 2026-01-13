@@ -19,9 +19,7 @@ public class Void extends ChunkGenerator {
     @Override
     public boolean canSpawn(World world, int x, int z) {
         world.setSpawnLocation(0, 128, 0);
-        world.setSpawnFlags(false, false);
-
-        return false;
+        return true;
     }
 }
 
