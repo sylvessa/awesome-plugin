@@ -25,6 +25,7 @@ public class Main extends JavaPlugin {
     private final HashMap<String, UserConfig> userConfigs = new HashMap<>();
     private final HashMap<String, TpaRequest> tpaRequests = new HashMap<>();
     private TeamManager teamManager;
+    public static FakePlayerClickListener npcClickListener;
 
 
     // bad bad bad!!!
@@ -119,6 +120,10 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DamageTracker(), this);
         getServer().getPluginManager().registerEvents(new DeathListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerMilkListener(), this);
+
+//        npcClickListener = new FakePlayerClickListener();
+//        getServer().getPluginManager().registerEvents(npcClickListener, this);
+
 
         discordBot = new Bot(this);
         discordBot.start();
