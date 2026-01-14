@@ -6,6 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.plugin.java.JavaPlugin;
 import sylvessa.plugin.Duels.DuelListener;
 import sylvessa.plugin.Listeners.*;
+import sylvessa.plugin.Minigames.MinigameListener;
 import sylvessa.plugin.Teams.TeamManager;
 import sylvessa.plugin.commands.PluginCommand;
 import sylvessa.plugin.Discord.Bot;
@@ -111,6 +112,7 @@ public class Main extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new DuelListener(), this);
         getServer().getPluginManager().registerEvents(new TreeMobSpawnListener(), this);
+        //getServer().getPluginManager().registerEvents(new MinigameListener(), this);
 
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, new ChatListener(), Event.Priority.Normal,this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, new JoinListener(this), Event.Priority.Normal, this);

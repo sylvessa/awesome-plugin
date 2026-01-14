@@ -137,5 +137,4 @@ public class DuelManager {
             armor = a;
         }
     }
-
 }

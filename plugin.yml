@@ -53,3 +53,5 @@ commands:
     description: a
   ride:
     description: a
+  queue:
+    description: a
