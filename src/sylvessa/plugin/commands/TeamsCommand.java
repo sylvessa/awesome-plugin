@@ -50,5 +50,7 @@ public class TeamsCommand implements PluginCommand {
         if (totalPages > 1) {
             sender.sendMessage("§7Use §e/teams <page> §7to view more.");
         }
+
+        sender.sendMessage("§7Use §e/team join <tag/name> §7to join a team (Only if its not invite-only).");
     }
 }
