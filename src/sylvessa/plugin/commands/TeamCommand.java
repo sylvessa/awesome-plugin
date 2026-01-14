@@ -181,20 +181,59 @@ public class TeamCommand implements PluginCommand {
                 break;
 
             case "color":
-                if (args.length < 3) { sender.sendMessage("§7Current color: " + st.getColor()); return; }
-                st.setColor(args[2]);
-                sender.sendMessage("§aTeam color set to §" + args[2] + "this color");
+                if (args.length < 3) {
+                    sender.sendMessage("§7Current color: " + st.getColor());
+                    return;
+                }
+
+                String c = args[2].toLowerCase();
+
+                if (c.startsWith("&") || c.startsWith("§")) {
+                    c = c.substring(1);
+                }
+
+                if (!c.matches("[0-9a-f]")) {
+                    sender.sendMessage("§cInvalid color. Use 0-9 or a-f");
+                    return;
+                }
+
+                st.setColor(c);
+                sender.sendMessage("§aTeam color set to §" + c + "this color");
                 break;
             case "freejoin":
-                if (args.length < 3) { sender.sendMessage("§7Current freejoin: " + st.isFreeJoin()); return; }
-                st.setFreeJoin(Boolean.parseBoolean(args[2]));
-                sender.sendMessage("§aTeam freejoin set to " + args[2]);
+                if (args.length < 3) {
+                    sender.sendMessage("§7Current freejoin: " + st.isFreeJoin());
+                    return;
+                }
+
+                String fj = args[2].toLowerCase();
+
+                if (!fj.equals("0") && !fj.equals("1") && !fj.equals("true") && !fj.equals("false")) {
+                    sender.sendMessage("§cValue must be 0, 1, true, or false");
+                    return;
+                }
+
+                st.setFreeJoin(fj.equals("1") || fj.equals("true"));
+                sender.sendMessage("§aTeam freejoin set to " + (st.isFreeJoin() ? "true" : "false"));
                 break;
+
             case "pvp":
-                if (args.length < 3) { sender.sendMessage("§7Current PvP: " + st.isPvpEnabled()); return; }
-                st.setPvpEnabled(Boolean.parseBoolean(args[2]));
-                sender.sendMessage("§aTeam PvP set to " + args[2]);
+                if (args.length < 3) {
+                    sender.sendMessage("§7Current PvP: " + st.isPvpEnabled());
+                    return;
+                }
+
+                String pv = args[2].toLowerCase();
+
+                if (!pv.equals("0") && !pv.equals("1") && !pv.equals("true") && !pv.equals("false")) {
+                    sender.sendMessage("§cValue must be 0, 1, true, or false");
+                    return;
+                }
+
+                st.setPvpEnabled(pv.equals("1") || pv.equals("true"));
+                sender.sendMessage("§aTeam PvP set to " + (st.isPvpEnabled() ? "true" : "false"));
                 break;
+
             default:
                 sender.sendMessage("§7Unknown setting.");
         }
