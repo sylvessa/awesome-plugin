@@ -52,7 +52,6 @@ public class MinigameManager {
                         Main.getInstance(),
                         () -> {
                             if(g.players.size() >= g.minPlayers()) {
-                                // enough players, cancel waiting messages
                                 Bukkit.getScheduler().cancelTask(g.countdownTask);
                                 g.countdownTask = -1;
                                 manageLobbyCountdown(g);
@@ -60,7 +59,7 @@ public class MinigameManager {
                             }
 
                             for(Player p : g.players) {
-                                p.sendMessage("§eWaiting for players...");
+                                p.sendMessage("§eWaiting for players (" + g.minPlayers() + " players needed)...");
                             }
                         },
                         0L,

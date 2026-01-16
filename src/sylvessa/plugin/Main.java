@@ -26,7 +26,6 @@ public class Main extends JavaPlugin {
     private final HashMap<String, UserConfig> userConfigs = new HashMap<>();
     private final HashMap<String, TpaRequest> tpaRequests = new HashMap<>();
     private TeamManager teamManager;
-    public static FakePlayerClickListener npcClickListener;
 
 
     // bad bad bad!!!
