@@ -102,6 +102,12 @@ public class SpleefDuel extends DuelGame {
         p1.setHealth(20);
         p2.setHealth(20);
 
+        p1.setFoodLevel(20);
+        p1.setSaturation(20);
+
+        p2.setFoodLevel(20);
+        p2.setSaturation(20);
+
         noteBlockP1 = placeNoteBlockBehind(p1);
         noteBlockP2 = placeNoteBlockBehind(p2);
     }
@@ -211,7 +217,7 @@ public class SpleefDuel extends DuelGame {
     }
 
     @Override
-    public void onFoodLevelChange(Player p, FoodLevelChangeEvent event) { event.setFoodLevel(20); }
+    public void onFoodLevelChange(Player p, FoodLevelChangeEvent event) { event.setCancelled(true); }
 
     private void cleanup() {
         DuelManager.end(this);
