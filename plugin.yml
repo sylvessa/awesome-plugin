@@ -1,6 +1,6 @@
 name: SylvessaPlugin
-main: sylvessa.plugin.Main
-version: b1.2_02
+main: sylvessa.cb1337.Main
+version: b1.8.1
 
 commands:
   testc:

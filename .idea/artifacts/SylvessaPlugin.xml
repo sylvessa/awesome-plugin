@@ -1,9 +1,9 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="SylvessaPlugin">
-    <output-path>$PROJECT_DIR$/../uberbukkit server/plugins</output-path>
+    <output-path>$PROJECT_DIR$/../craftbukkit 1.8.1/plugins</output-path>
     <root id="archive" name="SylvessaPlugin.jar">
+      <element id="module-output" name="CB1337 Test" />
       <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
-      <element id="module-output" name="UberBukkit Plugin" />
       <element id="extracted-dir" path="$PROJECT_DIR$/dep/JDA-6.2.1-withDependencies.jar" path-in-jar="/" />
       <element id="directory" name="arenas">
         <element id="dir-copy" path="$PROJECT_DIR$/arenas" />
