@@ -37,6 +37,6 @@ public class QueueCommand implements PluginCommand {
             return;
         }
 
-        MinigameManager.queue(p, type);
+        //MinigameManager.queue(p, type);
     }
 }

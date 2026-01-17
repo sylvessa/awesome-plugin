@@ -3,6 +3,8 @@ package sylvessa.cb1337.commands;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import sylvessa.cb1337.Duels.DuelGame;
+import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Types.*;
 import sylvessa.cb1337.UserConfig;
@@ -20,6 +22,13 @@ public class TpaHereCommand implements PluginCommand {
         }
 
         Player from = (Player) sender;
+
+        DuelGame fromGame = DuelManager.get(from);
+        if (fromGame != null) {
+            from.sendMessage("§cYou cannot use this command while in a duel!");
+            return;
+        }
+
         Player to = Bukkit.getPlayer(args[0]);
         if(to == null || from == to) {
             sender.sendMessage("§cPlayer not found.");
@@ -29,6 +38,12 @@ public class TpaHereCommand implements PluginCommand {
         UserConfig uc = Main.getInstance().getUserConfig(to.getName());
         if(!uc.getBoolean("tpa.enabled", true)) {
             sender.sendMessage("§cThat player has tpa disabled.");
+            return;
+        }
+
+        DuelGame toGame = DuelManager.get(to);
+        if (toGame != null) {
+            from.sendMessage("§cThat player is in a duel and cannot receive TPA requests.");
             return;
         }
 
@@ -49,4 +64,3 @@ public class TpaHereCommand implements PluginCommand {
 
     }
 }
-

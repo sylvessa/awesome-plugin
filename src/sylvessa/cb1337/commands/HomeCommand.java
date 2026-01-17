@@ -5,6 +5,8 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import sylvessa.cb1337.Duels.DuelGame;
+import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Types.PluginCommand;
 import sylvessa.cb1337.UserConfig;
@@ -26,6 +28,12 @@ public class HomeCommand implements PluginCommand {
         }
 
         Player p = (Player) sender;
+
+        DuelGame fromGame = DuelManager.get(p);
+        if (fromGame != null) {
+            p.sendMessage("§cYou cannot use this command while in a duel!");
+            return;
+        }
 
         // /home -> own home
         if (args.length == 0) {

@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import sylvessa.cb1337.Duels.DuelGame;
+import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Types.PluginCommand;
 
 import java.util.HashMap;
@@ -42,6 +44,12 @@ public class RideCommand implements PluginCommand {
             return;
         }
 
+        DuelGame fromGame = DuelManager.get(rider);
+        if (fromGame != null) {
+            rider.sendMessage("§cYou cannot use this command while in a duel!");
+            return;
+        }
+
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
             rider.sendMessage(ChatColor.RED + "That player is not online.");
@@ -50,6 +58,17 @@ public class RideCommand implements PluginCommand {
 
         if (target == rider) {
             rider.sendMessage(ChatColor.RED + "You cannot ride yourself.");
+            return;
+        }
+
+        if (target.getWorld() != rider.getWorld()) {
+            rider.sendMessage(ChatColor.RED + "You two are not in the same world.");
+            return;
+        }
+
+        DuelGame toGame = DuelManager.get(target);
+        if (toGame != null) {
+            target.sendMessage("§cThe other user is in a duel, please wait!");
             return;
         }
 

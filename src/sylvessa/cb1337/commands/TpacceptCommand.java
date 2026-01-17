@@ -3,6 +3,8 @@ package sylvessa.cb1337.commands;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import sylvessa.cb1337.Duels.DuelGame;
+import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Types.*;
 
@@ -15,6 +17,13 @@ public class TpacceptCommand implements PluginCommand {
         if(!(sender instanceof Player)) return;
 
         Player target = (Player) sender;
+
+        DuelGame fromGame = DuelManager.get(target);
+        if (fromGame != null) {
+            target.sendMessage("§cYou cannot use this command while in a duel!");
+            return;
+        }
+
         TpaRequest req = Main.getInstance().getTpaRequests()
                 .remove(target.getName().toLowerCase());
 
