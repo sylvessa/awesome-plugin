@@ -11,6 +11,7 @@ import sylvessa.cb1337.Duels.Listeners.DuelEntityListener;
 import sylvessa.cb1337.Duels.Listeners.DuelPlayerListener;
 import sylvessa.cb1337.Listeners.*;
 import sylvessa.cb1337.Minigames.Listeners.MinigameBlockListener;
+import sylvessa.cb1337.Minigames.Listeners.MinigameEntityListener;
 import sylvessa.cb1337.Minigames.Listeners.MinigamePlayerListener;
 import sylvessa.cb1337.Teams.TeamManager;
 import sylvessa.cb1337.Types.PluginCommand;
@@ -138,6 +139,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvent(Event.Type.BLOCK_PLACE, new MinigameBlockListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_MOVE, new MinigamePlayerListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, new MinigamePlayerListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new MinigameEntityListener(), Event.Priority.Normal, this);
 
 
 

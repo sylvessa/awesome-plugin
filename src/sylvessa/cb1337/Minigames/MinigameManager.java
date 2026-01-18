@@ -16,24 +16,28 @@ import java.util.Map;
 import java.util.Random;
 
 public class MinigameManager {
-    private static final Map<MinigameType, Minigame> queued = new HashMap<>();
+    private static final Map<MinigameType, ArrayList<Minigame>> queued = new HashMap<>();
     private static final Map<String, Minigame> active = new HashMap<>();
     private static final Map<String, SavedState> saved = new HashMap<>();
 
     public static void queue(Player p, MinigameType type) {
-        Minigame g = queued.get(type);
+        ArrayList<Minigame> list = queued.computeIfAbsent(type, k -> new ArrayList<>());
+        Minigame g = null;
+
+        for(Minigame mg : list) {
+            if(!mg.started && mg.players.size() < mg.maxPlayers()) {
+                g = mg;
+                break;
+            }
+        }
 
         if(g == null) {
             g = type.create();
             createLobbyWorld(g);
-            queued.put(type, g);
+            list.add(g);
         }
 
         if(g.players.contains(p)) return;
-        if(g.players.size() >= g.maxPlayers()) {
-            p.sendMessage("§cQueue is full");
-            return;
-        }
 
         saveState(p);
         p.getInventory().clear();
@@ -77,7 +81,7 @@ public class MinigameManager {
 
     private static void startCountdown(Minigame g) {
         g.countingDown = true;
-        final int[] time = {20};
+        final int[] time = {5};
 
         if(g.countdownTask != -1) {
             Bukkit.getScheduler().cancelTask(g.countdownTask);
@@ -91,8 +95,6 @@ public class MinigameManager {
                         for(Player p : g.players) {
                             p.sendMessage("§cNot enough players, countdown cancelled");
                         }
-
-                        g.countingDown = false;
                         manageLobbyCountdown(g);
                         return;
                     }
@@ -116,6 +118,12 @@ public class MinigameManager {
     private static void startGame(Minigame g) {
         World lobbyWorld = g.world;
 
+        ArrayList<Minigame> list = queued.get(g.getType());
+        if(list != null) {
+            list.remove(g);
+            if(list.isEmpty()) queued.remove(g.getType());
+        }
+
         createArenaWorld(g);
         g.teleportToArena();
         g.started = true;
@@ -133,25 +141,39 @@ public class MinigameManager {
         if(g != null) {
             g.players.remove(p);
             restoreState(p);
-
             if(g.players.size() < g.minPlayers()) {
                 end(g);
             }
             return;
         }
 
-        for(Minigame mg : queued.values()) {
-            if(mg.players.remove(p)) {
-                restoreState(p);
-                cancelCountdown(mg);
-                manageLobbyCountdown(mg);
-                return;
+        for(ArrayList<Minigame> list : queued.values()) {
+            for(Minigame mg : list) {
+                if(mg.players.remove(p)) {
+                    restoreState(p);
+                    cancelCountdown(mg);
+                    manageLobbyCountdown(mg);
+                    return;
+                }
             }
         }
     }
 
     public static Minigame get(Player p) {
         return active.get(p.getName());
+    }
+
+    public static Minigame getQueued(Player p) {
+        for(ArrayList<Minigame> list : queued.values()) {
+            for(Minigame g : list) {
+                if(g.players.contains(p)) return g;
+            }
+        }
+        return null;
+    }
+
+    public static boolean isQueued(Player p) {
+        return getQueued(p) != null;
     }
 
     public static void end(Minigame g) {
@@ -162,7 +184,6 @@ public class MinigameManager {
 
         g.endGame();
         unloadWorld(g.world);
-        queued.remove(g.getType());
     }
 
     private static void createLobbyWorld(Minigame g) {
@@ -170,7 +191,6 @@ public class MinigameManager {
             String name = "mg_lobby_" + g.getType().name().toLowerCase() + "_" + new Random().nextInt(100000);
             CustomWorldLoader.copyArenaToServerJar(g.lobbyTemplate(), name);
             g.world = Bukkit.createWorld(name, World.Environment.NORMAL, new Void());
-            g.world.setStorm(false);
         } catch(Exception ignored) {}
     }
 
@@ -179,7 +199,6 @@ public class MinigameManager {
             String name = "mg_game_" + g.getType().name().toLowerCase() + "_" + new Random().nextInt(100000);
             CustomWorldLoader.copyArenaToServerJar(g.arenaTemplate(), name);
             g.world = Bukkit.createWorld(name, World.Environment.NORMAL, new Void());
-            g.world.setStorm(false);
         } catch(Exception ignored) {}
     }
 
@@ -194,7 +213,11 @@ public class MinigameManager {
     private static void unloadWorld(World w) {
         File f = new File(".", w.getName());
         Bukkit.unloadWorld(w, true);
-        delete(f);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(
+                Main.getInstance(),
+                () -> delete(f),
+                100L
+        );
     }
 
     private static void delete(File f) {

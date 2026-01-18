@@ -4,6 +4,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public abstract class Minigame {
     public abstract void teleportToArena();
     public abstract void startGame();
     public abstract void endGame();
+    public void onDamage(Player p, EntityDamageEvent e) {};
 
     public abstract void onMove(Player p);
     public abstract void onQuit(Player p);
@@ -42,5 +44,6 @@ public abstract class Minigame {
     public boolean isPlaying(Player p) {
         return players.contains(p);
     }
+    public boolean hasStarted() {return started;}
 }
 
