@@ -1,6 +1,7 @@
 package sylvessa.cb1337.commands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -32,6 +33,11 @@ public class HomeCommand implements PluginCommand {
         DuelGame fromGame = DuelManager.get(p);
         if (fromGame != null) {
             p.sendMessage("§cYou cannot use this command while in a duel!");
+            return;
+        }
+
+        if (p.getWorld().getName().equals("creative")) {
+            p.sendMessage(ChatColor.RED + "No");
             return;
         }
 

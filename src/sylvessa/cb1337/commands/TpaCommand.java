@@ -1,6 +1,7 @@
 package sylvessa.cb1337.commands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import sylvessa.cb1337.Duels.DuelGame;
@@ -44,6 +45,20 @@ public class TpaCommand implements PluginCommand {
         DuelGame toGame = DuelManager.get(to);
         if (toGame != null) {
             from.sendMessage("§cThat player is in a duel and cannot receive TPA requests.");
+            return;
+        }
+
+        World fw = from.getWorld();
+        World tw = to.getWorld();
+
+        boolean sameWorld = fw.equals(tw);
+        boolean bothAllowed = (
+                (fw.getName().equals("world") || fw.getName().equals("world_nether")) &&
+                        (tw.getName().equals("world") || tw.getName().equals("world_nether"))
+        );
+
+        if(!sameWorld && !bothAllowed) {
+            from.sendMessage("§cYou cannot send TPA requests across these worlds.");
             return;
         }
 

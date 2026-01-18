@@ -16,6 +16,11 @@ public class DuelCommand implements PluginCommand {
         if(!(sender instanceof Player)) return;
         Player p = (Player)sender;
 
+        if (p.getWorld().getName().equals("creative")) {
+            p.sendMessage(ChatColor.RED + "No");
+            return;
+        }
+
         if(args.length == 0) {
             p.sendMessage(ChatColor.AQUA + "Available duel modes:");
             for(DuelType t : DuelType.values()) {

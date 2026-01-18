@@ -240,28 +240,35 @@ public class BridgeDuel extends DuelGame {
     private void endGame(Team winnerTeam) {
         if (finished) return;
         finished = true;
+
         Player winner = (winnerTeam == Team.RED ? (p1Team == Team.RED ? p1 : p2) : (p1Team == Team.BLUE ? p1 : p2));
         Player loser = winner == p1 ? p2 : p1;
-        Bukkit.broadcastMessage("§a" + winner.getName() + " won a bridge duel against " + loser.getName() + "!");
+
+        int winnerScore = winnerTeam == Team.RED ? redScore : blueScore;
+        int loserScore = winnerTeam == Team.RED ? blueScore : redScore;
+
+        Bukkit.broadcastMessage("§a" + winner.getName() + " won a bridge duel against " + loser.getName() + "! §7(" + winnerScore + " - " + loserScore + ")");
 
         new DiscordWebhook()
                 .setUsername(winner.getName())
                 .setAvatarUrl("https://mc-heads.net/avatar/" + winner.getName())
-                .sendMessage(winner.getName() + " won a bridge duel against " + loser.getName(), 16776960);
+                .sendMessage(winner.getName() + " won a bridge duel against " + loser.getName() + "! (" + winnerScore + " - " + loserScore + ")", 16776960);
+
         cleanup();
     }
+
 
     public void onQuit(Player p) { if (!finished) markLoser(p); }
     private void markLoser(Player p) {
         finished = true;
         Player loser = p == p1 ? p1 : p2;
         Player winner = loser == p1 ? p2 : p1;
-        Bukkit.broadcastMessage("§a" + winner.getName() + " won a bridge duel against " + loser.getName());
+        Bukkit.broadcastMessage("§a" + winner.getName() + " won a bridge duel against " + loser.getName() + " §7(FORFEIT)");
 
         new DiscordWebhook()
                 .setUsername(winner.getName())
                 .setAvatarUrl("https://mc-heads.net/avatar/" + winner.getName())
-                .sendMessage(winner.getName() + " won a bridge duel against " + loser.getName(), 16776960);
+                .sendMessage(winner.getName() + " won a bridge duel against " + loser.getName() + " (FORFEIT)", 16776960);
 
         cleanup();
     }

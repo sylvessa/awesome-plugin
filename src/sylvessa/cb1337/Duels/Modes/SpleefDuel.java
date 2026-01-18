@@ -20,6 +20,8 @@ import sylvessa.cb1337.Util.DiscordWebhook;
 
 import java.util.Random;
 
+import static sylvessa.cb1337.Util.Helpers.freezeWorldTime;
+
 public class SpleefDuel extends DuelGame {
 
     private int countdown = 5;
@@ -49,6 +51,7 @@ public class SpleefDuel extends DuelGame {
     public void start() {
         createWorld();
         buildArena();
+        freezeWorldTime(world, 6000);
         preparePlayers();
         startCountdown();
     }

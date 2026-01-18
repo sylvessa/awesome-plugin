@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import sylvessa.cb1337.Duels.Modes.BridgeDuel;
+import sylvessa.cb1337.Duels.Modes.PvPDuel;
 import sylvessa.cb1337.Duels.Modes.SpleefDuel;
 import sylvessa.cb1337.Duels.Modes.SumoDuel;
 import sylvessa.cb1337.Main;
@@ -83,6 +84,8 @@ public class DuelManager {
         if(type == DuelType.SPLEEF) return new SpleefDuel(p1, p2);
         if(type == DuelType.SUMO) return new SumoDuel(p1, p2);
         if(type == DuelType.BRIDGE) return new BridgeDuel(p1, p2);
+        if(type == DuelType.PVP) return new PvPDuel(p1, p2);
+
 
         return null;
     }

@@ -15,6 +15,8 @@ import sylvessa.cb1337.Util.DiscordWebhook;
 
 import java.util.Random;
 
+import static sylvessa.cb1337.Util.Helpers.freezeWorldTime;
+
 public class SumoDuel extends DuelGame {
     private int countdown = 5;
     private int taskId = -1;
@@ -39,6 +41,7 @@ public class SumoDuel extends DuelGame {
     public void start() {
         createWorld();
         buildArena();
+        freezeWorldTime(world, 6000);
         preparePlayers();
         startCountdown();
     }

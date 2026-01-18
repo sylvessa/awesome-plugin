@@ -11,7 +11,6 @@ import sylvessa.cb1337.Minigames.MinigameType;
 import java.util.List;
 
 public class TestMinigame extends Minigame {
-
     public TestMinigame(List<Player> players) {
         super(players);
     }

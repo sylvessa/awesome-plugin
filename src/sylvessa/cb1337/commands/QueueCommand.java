@@ -9,7 +9,7 @@ import sylvessa.cb1337.Types.PluginCommand;
 
 public class QueueCommand implements PluginCommand {
     public String name() { return "queue"; }
-    public String description() { return "join a minigame queue"; }
+    public String description() { return "Join a minigame queue"; }
 
     public boolean hidden() {
         return true;
@@ -37,6 +37,6 @@ public class QueueCommand implements PluginCommand {
             return;
         }
 
-        MinigameManager.queue(p, type);
+        //MinigameManager.queue(p, type);
     }
 }

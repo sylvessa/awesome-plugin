@@ -12,6 +12,7 @@ import sylvessa.cb1337.Teams.TeamManager;
 import sylvessa.cb1337.Types.Team;
 import sylvessa.cb1337.UserConfig;
 import sylvessa.cb1337.Util.Helpers;
+import sylvessa.cb1337.commands.CreativeCommand;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -58,6 +59,8 @@ public class JoinListener extends PlayerListener {
 
     public void onPlayerQuit(PlayerQuitEvent event) {
         String name = event.getPlayer().getName();
+
+        CreativeCommand.returnFromCreative(event.getPlayer());
 
         Log.info("Saving " + name + "'s data.");
 
