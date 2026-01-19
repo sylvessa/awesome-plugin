@@ -1,8 +1,10 @@
 package sylvessa.cb1337.Listeners;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
 public class CustomPvpPlayerListener extends PlayerListener {
@@ -30,5 +32,18 @@ public class CustomPvpPlayerListener extends PlayerListener {
 
         victim.setVelocity(v);
         victim.damage(damage, attacker);
+    }
+
+    @Override
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Player p = event.getPlayer();
+        Location to = event.getTo();
+
+        if (to == null) return;
+        if (!p.getWorld().getName().equalsIgnoreCase("creative")) return;
+        if (to.getY() >= -5) return;
+
+        Location spawn = new Location(p.getWorld(), 0, 64, 0);
+        p.teleport(spawn);
     }
 }
