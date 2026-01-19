@@ -1,11 +1,14 @@
 package sylvessa.cb1337.Duels.Modes;
 
+import net.minecraft.server.Packet9Respawn;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import sylvessa.cb1337.ChunkGenerators.Void;
@@ -234,7 +237,17 @@ public class BridgeDuel extends DuelGame {
 
     public void onDamage(Player p, EntityDamageEvent e) {
         if (e.getCause() == EntityDamageEvent.DamageCause.FALL) { e.setCancelled(true); return; }
-        if (p.getHealth() - e.getDamage() <= 0) { e.setCancelled(true); respawnPlayer(p); }
+        //if (p.getHealth() - e.getDamage() <= 0) { e.setCancelled(true); respawnPlayer(p); }
+    }
+
+    @Override
+    public void onDeath(Player p, EntityDeathEvent event) {
+        event.getDrops().clear();
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
+            ((CraftPlayer) p).getHandle().netServerHandler.a(new Packet9Respawn());
+            respawnPlayer(p);
+        }, 2L);
     }
 
     private void endGame(Team winnerTeam) {

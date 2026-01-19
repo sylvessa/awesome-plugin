@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import sylvessa.cb1337.Duels.DuelGame;
 import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Main;
+import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Types.*;
 import sylvessa.cb1337.UserConfig;
 
@@ -30,6 +31,11 @@ public class TpaCommand implements PluginCommand {
             return;
         }
 
+        if (MinigameManager.get(from) != null || MinigameManager.getQueued(from) != null) {
+            from.sendMessage("§cYou cannot use this command while in a minigame!");
+            return;
+        }
+
         Player to = Bukkit.getPlayer(args[0]);
         if(to == null || from == to) {
             sender.sendMessage("§cPlayer not found.");
@@ -45,6 +51,11 @@ public class TpaCommand implements PluginCommand {
         DuelGame toGame = DuelManager.get(to);
         if (toGame != null) {
             from.sendMessage("§cThat player is in a duel and cannot receive TPA requests.");
+            return;
+        }
+
+        if (MinigameManager.get(to) != null || MinigameManager.getQueued(to) != null) {
+            from.sendMessage("§cThat player is in a minigame and cannot receive TPA requests.");
             return;
         }
 

@@ -1,6 +1,10 @@
 package sylvessa.cb1337.Listeners;
 
+import net.minecraft.server.Packet9Respawn;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -58,9 +62,13 @@ public class DeathListener extends EntityListener {
             }
         }
 
-        String webhook = Main.getInstance().getPluginConfig().getString("discord.webhook-url", "");
-        if (!webhook.isEmpty()) {
-            sendDeathWebhook(webhook, stripColorCodes(msg), p.getName());
+        String name = event.getEntity().getWorld().getName();
+
+        if (name.equals("world") || name.equals("world_nether")) {
+            String webhook = Main.getInstance().getPluginConfig().getString("discord.webhook-url", "");
+            if (!webhook.isEmpty()) {
+                sendDeathWebhook(webhook, stripColorCodes(msg), p.getName());
+            }
         }
 
         //org.bukkit.Bukkit.getServer().getLogger().info(msg);

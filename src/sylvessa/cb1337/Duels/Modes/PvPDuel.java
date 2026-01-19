@@ -1,10 +1,13 @@
 package sylvessa.cb1337.Duels.Modes;
 
+import net.minecraft.server.Packet9Respawn;
 import org.bukkit.*;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -172,18 +175,18 @@ public class PvPDuel extends DuelGame {
     public void onDamage(Player p, EntityDamageEvent e) {
         if(e.getCause() == EntityDamageEvent.DamageCause.FALL) {
             e.setCancelled(true);
-            return;
         }
+    }
 
-        if(!started || finished) return;
-        if(!isParticipant(p)) return;
+    public void onDeath(Player p, EntityDeathEvent event) {
+        event.getDrops().clear();
 
-        if(p.getHealth() - e.getDamage() <= 0) {
-            e.setCancelled(true);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
+            ((CraftPlayer) p).getHandle().netServerHandler.a(new Packet9Respawn());
 
             Player winner = p == p1 ? p2 : p1;
             finish(winner, p);
-        }
+        }, 2L);
     }
 
     private void finish(Player winner, Player loser) {

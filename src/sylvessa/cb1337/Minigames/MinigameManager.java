@@ -1,6 +1,7 @@
 package sylvessa.cb1337.Minigames;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import static sylvessa.cb1337.Util.Helpers.freezeWorldTime;
 
 public class MinigameManager {
     private static final Map<MinigameType, ArrayList<Minigame>> queued = new HashMap<>();
@@ -44,7 +47,13 @@ public class MinigameManager {
         p.getInventory().setArmorContents(null);
 
         g.players.add(p);
-        p.teleport(g.world.getSpawnLocation());
+        //p.teleport(g.world.getSpawnLocation());
+        p.teleport(new Location(g.world, g.lobbySpawn.getX(), g.lobbySpawn.getY(), g.lobbySpawn.getZ()));
+
+        p.setHealth(20);
+        p.setSaturation(0);
+        p.setFoodLevel(20);
+
         p.sendMessage("§aJoined queue");
 
         manageLobbyCountdown(g);
@@ -141,6 +150,7 @@ public class MinigameManager {
         if(g != null) {
             g.players.remove(p);
             restoreState(p);
+
             if(g.players.size() < g.minPlayers()) {
                 end(g);
             }
@@ -176,7 +186,12 @@ public class MinigameManager {
         return getQueued(p) != null;
     }
 
+
+
     public static void end(Minigame g) {
+        if(g.ended) return;
+        g.ended = true;
+
         for(Player p : new ArrayList<>(g.players)) {
             restoreState(p);
             active.remove(p.getName());
@@ -189,16 +204,21 @@ public class MinigameManager {
     private static void createLobbyWorld(Minigame g) {
         try {
             String name = "mg_lobby_" + g.getType().name().toLowerCase() + "_" + new Random().nextInt(100000);
-            CustomWorldLoader.copyArenaToServerJar(g.lobbyTemplate(), name);
+            CustomWorldLoader.copyArenaToServerJar(g.lobbyTemplate, name);
             g.world = Bukkit.createWorld(name, World.Environment.NORMAL, new Void());
+
+            freezeWorldTime(g.world, g.lobbyTime);
         } catch(Exception ignored) {}
     }
+
 
     private static void createArenaWorld(Minigame g) {
         try {
             String name = "mg_game_" + g.getType().name().toLowerCase() + "_" + new Random().nextInt(100000);
-            CustomWorldLoader.copyArenaToServerJar(g.arenaTemplate(), name);
+            CustomWorldLoader.copyArenaToServerJar(g.arenaTemplate, name);
             g.world = Bukkit.createWorld(name, World.Environment.NORMAL, new Void());
+
+            freezeWorldTime(g.world, g.arenaTime);
         } catch(Exception ignored) {}
     }
 
@@ -239,6 +259,7 @@ public class MinigameManager {
 
         p.teleport(s.loc);
         p.getInventory().setContents(s.inv);
+        p.setGameMode(GameMode.SURVIVAL);
         p.getInventory().setArmorContents(s.armor);
         p.setFallDistance(0f);
     }

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import sylvessa.cb1337.Duels.DuelGame;
 import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Main;
+import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Types.PluginCommand;
 import sylvessa.cb1337.UserConfig;
 
@@ -33,6 +34,11 @@ public class HomeCommand implements PluginCommand {
         DuelGame fromGame = DuelManager.get(p);
         if (fromGame != null) {
             p.sendMessage("§cYou cannot use this command while in a duel!");
+            return;
+        }
+
+        if (MinigameManager.get(p) != null) {
+            p.sendMessage("§cYou cannot use this command while in a minigame!");
             return;
         }
 

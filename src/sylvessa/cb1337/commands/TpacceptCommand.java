@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import sylvessa.cb1337.Duels.DuelGame;
 import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Main;
+import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Types.*;
 
 @SuppressWarnings("unused")
@@ -21,6 +22,11 @@ public class TpacceptCommand implements PluginCommand {
         DuelGame fromGame = DuelManager.get(target);
         if (fromGame != null) {
             target.sendMessage("§cYou cannot use this command while in a duel!");
+            return;
+        }
+
+        if (MinigameManager.get(target) != null || MinigameManager.getQueued(target) != null) {
+            target.sendMessage("§cYou cannot use this command while in a minigame!");
             return;
         }
 

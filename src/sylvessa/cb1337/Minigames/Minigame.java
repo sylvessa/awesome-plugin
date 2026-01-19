@@ -1,10 +1,14 @@
 package sylvessa.cb1337.Minigames;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 
@@ -13,13 +17,26 @@ public abstract class Minigame {
     protected final List<Player> players;
     protected World world;
     protected boolean started;
-    protected boolean finished;
+    protected boolean ended;
 
     protected int countdownTask = -1;
     protected boolean countingDown;
 
-    public Minigame(List<Player> players) {
+    protected final String lobbyTemplate;
+    protected final String arenaTemplate;
+    protected final Vector lobbySpawn;
+    protected final long lobbyTime;
+    protected final long arenaTime;
+
+
+    public Minigame(List<Player> players, String lobbyTemplate, String arenaTemplate, Vector lobbySpawn,
+                    long lobbyTime, long arenaTime) {
         this.players = players;
+        this.lobbyTemplate = lobbyTemplate;
+        this.arenaTemplate = arenaTemplate;
+        this.lobbySpawn = lobbySpawn;
+        this.lobbyTime = lobbyTime;
+        this.arenaTime = arenaTime;
     }
 
     public abstract MinigameType getType();
@@ -27,19 +44,19 @@ public abstract class Minigame {
     public abstract int minPlayers();
     public abstract int maxPlayers();
 
-    public abstract String lobbyTemplate();
-    public abstract String arenaTemplate();
-
     public abstract void teleportToArena();
     public abstract void startGame();
     public abstract void endGame();
     public void onDamage(Player p, EntityDamageEvent e) {};
 
     public abstract void onMove(Player p);
+    public abstract void onMoveInQueue(Player p);
     public abstract void onQuit(Player p);
 
     public boolean canBreak(Player p, BlockBreakEvent e) { return false; }
     public boolean canPlace(Player p, BlockPlaceEvent e) { return false; }
+    public void onChat(Player p, PlayerChatEvent e) {}
+    public void onDeath(Player p, EntityDeathEvent e) {}
 
     public boolean isPlaying(Player p) {
         return players.contains(p);

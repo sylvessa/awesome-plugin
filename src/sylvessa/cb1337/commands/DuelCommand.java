@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Duels.DuelType;
+import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Types.PluginCommand;
 
 public class DuelCommand implements PluginCommand {
@@ -18,6 +19,11 @@ public class DuelCommand implements PluginCommand {
 
         if (p.getWorld().getName().equals("creative")) {
             p.sendMessage(ChatColor.RED + "No");
+            return;
+        }
+
+        if (MinigameManager.get(p) != null || MinigameManager.getQueued(p) != null) {
+            p.sendMessage("§cYou cannot use this command while in a minigame!");
             return;
         }
 

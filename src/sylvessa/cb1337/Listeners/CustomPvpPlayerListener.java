@@ -43,7 +43,6 @@ public class CustomPvpPlayerListener extends PlayerListener {
         if (!p.getWorld().getName().equalsIgnoreCase("creative")) return;
         if (to.getY() >= -5) return;
 
-        Location spawn = new Location(p.getWorld(), 0, 64, 0);
-        p.teleport(spawn);
+        p.teleport(p.getWorld().getSpawnLocation());
     }
 }

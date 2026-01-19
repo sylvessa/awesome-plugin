@@ -5,6 +5,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import sylvessa.cb1337.Duels.DuelManager;
+import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Types.PluginCommand;
 
 import java.util.HashMap;
@@ -31,6 +33,11 @@ public class CreativeCommand implements PluginCommand {
         if (!(sender instanceof Player)) return;
 
         Player p = (Player) sender;
+
+        if (MinigameManager.get(p) != null || DuelManager.get(p) != null || MinigameManager.getQueued(p) != null) {
+            p.sendMessage("§cYou cannot use this command right now!");
+            return;
+        }
 
         World creativeWorld = Bukkit.getWorld(WORLD_NAME);
         if (creativeWorld == null) {

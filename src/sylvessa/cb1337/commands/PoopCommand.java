@@ -1,6 +1,7 @@
 package sylvessa.cb1337.commands;
 
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -21,6 +22,13 @@ public class PoopCommand implements PluginCommand {
         }
 
         Player p = (Player) sender;
+        World w = p.getWorld();
+
+        if(!w.getName().equals("world") && !w.getName().equals("world_nether")) {
+            sender.sendMessage("§cYou can only set your home in the overworld or nether.");
+            return;
+        }
+
         UserConfig uc = Main.getInstance().getUserConfig(p.getName());
         if (uc == null) {
             p.sendMessage("§cYour user config is not loaded.");

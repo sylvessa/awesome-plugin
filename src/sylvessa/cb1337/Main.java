@@ -134,17 +134,23 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvent(Event.Type.BLOCK_BREAK, new DuelBlockListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.BLOCK_PLACE, new DuelBlockListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new DuelEntityListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.FOOD_LEVEL_CHANGE, new DuelEntityListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, new DuelEntityListener(), Event.Priority.Normal, this);
 
         // minigame listeners
         getServer().getPluginManager().registerEvent(Event.Type.BLOCK_BREAK, new MinigameBlockListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.BLOCK_PLACE, new MinigameBlockListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_MOVE, new MinigamePlayerListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, new MinigamePlayerListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, new MinigamePlayerListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new MinigameEntityListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.FOOD_LEVEL_CHANGE, new MinigameEntityListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, new MinigameEntityListener(), Event.Priority.Normal, this);
 
         // custom pvp
         getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new CustomPvpEntityListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_FISH, new CustomPvpPlayerListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_MOVE, new CustomPvpPlayerListener(), Event.Priority.Normal, this);
 
 //        getServer().getPluginManager().registerEvents(new ChatListener(), this);
 //        getServer().getPluginManager().registerEvents(new JoinListener(this), this);

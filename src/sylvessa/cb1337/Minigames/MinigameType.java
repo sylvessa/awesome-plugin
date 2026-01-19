@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum MinigameType {
-    GUESS;
+    GTB;
 
     public Minigame create() {
         List<Player> list = new ArrayList<>();
-        if(this == GUESS) return new GuessTheBuildMinigame(list);
+        if(this == GTB) return new GuessTheBuildMinigame(list);
         return null;
     }
 }
