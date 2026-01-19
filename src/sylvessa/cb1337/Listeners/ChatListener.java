@@ -69,7 +69,7 @@ public class ChatListener extends PlayerListener {
 
                 String json = "{\"username\":\"" + escape(username) + "\"," +
                         "\"avatar_url\":\"https://mc-heads.net/avatar/" + escape(username) + "\"," +
-                        "\"content\":\"" + escape(message) + "\"}";
+                        "\"content\":\"" + escape(message).replace("@everyone", "BOOYAH!").replace("@here", "BOOYAH!") + "\"}";
 
                 OutputStream os = con.getOutputStream();
                 os.write(json.getBytes(StandardCharsets.UTF_8));

@@ -37,7 +37,7 @@ public class HomeCommand implements PluginCommand {
         }
 
         if (p.getWorld().getName().equals("creative")) {
-            p.sendMessage(ChatColor.RED + "No");
+            p.sendMessage(ChatColor.RED + "Run /creative");
             return;
         }
 
