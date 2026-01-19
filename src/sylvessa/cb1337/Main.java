@@ -125,6 +125,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new DamageListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, new DeathListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.LEAVES_DECAY, new LeafDecayListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_PORTAL, new PortalListener(), Event.Priority.Normal, this);
 
         // duel listeners
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_MOVE, new DuelPlayerListener(), Event.Priority.Normal, this);
