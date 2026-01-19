@@ -141,11 +141,9 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, new MinigamePlayerListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new MinigameEntityListener(), Event.Priority.Normal, this);
 
-
-
-
-
-
+        // custom pvp
+        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new CustomPvpEntityListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_FISH, new CustomPvpPlayerListener(), Event.Priority.Normal, this);
 
 //        getServer().getPluginManager().registerEvents(new ChatListener(), this);
 //        getServer().getPluginManager().registerEvents(new JoinListener(this), this);

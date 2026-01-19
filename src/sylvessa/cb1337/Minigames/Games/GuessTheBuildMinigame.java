@@ -10,17 +10,17 @@ import sylvessa.cb1337.Minigames.MinigameType;
 
 import java.util.List;
 
-public class TestMinigame extends Minigame {
-    public TestMinigame(List<Player> players) {
+public class GuessTheBuildMinigame extends Minigame {
+    public GuessTheBuildMinigame(List<Player> players) {
         super(players);
     }
 
     public MinigameType getType() {
-        return MinigameType.TEST;
+        return MinigameType.GUESS;
     }
 
     public int minPlayers() { return 2; }
-    public int maxPlayers() { return 2; }
+    public int maxPlayers() { return 15; }
 
     public String lobbyTemplate() { return "test_lobby"; }
     public String arenaTemplate() { return "test_arena"; }

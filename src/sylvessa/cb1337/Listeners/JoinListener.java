@@ -1,17 +1,14 @@
 package sylvessa.cb1337.Listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import sylvessa.cb1337.Discord.BotUtil;
+import org.bukkit.util.Vector;
 import sylvessa.cb1337.Log;
 import sylvessa.cb1337.Main;
-import sylvessa.cb1337.Teams.TeamManager;
-import sylvessa.cb1337.Types.Team;
 import sylvessa.cb1337.UserConfig;
-import sylvessa.cb1337.Util.Helpers;
 import sylvessa.cb1337.commands.CreativeCommand;
 
 import java.io.OutputStream;
@@ -87,6 +84,7 @@ public class JoinListener extends PlayerListener {
 //        BotUtil.updateChannelDescription(online + " player" + (online != 1 ? "s" : "") + " online | Site map: https://map.snep.lol/");
     }
 
+    // PRIVATE
     private void sendJoinLeaveWebhook(String url, String username, boolean joined) {
         new Thread(() -> {
             try {
