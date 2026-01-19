@@ -312,9 +312,10 @@ public class BridgeDuel extends DuelGame {
         p.getInventory().setBoots(new ItemStack(Material.CHAINMAIL_BOOTS, 1, (short)0));
         p.getInventory().setItem(0, new ItemStack(Material.IRON_SWORD, 1, (short)0));
         p.getInventory().setItem(1, new ItemStack(Material.BOW, 1, (short)0));
+        p.getInventory().setItem(2, new ItemStack(Material.SHEARS, 1, (short)0));
         byte woolData = team == Team.RED ? (byte)14 : (byte)11;
-        for (int i = 2; i <= 4; i++) p.getInventory().setItem(i, new ItemStack(Material.WOOL, 64, woolData));
-        p.getInventory().setItem(5, new ItemStack(Material.GOLDEN_APPLE, 8, (short)0));
+        for (int i = 3; i <= 5; i++) p.getInventory().setItem(i, new ItemStack(Material.WOOL, 64, woolData));
+        p.getInventory().setItem(6, new ItemStack(Material.GOLDEN_APPLE, 8, (short)0));
         p.getInventory().setItem(8, new ItemStack(Material.ARROW, 64, (short)0));
     }
 

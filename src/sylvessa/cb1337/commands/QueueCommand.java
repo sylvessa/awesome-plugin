@@ -20,6 +20,12 @@ public class QueueCommand implements PluginCommand {
         Player p = (Player) sender;
 
         if(args.length == 0) {
+            if(MinigameManager.isQueued(p)) {
+                MinigameManager.remove(p);
+                p.sendMessage(ChatColor.RED + "You left the queue.");
+                return;
+            }
+
             p.sendMessage(ChatColor.AQUA + "Available minigames:");
             for(MinigameType t : MinigameType.values()) {
                 p.sendMessage(ChatColor.YELLOW + "- " + t.name().toLowerCase());

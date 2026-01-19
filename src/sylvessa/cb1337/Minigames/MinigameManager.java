@@ -51,10 +51,15 @@ public class MinigameManager {
         p.teleport(new Location(g.world, g.lobbySpawn.getX(), g.lobbySpawn.getY(), g.lobbySpawn.getZ()));
 
         p.setHealth(20);
-        p.setSaturation(0);
+        p.setSaturation(20);
         p.setFoodLevel(20);
 
-        p.sendMessage("§aJoined queue");
+        p.sendMessage("§aJoined queue. Run /queue to leave queue." );
+
+        for(String line : g.lobbyJoinDesc.split("\n")) {
+            p.sendMessage(line);
+        }
+        p.sendMessage("");
 
         manageLobbyCountdown(g);
     }
@@ -158,16 +163,23 @@ public class MinigameManager {
         }
 
         for(ArrayList<Minigame> list : queued.values()) {
-            for(Minigame mg : list) {
+            for(Minigame mg : new ArrayList<>(list)) {
                 if(mg.players.remove(p)) {
                     restoreState(p);
                     cancelCountdown(mg);
                     manageLobbyCountdown(mg);
+
+                    // if queue is now empty and game hasnt started, delete the lobby world
+                    if(mg.players.isEmpty() && !mg.started) {
+                        list.remove(mg);
+                        unloadWorld(mg.world);
+                    }
                     return;
                 }
             }
         }
     }
+
 
     public static Minigame get(Player p) {
         return active.get(p.getName());

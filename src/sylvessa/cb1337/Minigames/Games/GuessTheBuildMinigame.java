@@ -1,9 +1,6 @@
 package sylvessa.cb1337.Minigames.Games;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -43,7 +40,10 @@ public class GuessTheBuildMinigame extends Minigame {
                 "minigame_guess_arena_happyworld",
                 new Vector(343, 108, 424),
                 6000,
-                6000
+                6000,
+                ChatColor.YELLOW + "Welcome to Guess the Build!\n" +
+                        ChatColor.GOLD + "You are given 90 seconds to guess someones build.\n" +
+                        ChatColor.GREEN + "Whoever guesses the most builds correctly wins!"
         );
     }
 
@@ -112,10 +112,16 @@ public class GuessTheBuildMinigame extends Minigame {
         roundId++;
 
         if(players.size() < minPlayers()) return;
-        if(allBuiltTwice()) return;
+        if(allBuiltTwice()) {
+            MinigameManager.end(this);
+            return;
+        }
 
         builder = selectNextBuilder();
-        if(builder == null) return;
+        if(builder == null) {
+            MinigameManager.end(this);
+            return;
+        }
 
         lastBuilder = builder;
         buildCount.put(builder, buildCount.get(builder) + 1);
@@ -127,6 +133,8 @@ public class GuessTheBuildMinigame extends Minigame {
         roundStart = System.currentTimeMillis();
 
         int myRound = roundId;
+
+        clearBuilderArea();
 
         for(Player p : players) {
             p.setGameMode(GameMode.CREATIVE);
@@ -222,6 +230,7 @@ public class GuessTheBuildMinigame extends Minigame {
                 pl.sendMessage("§eEveryone guessed the word!");
                 pl.sendMessage("");
             }
+
             Bukkit.getScheduler().scheduleSyncDelayedTask(
                     Main.getInstance(),
                     this::startRound,
@@ -278,7 +287,7 @@ public class GuessTheBuildMinigame extends Minigame {
     }
 
     public void onMoveInQueue(Player p) {
-        if(p.getLocation().getY() >= 106) return;
+        if(p.getLocation().getY() >= 105) return;
 
         Location from = p.getLocation();
         Location target = new Location(from.getWorld(), 343, from.getY(), 424);
@@ -326,5 +335,16 @@ public class GuessTheBuildMinigame extends Minigame {
             sb.append(revealed[i] ? word.charAt(i) : '_').append(' ');
         }
         return sb.toString();
+    }
+
+    private void clearBuilderArea() {
+        for(int x = 293; x <= 333; x++) {
+            for(int y = 91; y <= world.getMaxHeight(); y++) {
+                for(int z = 591; z <= 631; z++) {
+                    Block b = world.getBlockAt(x, y, z);
+                    b.setType(Material.AIR);
+                }
+            }
+        }
     }
 }

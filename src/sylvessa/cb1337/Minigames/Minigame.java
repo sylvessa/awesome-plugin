@@ -27,16 +27,19 @@ public abstract class Minigame {
     protected final Vector lobbySpawn;
     protected final long lobbyTime;
     protected final long arenaTime;
+    protected final String lobbyJoinDesc;
 
 
     public Minigame(List<Player> players, String lobbyTemplate, String arenaTemplate, Vector lobbySpawn,
-                    long lobbyTime, long arenaTime) {
+                    long lobbyTime, long arenaTime, String lobbyJoinDesc) {
         this.players = players;
         this.lobbyTemplate = lobbyTemplate;
         this.arenaTemplate = arenaTemplate;
         this.lobbySpawn = lobbySpawn;
         this.lobbyTime = lobbyTime;
         this.arenaTime = arenaTime;
+        this.lobbyJoinDesc = lobbyJoinDesc;
+
     }
 
     public abstract MinigameType getType();
