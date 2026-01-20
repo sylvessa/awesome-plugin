@@ -298,7 +298,7 @@ public class GuessTheBuildMinigame extends Minigame {
 
     public void onMove(Player p) {
         if(!started) p.teleport(p.getLocation());
-        if (p.getLocation().getY() > 127) p.teleport(p.getLocation());
+        if (p.getLocation().getY() > 127) p.teleport(p.getLocation().add(0, -4, 0));
     }
 
     public void onMoveInQueue(Player p) {
