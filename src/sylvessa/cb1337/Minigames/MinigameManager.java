@@ -95,7 +95,7 @@ public class MinigameManager {
 
     private static void startCountdown(Minigame g) {
         g.countingDown = true;
-        final int[] time = {5};
+        final int[] time = {30};
 
         if(g.countdownTask != -1) {
             Bukkit.getScheduler().cancelTask(g.countdownTask);
@@ -119,9 +119,12 @@ public class MinigameManager {
                         return;
                     }
 
-                    for(Player p : g.players) {
-                        p.sendMessage("§eStarting in " + time[0]);
+                    if(time[0] <= 5 || time[0] % 10 == 0) {
+                        for(Player p : g.players) {
+                            p.sendMessage("§eBeginning in " + time[0] + "...");
+                        }
                     }
+
                     time[0]--;
                 },
                 0L,

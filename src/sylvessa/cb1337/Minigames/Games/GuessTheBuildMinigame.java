@@ -23,6 +23,7 @@ public class GuessTheBuildMinigame extends Minigame {
     protected boolean[] revealed;
     protected boolean roundActive = false;
     protected long roundStart;
+    protected long roundEndTime;
     protected int roundLengthTicks = 1800;
     protected int roundId = 0;
 
@@ -31,6 +32,8 @@ public class GuessTheBuildMinigame extends Minigame {
     protected Set<Player> guessed = new HashSet<>();
 
     protected boolean ended = false;
+
+    private int roundEndTaskId = -1;
 
     private static final String[] WORDS = GTBList.getWordList();
 
@@ -48,28 +51,19 @@ public class GuessTheBuildMinigame extends Minigame {
     }
 
     public MinigameType getType() { return MinigameType.GTB; }
-
     public int minPlayers() { return 2; }
     public int maxPlayers() { return 15; }
 
     public void teleportToArena() {
         Location center = new Location(world, 313, 92, 611);
         for(Player p : players) {
-            double x = 293 + Math.random() * (333 - 293);
-            double z = 591 + Math.random() * (631 - 591);
-            double y = 92;
-
+            double x = 293 + Math.random() * 40;
+            double z = 591 + Math.random() * 40;
             double dx = center.getX() - x;
-            double dy = center.getY() - y;
             double dz = center.getZ() - z;
-
-            float yaw = (float) Math.toDegrees(Math.atan2(-dx, dz));
-            float pitch = (float) Math.toDegrees(-Math.atan2(dy, Math.sqrt(dx*dx + dz*dz)));
-
-            Location loc = new Location(world, x, y, z);
+            float yaw = (float)Math.toDegrees(Math.atan2(-dx, dz));
+            Location loc = new Location(world, x, 92, z);
             loc.setYaw(yaw);
-            loc.setPitch(pitch);
-
             p.teleport(loc);
             p.setGameMode(GameMode.CREATIVE);
         }
@@ -95,7 +89,7 @@ public class GuessTheBuildMinigame extends Minigame {
 
         for(Player p : players) {
             int pts = points.get(p);
-            p.sendMessage("§ePoints: §a" + pts);
+            p.sendMessage("§eYour Total Points: §a" + pts);
             if(pts > best) {
                 best = pts;
                 winner = p;
@@ -103,7 +97,7 @@ public class GuessTheBuildMinigame extends Minigame {
         }
 
         if(winner != null) {
-            Bukkit.broadcastMessage("§6Guess The Build winner: §a" + winner.getName());
+            Bukkit.broadcastMessage("§6Guess The Build winner: §a" + winner.getName() + " §7(" + points.get(winner) + ")");
         }
     }
 
@@ -131,6 +125,7 @@ public class GuessTheBuildMinigame extends Minigame {
         guessed.clear();
         roundActive = true;
         roundStart = System.currentTimeMillis();
+        roundEndTime = roundStart + roundLengthTicks * 50L;
 
         int myRound = roundId;
 
@@ -146,7 +141,7 @@ public class GuessTheBuildMinigame extends Minigame {
             }
         }
 
-        int reveals = Math.max(1, word.length() - 1);
+        int reveals = Math.max(1, word.replace(" ", "").length() - 1);
         int revealDelay = roundLengthTicks / reveals;
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(
@@ -158,13 +153,15 @@ public class GuessTheBuildMinigame extends Minigame {
         Bukkit.getScheduler().scheduleSyncDelayedTask(
                 Main.getInstance(),
                 () -> tickTimeBroadcast(myRound),
-                200L
+                20L
         );
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(
+        if(roundEndTaskId != -1) Bukkit.getScheduler().cancelTask(roundEndTaskId);
+        long delayTicks = (roundEndTime - System.currentTimeMillis()) / 50;
+        roundEndTaskId = Bukkit.getScheduler().scheduleSyncDelayedTask(
                 Main.getInstance(),
                 () -> endRound(myRound),
-                roundLengthTicks
+                delayTicks
         );
     }
 
@@ -172,7 +169,9 @@ public class GuessTheBuildMinigame extends Minigame {
         if(!roundActive || id != roundId || ended) return;
 
         List<Integer> hidden = new ArrayList<>();
-        for(int i = 0; i < revealed.length; i++) if(!revealed[i]) hidden.add(i);
+        for(int i = 0; i < word.length(); i++) {
+            if(word.charAt(i) != ' ' && !revealed[i]) hidden.add(i);
+        }
         if(hidden.isEmpty()) return;
 
         int idx = hidden.get((int)(Math.random() * hidden.size()));
@@ -180,7 +179,7 @@ public class GuessTheBuildMinigame extends Minigame {
 
         for(Player p : players) if(p != builder) p.sendMessage("§eWord: " + getWordDisplay());
 
-        int reveals = Math.max(1, word.length() - 1);
+        int reveals = Math.max(1, word.replace(" ", "").length() - 1);
         int revealDelay = roundLengthTicks / reveals;
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(
@@ -193,48 +192,16 @@ public class GuessTheBuildMinigame extends Minigame {
     private void tickTimeBroadcast(int id) {
         if(!roundActive || id != roundId || ended) return;
 
-        long elapsed = (System.currentTimeMillis() - roundStart) / 1000;
-        long left = (roundLengthTicks / 20) - elapsed;
-
+        long left = Math.max(0, (roundEndTime - System.currentTimeMillis()) / 1000);
         if(left > 0 && left % 10 == 0) {
             for(Player p : players) p.sendMessage("§eTime left: §a" + left + "s");
         }
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(
-                Main.getInstance(),
-                () -> tickTimeBroadcast(id),
-                20L
-        );
-    }
-
-    @Override
-    public void onChat(Player p, PlayerChatEvent e) {
-        if(!roundActive || p == builder || guessed.contains(p) || ended) return;
-
-        String msg = e.getMessage().toLowerCase();
-        if(!msg.equals(word.toLowerCase())) return;
-
-        e.setCancelled(true);
-        guessed.add(p);
-
-        long time = (System.currentTimeMillis() - roundStart) / 1000;
-        int score = Math.max(1, 30 - (int)time);
-        points.put(p, points.get(p) + score);
-
-        for(Player pl : players) pl.sendMessage("§a" + p.getName() + " guessed the word! §7(+" + score + ")");
-
-        if(guessed.size() >= players.size() - 1) {
-            roundActive = false;
-            roundId++;
-            for(Player pl : players) {
-                pl.sendMessage("§eEveryone guessed the word!");
-                pl.sendMessage("");
-            }
-
+        if(roundActive) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(
                     Main.getInstance(),
-                    this::startRound,
-                    60L
+                    () -> tickTimeBroadcast(id),
+                    20L
             );
         }
     }
@@ -243,6 +210,12 @@ public class GuessTheBuildMinigame extends Minigame {
         if(!roundActive || id != roundId || ended) return;
 
         roundActive = false;
+
+        if(roundEndTaskId != -1) {
+            Bukkit.getScheduler().cancelTask(roundEndTaskId);
+            roundEndTaskId = -1;
+        }
+
         for(Player p : players) {
             p.sendMessage("§cWord was: §a" + word);
             p.sendMessage("");
@@ -256,34 +229,76 @@ public class GuessTheBuildMinigame extends Minigame {
     }
 
     @Override
-    public boolean canBreak(Player p, BlockBreakEvent e) {
-        if(!roundActive || p != builder) return false;
+    public void onChat(Player p, PlayerChatEvent e) {
+        if(!roundActive || p == builder || guessed.contains(p) || ended) return;
 
-        Block b = e.getBlock();
-        int x = b.getX();
-        int y = b.getY();
-        int z = b.getZ();
-        if(y < 91) return false;
-        return x >= 293 && x <= 333 && z >= 591 && z <= 631;
+        String guess = e.getMessage().toLowerCase().replace(" ", "");
+        String target = word.toLowerCase().replace(" ", "");
+
+        if(!guess.equals(target)) return;
+
+        e.setCancelled(true);
+
+        boolean firstGuess = guessed.isEmpty();
+        guessed.add(p);
+
+        long total = roundLengthTicks / 20;
+        long left = Math.max(0, (roundEndTime - System.currentTimeMillis()) / 1000);
+
+        int baseScore = (int)(5 + ((double)left / total) * 15);
+        int bonus = firstGuess ? 5 : 0;
+        int score = baseScore + bonus;
+
+        points.put(p, points.get(p) + score);
+
+        for(Player pl : players) {
+            if(firstGuess) {
+                pl.sendMessage("§6" + p.getName() + " was first to guess! §7(+" + score + ")");
+            } else {
+                pl.sendMessage("§a" + p.getName() + " guessed the word! §7(+" + score + ")");
+            }
+        }
+
+        roundEndTime -= 10_000;
+
+        if(roundEndTaskId != -1) Bukkit.getScheduler().cancelTask(roundEndTaskId);
+        long newDelayTicks = Math.max(0, (roundEndTime - System.currentTimeMillis()) / 50);
+        roundEndTaskId = Bukkit.getScheduler().scheduleSyncDelayedTask(
+                Main.getInstance(),
+                () -> endRound(roundId),
+                newDelayTicks
+        );
+
+        if(guessed.size() >= players.size() - 1) {
+            Bukkit.broadcastMessage("§eEveryone has guessed the word!");
+            endRound(roundId);
+        }
     }
 
-    @Override
-    public boolean canPlace(Player p, BlockPlaceEvent e) {
-        if(!roundActive || p != builder) return false;
+    public void onQuit(Player p) {
+        players.remove(p);
+        points.remove(p);
+        buildCount.remove(p);
+        guessed.remove(p);
 
-        Block b = e.getBlock();
-        int x = b.getX();
-        int y = b.getY();
-        int z = b.getZ();
-        if(y < 91 || x < 293 || x > 333 || z < 591 || z > 631) return false;
+        if(p == builder) {
+            roundActive = false;
+            roundId++;
+            Bukkit.getScheduler().scheduleSyncDelayedTask(
+                    Main.getInstance(),
+                    this::startRound,
+                    40L
+            );
+        }
 
-        Material m = b.getType();
-        return !(m == Material.TNT || m == Material.FIRE || m == Material.LAVA
-                || m == Material.STATIONARY_LAVA || m == Material.WATER || m == Material.STATIONARY_WATER);
+        if(players.size() < minPlayers()) {
+            roundActive = false;
+        }
     }
 
     public void onMove(Player p) {
         if(!started) p.teleport(p.getLocation());
+        if (p.getLocation().getY() > 127) p.teleport(p.getLocation());
     }
 
     public void onMoveInQueue(Player p) {
@@ -294,22 +309,41 @@ public class GuessTheBuildMinigame extends Minigame {
 
         Vector horiz = target.toVector().subtract(from.toVector());
         horiz.setY(0);
-        horiz.normalize().multiply(1.2);
+        horiz.normalize().multiply(1.5);
 
-        Vector v = new Vector(horiz.getX(), 1.3, horiz.getZ());
-        p.setVelocity(v);
+        p.setVelocity(new Vector(horiz.getX(), 1.3, horiz.getZ()));
     }
 
-    public void onQuit(Player p) {
-        players.remove(p);
-        points.remove(p);
-        buildCount.remove(p);
-        guessed.remove(p);
+    @Override
+    public boolean canBreak(Player p, BlockBreakEvent e) {
+        if(!roundActive || p != builder) return false;
+        Block b = e.getBlock();
+        int x = b.getX();
+        int y = b.getY();
+        int z = b.getZ();
+        return y >= 91 && x >= 293 && x <= 333 && z >= 591 && z <= 631;
+    }
 
-        if(players.size() < minPlayers()) {
-            roundActive = false;
-            roundId++;
-        }
+    @Override
+    public boolean canPlace(Player p, BlockPlaceEvent e) {
+        if(!roundActive || p != builder) return false;
+        Block b = e.getBlock();
+        int x = b.getX();
+        int y = b.getY();
+        int z = b.getZ();
+
+        if(y < 91 || x < 293 || x > 333 || z < 591 || z > 631) return false;
+
+        Material block = b.getType();
+        Material item = e.getItemInHand().getType();
+
+        if(block == Material.FIRE || block == Material.LAVA || block == Material.STATIONARY_LAVA
+                || block == Material.WATER || block == Material.STATIONARY_WATER) return false;
+
+        if(item == Material.FLINT_AND_STEEL || item == Material.LAVA_BUCKET
+                || item == Material.WATER_BUCKET) return false;
+
+        return true;
     }
 
     private boolean allBuiltTwice() {
@@ -332,7 +366,12 @@ public class GuessTheBuildMinigame extends Minigame {
     private String getWordDisplay() {
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < word.length(); i++) {
-            sb.append(revealed[i] ? word.charAt(i) : '_').append(' ');
+            char c = word.charAt(i);
+            if(c == ' ') sb.append("  ");
+            else {
+                sb.append(revealed[i] ? c : '_');
+                sb.append(" ");
+            }
         }
         return sb.toString();
     }
@@ -341,8 +380,7 @@ public class GuessTheBuildMinigame extends Minigame {
         for(int x = 293; x <= 333; x++) {
             for(int y = 91; y <= world.getMaxHeight(); y++) {
                 for(int z = 591; z <= 631; z++) {
-                    Block b = world.getBlockAt(x, y, z);
-                    b.setType(Material.AIR);
+                    world.getBlockAt(x, y, z).setType(Material.AIR);
                 }
             }
         }

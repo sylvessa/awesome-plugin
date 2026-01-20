@@ -1,9 +1,13 @@
 package sylvessa.cb1337.Minigames.Games;
 
+import net.minecraft.server.Packet9Respawn;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -21,10 +25,13 @@ public class SkywarsMinigame extends Minigame {
     private final List<Location> spawnChests = new ArrayList<>();
     private final List<Location> midChests = new ArrayList<>();
     private final Map<Player, Long> fallImmunity = new HashMap<>();
+    private final Map<Player, Location> playerNoteBlocks = new HashMap<>();
     private final Random rand = new Random();
 
     private boolean refill1 = false;
     private boolean refill2 = false;
+
+    private boolean canDoStuff = false;
 
     public SkywarsMinigame(List<Player> players) {
         super(players,
@@ -52,12 +59,13 @@ public class SkywarsMinigame extends Minigame {
         for(int[] s : spawnsRaw) spawns.add(new Location(world, s[0], s[1], s[2]));
 
         int[][] spawnChestsRaw = {
-                {108,64,420},{112,63,423},{111,57,423},{114,64,393},{118,63,397},{117,57,396},
+                {108,64,420},{112,63,424},{111,57,423},{114,64,393},{118,63,397},{117,57,396},
                 {139,64,368},{143,63,372},{142,57,371},{162,63,366},{166,64,362},{163,57,365},
                 {193,64,368},{189,63,372},{190,57,371},{218,64,393},{214,63,397},{215,57,396},
                 {224,64,420},{220,63,416},{221,57,417},{218,64,447},{214,63,443},{215,57,444},
                 {193,64,472},{189,63,468},{190,57,469},{166,64,478},{170,63,474},{169,57,574},
-                {139,64,472},{143,63,468},{142,57,469},{114,64,447},{118,63,443},{117,57,444}
+                {139,64,472},{143,63,468},{142,57,469},{114,64,447},{118,63,443},{117,57,444},
+                {169,57,475}
         };
         for(int[] c : spawnChestsRaw) spawnChests.add(new Location(world, c[0], c[1] - 1, c[2]));
 
@@ -66,15 +74,21 @@ public class SkywarsMinigame extends Minigame {
         };
         for(int[] c : midChestsRaw) midChests.add(new Location(world, c[0], c[1] - 1, c[2]));
 
+        Collections.shuffle(spawns, rand);
+
+        int i = 0;
         for(Player p : players) {
-            Location spawn = spawns.get(rand.nextInt(spawns.size()));
+            Location spawn = spawns.get(i);
             p.teleport(spawn);
             p.setGameMode(GameMode.SURVIVAL);
+            i++;
         }
     }
 
     public void startGame() {
         fillChests(spawnChests, true);
+        fillChests(midChests, false);
+        spawnNoteBlocksOnce();
 
         final int[] taskId = new int[1];
         taskId[0] = Bukkit.getScheduler().scheduleSyncRepeatingTask(
@@ -88,13 +102,23 @@ public class SkywarsMinigame extends Minigame {
                                 fallImmunity.put(p, System.currentTimeMillis());
                             }
 
+                            canDoStuff = true;
+
                             removeSpawnCages();
-                            for(Player p : players) p.sendMessage("§aGo!");
+                            for(Player p : players) {
+                                p.sendMessage("§aGo!");
+                                p.playNote(playerNoteBlocks.get(p), Instrument.PIANO, new Note((byte)1, Note.Tone.C, false));
+                            }
+
                             startRefills();
                             Bukkit.getScheduler().cancelTask(taskId[0]);
+                            removeNoteBlocks();
                             return;
                         }
-                        for(Player p : players) p.sendMessage("§eStarting in " + time + "...");
+                        for(Player p : players) {
+                            p.sendMessage("§cSkywars starting in " + time + "...");
+                            p.playNote(playerNoteBlocks.get(p), Instrument.PIANO, new Note((byte)1, Note.Tone.G, false));
+                        }
                         time--;
                     }
                 },
@@ -117,6 +141,7 @@ public class SkywarsMinigame extends Minigame {
 
     private void startRefills() {
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
+            if (ended) return;
             fillChests(spawnChests, true);
             fillChests(midChests, false);
             refill1 = true;
@@ -124,6 +149,7 @@ public class SkywarsMinigame extends Minigame {
         }, 120*20L);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
+            if (ended) return;
             fillChests(spawnChests, true);
             fillChests(midChests, false);
             refill2 = true;
@@ -161,19 +187,19 @@ public class SkywarsMinigame extends Minigame {
             items.add(new ItemStack(Material.STONE, 8 + r.nextInt(8)));   // stone
 
             // weapons: mostly stone, small chance diamond sword
-            if(r.nextInt(100) < 10) items.add(new ItemStack(Material.DIAMOND_SWORD)); // rare
-            else items.add(new ItemStack(Material.STONE_SWORD)); // default
+            if(r.nextInt(100) < 10) items.add(new ItemStack(Material.DIAMOND_SWORD, 1, (short)0)); // rare
+            else items.add(new ItemStack(Material.STONE_SWORD, 1, (short)0)); // default
 
             // tools: mostly basic, tiny chance diamond pickaxe
-            if(r.nextInt(100) < 5) items.add(new ItemStack(Material.DIAMOND_PICKAXE));
-            else items.add(new ItemStack(Material.IRON_AXE));
+            if(r.nextInt(100) < 5) items.add(new ItemStack(Material.DIAMOND_PICKAXE, 1, (short)0));
+            else items.add(new ItemStack(Material.IRON_AXE, 1, (short)0));
 
             // armor: mostly iron, 1 piece max
             ItemStack[] armors = {
-                    new ItemStack(Material.IRON_HELMET),
-                    new ItemStack(Material.IRON_CHESTPLATE),
-                    new ItemStack(Material.IRON_LEGGINGS),
-                    new ItemStack(Material.IRON_BOOTS)
+                    new ItemStack(Material.IRON_HELMET, 1, (short)0),
+                    new ItemStack(Material.IRON_CHESTPLATE, 1, (short)0),
+                    new ItemStack(Material.IRON_LEGGINGS, 1, (short)0),
+                    new ItemStack(Material.IRON_BOOTS, 1, (short)0)
             };
             Collections.shuffle(Arrays.asList(armors));
             items.add(armors[0]); // only 1 piece
@@ -185,26 +211,26 @@ public class SkywarsMinigame extends Minigame {
         } else {
             // mid chest: stronger loot, 1-2 armor pieces
             ItemStack[] armors = {
-                    new ItemStack(Material.DIAMOND_HELMET),
-                    new ItemStack(Material.DIAMOND_CHESTPLATE),
-                    new ItemStack(Material.DIAMOND_LEGGINGS),
-                    new ItemStack(Material.DIAMOND_BOOTS),
-                    new ItemStack(Material.IRON_HELMET),
-                    new ItemStack(Material.IRON_CHESTPLATE),
-                    new ItemStack(Material.IRON_LEGGINGS),
-                    new ItemStack(Material.IRON_BOOTS)
+                    new ItemStack(Material.DIAMOND_HELMET, 1, (short)0),
+                    new ItemStack(Material.DIAMOND_CHESTPLATE, 1, (short)0),
+                    new ItemStack(Material.DIAMOND_LEGGINGS, 1, (short)0),
+                    new ItemStack(Material.DIAMOND_BOOTS, 1, (short)0),
+                    new ItemStack(Material.IRON_HELMET, 1, (short)0),
+                    new ItemStack(Material.IRON_CHESTPLATE, 1, (short)0),
+                    new ItemStack(Material.IRON_LEGGINGS, 1, (short)0),
+                    new ItemStack(Material.IRON_BOOTS, 1, (short)0)
             };
             List<ItemStack> armorList = new ArrayList<>(Arrays.asList(armors));
             Collections.shuffle(armorList);
             items.add(armorList.get(0));
             if(r.nextBoolean()) items.add(armorList.get(1)); // 50% chance 2nd piece
 
-            if(r.nextInt(100) < 50) items.add(new ItemStack(Material.DIAMOND_SWORD));
+            if(r.nextInt(100) < 50) items.add(new ItemStack(Material.DIAMOND_SWORD, 1, (short)0));
             if(r.nextInt(100) < 15) items.add(createFireSword());
 
-            if(r.nextInt(100) < 50) items.add(new ItemStack(Material.DIAMOND_PICKAXE));
-            if(r.nextInt(100) < 40) items.add(new ItemStack(Material.DIAMOND_AXE));
-            if(r.nextInt(100) < 30) items.add(new ItemStack(Material.FISHING_ROD));
+            if(r.nextInt(100) < 50) items.add(new ItemStack(Material.DIAMOND_PICKAXE, 1, (short)0));
+            if(r.nextInt(100) < 40) items.add(new ItemStack(Material.DIAMOND_AXE, 1, (short)0));
+            if(r.nextInt(100) < 30) items.add(new ItemStack(Material.FISHING_ROD, 1, (short)0));
 
             // blocks
             items.add(new ItemStack(Material.WOOD, 16 + r.nextInt(16)));
@@ -238,7 +264,7 @@ public class SkywarsMinigame extends Minigame {
 
 
     private ItemStack createFireSword() {
-        return new ItemStack(Material.DIAMOND_SWORD);
+        return new ItemStack(Material.DIAMOND_SWORD, 1, (short)0);
     }
 
     public void endGame() {
@@ -262,18 +288,31 @@ public class SkywarsMinigame extends Minigame {
     }
 
     public void onDeath(Player p, EntityDeathEvent e) {
-        e.getDrops().clear();
-        onPlayerDeath(p);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
+            ((CraftPlayer) p).getHandle().netServerHandler.a(new Packet9Respawn());
+            onPlayerDeath(p);
+        }, 2L);
     }
 
     private void onPlayerDeath(Player p) {
-        for(Player pl : players) pl.sendMessage("§c" + p.getName() + " died!");
+        //for(Player pl : players) pl.sendMessage("§c" + p.getName() + " died!");
+
         if(players.size()==1) {
             Player winner = players.get(0);
             //Bukkit.broadcastMessage("§6SkyWars winner: §a" + winner.getName());
             MinigameManager.end(this);
         }
         MinigameManager.remove(p);
+    }
+
+    @Override
+    public boolean canBreak(Player p, BlockBreakEvent e) {
+        return canDoStuff;
+    }
+
+    @Override
+    public boolean canPlace(Player p, BlockPlaceEvent e) {
+        return canDoStuff;
     }
 
     public void onDamage(Player p, EntityDamageEvent e) {
@@ -292,5 +331,35 @@ public class SkywarsMinigame extends Minigame {
                 }
             }
         }
+    }
+
+    private void spawnNoteBlocksOnce() {
+        for (Player p : players) {
+            Location noteLoc = placeNoteBlockBehind(p);
+            playerNoteBlocks.put(p, noteLoc);
+        }
+    }
+
+    private void removeNoteBlocks() {
+        for (Location loc : playerNoteBlocks.values()) {
+            loc.getBlock().setType(Material.AIR);
+        }
+        playerNoteBlocks.clear();
+    }
+
+    private Location placeNoteBlockBehind(Player p) {
+        Location l = p.getLocation();
+        float yaw = l.getYaw();
+        int dx = 0;
+        int dz = 0;
+
+        if(yaw >= -45 && yaw < 45) dz = -1;
+        else if(yaw >= 45 && yaw < 135) dx = -1;
+        else if(yaw >= -135 && yaw < -45) dx = 1;
+        else dz = 1;
+
+        Location b = l.clone().add(dx, 4, dz);
+        b.getBlock().setType(Material.NOTE_BLOCK);
+        return b;
     }
 }

@@ -143,6 +143,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_MOVE, new MinigamePlayerListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, new MinigamePlayerListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, new MinigamePlayerListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_BUCKET_EMPTY, new MinigamePlayerListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new MinigameEntityListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.FOOD_LEVEL_CHANGE, new MinigameEntityListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, new MinigameEntityListener(), Event.Priority.Normal, this);

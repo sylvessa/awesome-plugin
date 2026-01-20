@@ -1,10 +1,7 @@
 package sylvessa.cb1337.Minigames.Listeners;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerListener;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import sylvessa.cb1337.Minigames.Minigame;
 import sylvessa.cb1337.Minigames.MinigameManager;
 
@@ -33,5 +30,13 @@ public class MinigamePlayerListener extends PlayerListener {
     public void onPlayerChat(PlayerChatEvent e) {
         Minigame g = MinigameManager.get(e.getPlayer());
         if (g != null) g.onChat(e.getPlayer(), e);
+    }
+
+    @Override
+    public void onPlayerBucketEmpty(PlayerBucketEmptyEvent e) {
+        Minigame g = MinigameManager.get(e.getPlayer());
+        if (g != null) {
+            e.setCancelled(true);
+        }
     }
 }

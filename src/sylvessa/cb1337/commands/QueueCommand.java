@@ -19,6 +19,11 @@ public class QueueCommand implements PluginCommand {
         if(!(sender instanceof Player)) return;
         Player p = (Player) sender;
 
+        if (MinigameManager.get(p) != null) {
+            p.sendMessage(ChatColor.RED + "You cannot run this command at this time.");
+            return;
+        }
+
         if(args.length == 0) {
             if(MinigameManager.isQueued(p)) {
                 MinigameManager.remove(p);
