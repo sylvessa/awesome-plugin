@@ -10,6 +10,7 @@ import sylvessa.cb1337.Duels.Listeners.DuelBlockListener;
 import sylvessa.cb1337.Duels.Listeners.DuelEntityListener;
 import sylvessa.cb1337.Duels.Listeners.DuelPlayerListener;
 import sylvessa.cb1337.Listeners.*;
+import sylvessa.cb1337.Listeners.Lobby.LobbyEntityListener;
 import sylvessa.cb1337.Minigames.Listeners.MinigameBlockListener;
 import sylvessa.cb1337.Minigames.Listeners.MinigameEntityListener;
 import sylvessa.cb1337.Minigames.Listeners.MinigamePlayerListener;
@@ -121,6 +122,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, new ChatListener(), Event.Priority.Normal,this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, new JoinListener(this), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, new JoinListener(this), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHANGED_WORLD, new JoinListener(this), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.SIGN_CHANGE, new SignColorListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new DamageListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, new DeathListener(), Event.Priority.Normal, this);
@@ -152,6 +154,9 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new CustomPvpEntityListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_FISH, new CustomPvpPlayerListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_MOVE, new CustomPvpPlayerListener(), Event.Priority.Normal, this);
+
+        // lobby
+        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new LobbyEntityListener(), Event.Priority.Normal, this);
 
 //        getServer().getPluginManager().registerEvents(new ChatListener(), this);
 //        getServer().getPluginManager().registerEvents(new JoinListener(this), this);

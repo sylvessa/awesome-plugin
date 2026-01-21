@@ -1,14 +1,12 @@
 package sylvessa.cb1337.Listeners;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.util.Vector;
 import sylvessa.cb1337.Log;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.UserConfig;
+import sylvessa.cb1337.Util.SurvivalHelper;
 import sylvessa.cb1337.commands.CreativeCommand;
 
 import java.io.OutputStream;
@@ -22,6 +20,11 @@ public class JoinListener extends PlayerListener {
 
     public JoinListener(Main plugin) {
         this.plugin = plugin;
+    }
+
+    @Override
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+        SurvivalHelper.handleWorldChange(event);
     }
 
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -51,10 +54,12 @@ public class JoinListener extends PlayerListener {
         if(!webhook.isEmpty()) {
             sendJoinLeaveWebhook(webhook, name, true);
         }
+
+        Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> SurvivalHelper.handleJoin(event.getPlayer()), 1L);
     }
 
-
     public void onPlayerQuit(PlayerQuitEvent event) {
+        SurvivalHelper.handleQuit(event.getPlayer());
         String name = event.getPlayer().getName();
 
         CreativeCommand.returnFromCreative(event.getPlayer());

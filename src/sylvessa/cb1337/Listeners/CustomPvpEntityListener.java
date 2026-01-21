@@ -1,5 +1,7 @@
 package sylvessa.cb1337.Listeners;
 
+import org.bukkit.GameMode;
+import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -14,19 +16,24 @@ public class CustomPvpEntityListener extends EntityListener {
         if (!(event instanceof EntityDamageByEntityEvent)) return;
         EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) event;
 
-        if(!(e.getDamager() instanceof Snowball)) return;
+        if(!(e.getDamager() instanceof Snowball || e.getDamager() instanceof Egg)) return;
         if(!(e.getEntity() instanceof Player)) return;
 
-        Snowball snowball = (Snowball)e.getDamager();
-        if(!(snowball.getShooter() instanceof Player)) return;
-
-        Player attacker = (Player)snowball.getShooter();
         Player victim = (Player)e.getEntity();
+        if (victim.getGameMode().equals(GameMode.CREATIVE)) return;
+
+        Object projectile = e.getDamager();
+        if(!((projectile instanceof Snowball || projectile instanceof Egg) &&
+                ((projectile instanceof Snowball && ((Snowball)projectile).getShooter() instanceof Player) ||
+                        (projectile instanceof Egg && ((Egg)projectile).getShooter() instanceof Player)))) return;
+
+        Player attacker;
+        if(projectile instanceof Snowball) attacker = (Player)((Snowball)projectile).getShooter();
+        else attacker = (Player)((Egg)projectile).getShooter();
 
         e.setCancelled(true);
 
         int damage = 1;
-
         double knockbackStrength = 0.5;
         double knockbackY = 0.25;
 
@@ -34,7 +41,6 @@ public class CustomPvpEntityListener extends EntityListener {
                 .subtract(attacker.getLocation().toVector())
                 .normalize()
                 .multiply(knockbackStrength);
-
         v.setY(knockbackY);
 
         victim.setVelocity(v);
