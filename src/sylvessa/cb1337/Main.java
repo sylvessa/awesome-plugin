@@ -10,6 +10,7 @@ import sylvessa.cb1337.Duels.Listeners.DuelBlockListener;
 import sylvessa.cb1337.Duels.Listeners.DuelEntityListener;
 import sylvessa.cb1337.Duels.Listeners.DuelPlayerListener;
 import sylvessa.cb1337.Listeners.*;
+import sylvessa.cb1337.Listeners.Lobby.LobbyBlockListener;
 import sylvessa.cb1337.Listeners.Lobby.LobbyEntityListener;
 import sylvessa.cb1337.Minigames.Listeners.MinigameBlockListener;
 import sylvessa.cb1337.Minigames.Listeners.MinigameEntityListener;
@@ -157,6 +158,11 @@ public class Main extends JavaPlugin {
 
         // lobby
         getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new LobbyEntityListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.FOOD_LEVEL_CHANGE, new LobbyEntityListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.FOOD_LEVEL_CHANGE, new LobbyEntityListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_BREAK, new LobbyBlockListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_PLACE, new LobbyBlockListener(), Event.Priority.Normal, this);
+
 
 //        getServer().getPluginManager().registerEvents(new ChatListener(), this);
 //        getServer().getPluginManager().registerEvents(new JoinListener(this), this);

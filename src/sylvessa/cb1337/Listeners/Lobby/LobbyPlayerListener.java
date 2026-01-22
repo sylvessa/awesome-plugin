@@ -1,4 +1,7 @@
 package sylvessa.cb1337.Listeners.Lobby;
 
-public class LobbyPlayerListener {
+import org.bukkit.event.player.PlayerListener;
+
+public class LobbyPlayerListener extends PlayerListener {
+
 }

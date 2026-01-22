@@ -24,7 +24,7 @@ public class JoinListener extends PlayerListener {
 
     @Override
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-        SurvivalHelper.handleWorldChange(event);
+        Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> SurvivalHelper.handleWorldChange(event), 1L);
     }
 
     public void onPlayerJoin(PlayerJoinEvent event) {
