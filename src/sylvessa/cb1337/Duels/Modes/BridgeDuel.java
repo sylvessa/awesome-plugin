@@ -246,8 +246,11 @@ public class BridgeDuel extends DuelGame {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
             ((CraftPlayer) p).getHandle().netServerHandler.a(new Packet9Respawn());
-            respawnPlayer(p);
         }, 2L);
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
+            respawnPlayer(p);
+        }, 4L);
     }
 
     private void endGame(Team winnerTeam) {

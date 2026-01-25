@@ -64,8 +64,8 @@ public class TpaHereCommand implements PluginCommand {
 
         boolean sameWorld = fw.equals(tw);
         boolean bothAllowed = (
-                (fw.getName().equals("world") || fw.getName().equals("world_nether")) &&
-                        (tw.getName().equals("world") || tw.getName().equals("world_nether"))
+                (fw.getName().equals("world") || fw.getName().equals("world_nether") || fw.getName().equals("world_the_end")) &&
+                        (tw.getName().equals("world") || tw.getName().equals("world_nether") || tw.getName().equals("world_the_end"))
         );
 
         if(!sameWorld && !bothAllowed) {

@@ -13,7 +13,7 @@ public class EntitySpawnListener extends EntityListener {
         World w = event.getLocation().getWorld();
         String name = w.getName();
 
-        if (!name.equals("world") && !name.equals("world_nether")) {
+        if (!name.equals("world") && !name.equals("world_nether") && !name.equals("world_the_end")) {
             //Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> event.getEntity().remove(), 1L);
             event.setCancelled(true);
 

@@ -12,6 +12,7 @@ import sylvessa.cb1337.Duels.Listeners.DuelPlayerListener;
 import sylvessa.cb1337.Listeners.*;
 import sylvessa.cb1337.Listeners.Lobby.LobbyBlockListener;
 import sylvessa.cb1337.Listeners.Lobby.LobbyEntityListener;
+import sylvessa.cb1337.Listeners.Lobby.LobbyPlayerListener;
 import sylvessa.cb1337.Minigames.Listeners.MinigameBlockListener;
 import sylvessa.cb1337.Minigames.Listeners.MinigameEntityListener;
 import sylvessa.cb1337.Minigames.Listeners.MinigamePlayerListener;
@@ -162,11 +163,14 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvent(Event.Type.FOOD_LEVEL_CHANGE, new LobbyEntityListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.BLOCK_BREAK, new LobbyBlockListener(), Event.Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.BLOCK_PLACE, new LobbyBlockListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, new LobbyPlayerListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_PORTAL, new LobbyPlayerListener(), Event.Priority.Normal, this);
 
 
 //        getServer().getPluginManager().registerEvents(new ChatListener(), this);
 //        getServer().getPluginManager().registerEvents(new JoinListener(this), this);
 //        getServer().getPluginManager().registerEvents(new SignColorListener(), this);
+
         //getServer().getPluginManager().registerEvent(Event.Type.SIGN_CHANGE, new SignColorListener(), Event.Priority.Normal, this);
 
         discordBot = new Bot(this);

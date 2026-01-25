@@ -26,7 +26,7 @@ public class SetHomeCommand implements PluginCommand {
         Player p = (Player)sender;
         World w = p.getWorld();
 
-        if(!w.getName().equals("world") && !w.getName().equals("world_nether")) {
+        if(!w.getName().equals("world") && !w.getName().equals("world_nether") && !w.getName().equals("world_the_end")) {
             sender.sendMessage("§cYou can only set your home in the overworld or nether.");
             return;
         }

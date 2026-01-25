@@ -8,6 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="JDA-6.2.1-withDependencies" level="project" />
-    <orderEntry type="library" name="craftbukkit-1464-a03328a54f0ed49df89ca083cd906e6e8de8f72a" level="project" />
+    <orderEntry type="library" name="craftbukkit-1712-b06a9ee242c29250ca02ed5bb8d0549b9a1d5e6e" level="project" />
   </component>
 </module>

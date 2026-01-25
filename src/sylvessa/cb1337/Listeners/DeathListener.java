@@ -64,7 +64,7 @@ public class DeathListener extends EntityListener {
 
         String name = event.getEntity().getWorld().getName();
 
-        if (name.equals("world") || name.equals("world_nether")) {
+        if (name.equals("world") || name.equals("world_nether") || name.equals("world_the_end")) {
             String webhook = Main.getInstance().getPluginConfig().getString("discord.webhook-url", "");
             if (!webhook.isEmpty()) {
                 sendDeathWebhook(webhook, stripColorCodes(msg), p.getName());

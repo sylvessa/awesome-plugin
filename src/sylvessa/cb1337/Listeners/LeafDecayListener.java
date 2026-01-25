@@ -9,7 +9,7 @@ public class LeafDecayListener extends BlockListener {
     @Override
     public void onLeavesDecay(LeavesDecayEvent event) {
         World world = event.getBlock().getWorld();
-        if(!world.getName().equals("world") && !world.getName().equals("world_nether")) {
+        if(!world.getName().equals("world") && !world.getName().equals("world_nether") && !world.getName().equals("world_the_end")) {
             event.setCancelled(true);
         }
     }
