@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import sylvessa.cb1337.Duels.DuelGame;
 import sylvessa.cb1337.Duels.DuelManager;
+import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Types.PluginCommand;
 
 import java.util.HashMap;
@@ -24,6 +25,11 @@ public class RideCommand implements PluginCommand {
         if (!(sender instanceof Player)) return;
 
         Player rider = (Player) sender;
+
+        if (MinigameManager.get(rider) != null || MinigameManager.getQueued(rider) != null || DuelManager.get(rider) != null) {
+            rider.sendMessage("§cYou cannot use this command right now!");
+            return;
+        }
 
         if (args.length == 1 && args[0].equalsIgnoreCase("accept")) {
             Player requester = requests.remove(rider);

@@ -3,6 +3,7 @@ package sylvessa.cb1337.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Minigames.MinigameType;
 import sylvessa.cb1337.Types.PluginCommand;
@@ -19,7 +20,7 @@ public class QueueCommand implements PluginCommand {
         if(!(sender instanceof Player)) return;
         Player p = (Player) sender;
 
-        if (MinigameManager.get(p) != null) {
+        if (MinigameManager.get(p) != null || DuelManager.get(p) != null) {
             p.sendMessage(ChatColor.RED + "You cannot run this command at this time.");
             return;
         }

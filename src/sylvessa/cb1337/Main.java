@@ -158,13 +158,13 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_MOVE, new CustomPvpPlayerListener(), Event.Priority.Normal, this);
 
         // lobby
-        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new LobbyEntityListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.FOOD_LEVEL_CHANGE, new LobbyEntityListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.FOOD_LEVEL_CHANGE, new LobbyEntityListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_BREAK, new LobbyBlockListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_PLACE, new LobbyBlockListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, new LobbyPlayerListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_PORTAL, new LobbyPlayerListener(), Event.Priority.Normal, this);
+//        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new LobbyEntityListener(), Event.Priority.Normal, this);
+//        getServer().getPluginManager().registerEvent(Event.Type.FOOD_LEVEL_CHANGE, new LobbyEntityListener(), Event.Priority.Normal, this);
+//        getServer().getPluginManager().registerEvent(Event.Type.FOOD_LEVEL_CHANGE, new LobbyEntityListener(), Event.Priority.Normal, this);
+//        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_BREAK, new LobbyBlockListener(), Event.Priority.Normal, this);
+//        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_PLACE, new LobbyBlockListener(), Event.Priority.Normal, this);
+//        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, new LobbyPlayerListener(), Event.Priority.Normal, this);
+//        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_PORTAL, new LobbyPlayerListener(), Event.Priority.Normal, this);
 
 
 //        getServer().getPluginManager().registerEvents(new ChatListener(), this);

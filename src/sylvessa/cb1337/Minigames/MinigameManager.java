@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import sylvessa.cb1337.ChunkGenerators.Void;
 import sylvessa.cb1337.Main;
+import sylvessa.cb1337.Types.GameTypes.SavedState;
 import sylvessa.cb1337.Util.CustomWorldLoader;
 
 import java.io.File;
@@ -264,7 +265,8 @@ public class MinigameManager {
         saved.put(p.getName(), new SavedState(
                 p.getLocation().clone(),
                 p.getInventory().getContents(),
-                p.getInventory().getArmorContents()
+                p.getInventory().getArmorContents(),
+                p.getExp()
         ));
     }
 
@@ -276,18 +278,9 @@ public class MinigameManager {
         p.getInventory().setContents(s.inv);
         p.setGameMode(GameMode.SURVIVAL);
         p.getInventory().setArmorContents(s.armor);
+        p.setExp(s.experience);
         p.setFallDistance(0f);
     }
 
-    private static class SavedState {
-        Location loc;
-        ItemStack[] inv;
-        ItemStack[] armor;
 
-        SavedState(Location l, ItemStack[] i, ItemStack[] a) {
-            loc = l;
-            inv = i;
-            armor = a;
-        }
-    }
 }

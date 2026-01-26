@@ -22,8 +22,8 @@ public class DuelCommand implements PluginCommand {
             return;
         }
 
-        if (MinigameManager.get(p) != null || MinigameManager.getQueued(p) != null) {
-            p.sendMessage("§cYou cannot use this command while in a minigame!");
+        if (MinigameManager.get(p) != null || MinigameManager.getQueued(p) != null || DuelManager.get(p) != null) {
+            p.sendMessage("§cYou cannot use this command right now!");
             return;
         }
 

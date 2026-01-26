@@ -13,6 +13,8 @@ import java.util.*;
 
 import static sylvessa.cb1337.Util.Helpers.freezeWorldTime;
 
+// this is no longer needed
+// we dont need a dam lobby
 public final class SurvivalHelper {
     private static final Set<String> SURVIVAL_WORLDS = new HashSet<>(Arrays.asList(
             "world",

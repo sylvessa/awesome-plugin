@@ -9,6 +9,7 @@ import sylvessa.cb1337.Duels.Modes.PvPDuel;
 import sylvessa.cb1337.Duels.Modes.SpleefDuel;
 import sylvessa.cb1337.Duels.Modes.SumoDuel;
 import sylvessa.cb1337.Main;
+import sylvessa.cb1337.Types.GameTypes.SavedState;
 
 import java.io.File;
 import java.util.HashMap;
@@ -96,7 +97,8 @@ public class DuelManager {
                 new SavedState(
                         p.getLocation().clone(),
                         p.getInventory().getContents(),
-                        p.getInventory().getArmorContents()
+                        p.getInventory().getArmorContents(),
+                        p.getExp()
                 )
         );
     }
@@ -108,6 +110,7 @@ public class DuelManager {
         p.teleport(s.loc);
         p.getInventory().setContents(s.inv);
         p.getInventory().setArmorContents(s.armor);
+        p.setExp(s.experience);
         p.setFallDistance(0f);
     }
 
@@ -125,18 +128,6 @@ public class DuelManager {
         PendingDuel(String c, DuelType t) {
             challenger = c;
             type = t;
-        }
-    }
-
-    private static class SavedState {
-        Location loc;
-        ItemStack[] inv;
-        ItemStack[] armor;
-
-        SavedState(Location l, ItemStack[] i, ItemStack[] a) {
-            loc = l;
-            inv = i;
-            armor = a;
         }
     }
 }

@@ -39,11 +39,8 @@ public class CustomInventory {
             public boolean a(EntityHuman entityHuman) {
                 return false;
             }
-
-            public void e() {}
-
-            public void t_() {}
-
+            public void f() {}
+            public void g() {}
             public ItemStack splitStack(int i, int j) {
                 if (items[i] != null) {
                     ItemStack stack = items[i];

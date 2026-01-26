@@ -24,7 +24,7 @@ public class JoinListener extends PlayerListener {
 
     @Override
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-        Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> SurvivalHelper.handleWorldChange(event), 1L);
+        //Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> SurvivalHelper.handleWorldChange(event), 1L);
     }
 
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -55,11 +55,11 @@ public class JoinListener extends PlayerListener {
             sendJoinLeaveWebhook(webhook, name, true);
         }
 
-        Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> SurvivalHelper.handleJoin(event.getPlayer()), 1L);
+        //Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> SurvivalHelper.handleJoin(event.getPlayer()), 1L);
     }
 
     public void onPlayerQuit(PlayerQuitEvent event) {
-        SurvivalHelper.handleQuit(event.getPlayer());
+        //SurvivalHelper.handleQuit(event.getPlayer());
         String name = event.getPlayer().getName();
 
         CreativeCommand.returnFromCreative(event.getPlayer());
