@@ -61,3 +61,5 @@ commands:
     description: a
   survival:
     description: a
+  setblock:
+    description: a

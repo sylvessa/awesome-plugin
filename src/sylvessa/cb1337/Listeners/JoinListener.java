@@ -1,5 +1,8 @@
 package sylvessa.cb1337.Listeners;
 
+import net.minecraft.server.EntityPlayer;
+import net.minecraft.server.NetServerHandler;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.*;
 import org.bukkit.util.Vector;
@@ -28,6 +31,15 @@ public class JoinListener extends PlayerListener {
     }
 
     public void onPlayerJoin(PlayerJoinEvent event) {
+        // hook
+//        Player p = event.getPlayer();
+//        CraftPlayer cp = (CraftPlayer)p;
+//        EntityPlayer ep = cp.getHandle();
+//
+//        NetServerHandler old = ep.netServerHandler;
+//        ep.netServerHandler = new EnchantPreviewListener(old, ep, p);
+
+
         Player player = event.getPlayer();
         String name = player.getName();
         String key = name.toLowerCase();
