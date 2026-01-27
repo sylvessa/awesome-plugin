@@ -1,58 +1,32 @@
 package sylvessa.cb1337.Types;
 
-import net.minecraft.server.*;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import sylvessa.cb1337.Main;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class CustomInventory {
-
-    private static int nextWindowId = 1;
+public class CustomInventory implements InventoryHolder {
 
     private final int size;
     private final String title;
-    private final ItemStack[] items;
+    private final Inventory inv;
     private final Map<Integer, Consumer<Player>> callbacks = new HashMap<>();
     private Consumer<Player> closeCallback = null;
-    private final IInventory inv;
     private boolean readOnly = false;
-
-    private int windowId;
 
     public CustomInventory(String title, int size) {
         this.size = size;
         this.title = title;
-        this.items = new ItemStack[size];
-
-        this.inv = new IInventory() {
-            public int getSize() { return items.length; }
-            public ItemStack getItem(int i) { return items[i]; }
-            public void setItem(int i, ItemStack itemstack) { items[i] = itemstack; }
-            public String getName() { return title; }
-            public void update() {}
-
-            public boolean a(EntityHuman entityHuman) {
-                return false;
-            }
-            public void f() {}
-            public void g() {}
-            public ItemStack splitStack(int i, int j) {
-                if (items[i] != null) {
-                    ItemStack stack = items[i];
-                    items[i] = null;
-                    return stack;
-                }
-                return null;
-            }
-            public int getMaxStackSize() { return 64; }
-            public boolean a_(EntityHuman entityhuman) { return true; }
-            public ItemStack[] getContents() { return items; }
-        };
+        this.inv = Bukkit.createInventory(this, size, title);
     }
 
     public void setReadOnly(boolean readOnly) {
@@ -60,7 +34,11 @@ public class CustomInventory {
     }
 
     public void setItem(int slot, ItemStack item) {
-        items[slot] = item;
+        inv.setItem(slot, item);
+    }
+
+    public ItemStack getItem(int slot) {
+        return inv.getItem(slot);
     }
 
     public void setCallback(int slot, Consumer<Player> callback) {
@@ -71,55 +49,40 @@ public class CustomInventory {
         this.closeCallback = callback;
     }
 
-    public ItemStack getItem(int slot) {
-        return items[slot];
+    public void open(Player player) {
+        player.openInventory(inv);
     }
 
-    public void open(final Player p) {
-        final EntityPlayer ep = ((CraftPlayer) p).getHandle();
-        windowId = nextWindowId++;
+    @Override
+    public Inventory getInventory() {
+        return inv;
+    }
 
-        ContainerChest container = new ContainerChest(ep.inventory, inv) {
-            @Override
-            public ItemStack a(int slotNum, int button, boolean shift, EntityHuman human) {
-                if (human instanceof EntityPlayer) {
-                    Player bukkitPlayer = (Player) human.getBukkitEntity();
-                    Consumer<Player> cb = callbacks.get(slotNum);
-                    if (cb != null) cb.accept(bukkitPlayer);
+    public static class InventoryListener implements Listener {
 
-                    if (readOnly) return null;
-                }
-                return super.a(slotNum, button, shift, human);
+        @EventHandler
+        public void onClick(InventoryClickEvent e) {
+            if(!(e.getInventory().getHolder() instanceof CustomInventory)) return;
+
+            CustomInventory ci = (CustomInventory) e.getInventory().getHolder();
+            if(e.getRawSlot() < 0 || e.getRawSlot() >= ci.size) return;
+
+            if(ci.readOnly) e.setCancelled(true);
+
+            Consumer<Player> cb = ci.callbacks.get(e.getRawSlot());
+            if(cb != null && e.getWhoClicked() instanceof Player) {
+                cb.accept((Player)e.getWhoClicked());
             }
-        };
-
-        container.windowId = windowId;
-        ep.activeContainer = container;
-
-        Packet100OpenWindow openPacket = new Packet100OpenWindow(windowId, 0, inv.getName(), inv.getSize());
-        ep.netServerHandler.sendPacket(openPacket);
-
-        for (int i = 0; i < inv.getSize(); i++) {
-            Packet103SetSlot slotPacket = new Packet103SetSlot(windowId, i, inv.getItem(i));
-            ep.netServerHandler.sendPacket(slotPacket);
         }
 
-        // theres no proper way to like, detect when closed
-        // for now do polling
-        if (closeCallback != null) {
-            final int[] taskId = new int[1];
-            taskId[0] = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(
-                    Main.getInstance(),
-                    () -> {
-                        EntityPlayer currentEP = ((CraftPlayer) p).getHandle();
-                        if (currentEP.activeContainer.windowId != windowId) {
-                            closeCallback.accept(p);
-                            Bukkit.getServer().getScheduler().cancelTask(taskId[0]);
-                        }
-                    },
-                    1L,
-                    1L
-            );
+        @EventHandler
+        public void onClose(InventoryCloseEvent e) {
+            if(!(e.getInventory().getHolder() instanceof CustomInventory)) return;
+
+            CustomInventory ci = (CustomInventory) e.getInventory().getHolder();
+            if(ci.closeCallback != null && e.getPlayer() instanceof Player) {
+                ci.closeCallback.accept((Player)e.getPlayer());
+            }
         }
     }
 }

@@ -9,7 +9,6 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
 import sylvessa.cb1337.Main;
 
 public class FakePlayer {
@@ -32,18 +31,18 @@ public class FakePlayer {
             cp.getHandle().netServerHandler.sendPacket(new Packet20NamedEntitySpawn(npc));
         }
 
-        Bukkit.getServer().getPluginManager().registerEvent(
-                org.bukkit.event.Event.Type.PLAYER_JOIN,
-                new PlayerListener() {
-                    @Override
-                    public void onPlayerJoin(PlayerJoinEvent event) {
-                        CraftPlayer cp = (CraftPlayer) event.getPlayer();
-                        cp.getHandle().netServerHandler.sendPacket(new Packet20NamedEntitySpawn(npc));
-                    }
-                },
-                org.bukkit.event.Event.Priority.Normal,
-                Main.getInstance()
-        );
+//        Bukkit.getServer().getPluginManager().registerEvent(
+//                org.bukkit.event.Event.Type.PLAYER_JOIN,
+//                new PlayerListener() {
+//                    @Override
+//                    public void onPlayerJoin(PlayerJoinEvent event) {
+//                        CraftPlayer cp = (CraftPlayer) event.getPlayer();
+//                        cp.getHandle().netServerHandler.sendPacket(new Packet20NamedEntitySpawn(npc));
+//                    }
+//                },
+//                org.bukkit.event.Event.Priority.Normal,
+//                Main.getInstance()
+//        );
     }
 
     public void lookAtNearestPlayer() {

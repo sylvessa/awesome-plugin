@@ -66,7 +66,11 @@ public class BridgeDuel extends DuelGame {
         try {
             String name = "duel_bridge_" + new Random().nextInt(1000000);
             CustomWorldLoader.copyArenaToServerJar("duel_bridge_main", name);
-            world = Bukkit.createWorld(name, World.Environment.NORMAL, new Void());
+            world = Bukkit.createWorld(
+                    new WorldCreator(name)
+                            .environment(World.Environment.NORMAL)
+                            .generator(new Void())
+            );
         } catch (Exception ignored) {}
     }
 

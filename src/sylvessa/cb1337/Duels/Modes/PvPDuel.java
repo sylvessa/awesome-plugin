@@ -54,7 +54,10 @@ public class PvPDuel extends DuelGame {
         try {
             String name = "duel_pvp_" + new Random().nextInt(1000000);
             CustomWorldLoader.copyArenaToServerJar("duel_pvp_fancy", name);
-            world = Bukkit.createWorld(name, World.Environment.NORMAL, new Void());
+            world = Bukkit.createWorld(
+                    new WorldCreator(name)
+                            .environment(World.Environment.NORMAL)
+                            .generator(new Void()));
         } catch (Exception ignored) {}
     }
 

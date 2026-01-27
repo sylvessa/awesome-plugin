@@ -7,10 +7,10 @@ import org.bukkit.World;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityListener;
 import sylvessa.cb1337.Log;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.UserConfig;
@@ -20,7 +20,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class DeathListener extends EntityListener {
+public class DeathListener implements Listener {
+    @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
         Entity e = event.getEntity();
         if (!(e instanceof Player)) return;

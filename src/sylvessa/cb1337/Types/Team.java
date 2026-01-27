@@ -1,6 +1,7 @@
 package sylvessa.cb1337.Types;
 
-import org.bukkit.util.config.Configuration;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import sylvessa.cb1337.Main;
 
 import java.io.File;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Team {
-    private final Configuration config;
+    private final FileConfiguration config;
     public final File file;
 
     private final String name;
@@ -23,20 +24,17 @@ public class Team {
 
     public Team(File file) {
         this.file = file;
-        this.config = new Configuration(file);
-        config.load();
+        this.config = YamlConfiguration.loadConfiguration(file);
 
         this.name = config.getString("name", "Unnamed Team");
         this.tag = config.getString("tag", "");
         this.owner = config.getString("owner", "");
         this.color = config.getString("color", "f");
         this.freeJoin = config.getBoolean("freeJoin", false);
-        this.members = config.getStringList("members", new ArrayList<>());
-        this.invited = config.getStringList("invited", new ArrayList<>());
+        this.members = new ArrayList<>(config.getStringList("members"));
+        this.invited = new ArrayList<>(config.getStringList("invited"));
         this.pvpEnabled = config.getBoolean("pvp", false);
-
-        String lastTag = config.getString("lastTagChange", "0");
-        try { this.lastTagChange = Long.parseLong(lastTag); } catch(Exception e) { this.lastTagChange = 0; }
+        this.lastTagChange = config.getLong("lastTagChange", 0L);
     }
 
     public Team(String name, String owner) {
@@ -48,28 +46,33 @@ public class Team {
         this.members = new ArrayList<>();
         this.members.add(owner);
         this.invited = new ArrayList<>();
-        this.lastTagChange = 0;
+        this.lastTagChange = 0L;
         this.pvpEnabled = false;
 
-        File folder = new File(Main.getInstance().getDataFolder(), "/teams");
+        File folder = new File(Main.getInstance().getDataFolder(), "teams");
         if(!folder.exists()) folder.mkdirs();
+
         this.file = new File(folder, name + ".yml");
-        this.config = new Configuration(file);
+        this.config = new YamlConfiguration();
 
         save();
     }
 
     public void save() {
-        config.setProperty("name", name);
-        config.setProperty("tag", tag);
-        config.setProperty("owner", owner);
-        config.setProperty("color", color);
-        config.setProperty("freeJoin", freeJoin);
-        config.setProperty("members", members);
-        config.setProperty("pvp", pvpEnabled);
-        config.setProperty("invited", invited);
-        config.setProperty("lastTagChange", String.valueOf(lastTagChange));
-        config.save();
+        config.set("name", name);
+        config.set("tag", tag);
+        config.set("owner", owner);
+        config.set("color", color);
+        config.set("freeJoin", freeJoin);
+        config.set("members", members);
+        config.set("invited", invited);
+        config.set("pvp", pvpEnabled);
+        config.set("lastTagChange", lastTagChange);
+        try {
+            config.save(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getName() { return name; }
@@ -77,7 +80,7 @@ public class Team {
 
     public boolean setTag(String newTag) {
         long now = System.currentTimeMillis();
-        if (now - lastTagChange < 7L * 24 * 60 * 60 * 1000) return false; // 1 week cooldown
+        if(now - lastTagChange < 7L * 24 * 60 * 60 * 1000) return false;
         this.tag = newTag;
         this.lastTagChange = now;
         save();
@@ -87,12 +90,15 @@ public class Team {
     public String getOwner() { return owner; }
     public String getColor() { return color; }
     public void setColor(String color) { this.color = color; save(); }
+
     public boolean isFreeJoin() { return freeJoin; }
     public void setFreeJoin(boolean freeJoin) { this.freeJoin = freeJoin; save(); }
+
     public boolean isPvpEnabled() { return pvpEnabled; }
     public void setPvpEnabled(boolean pvpEnabled) { this.pvpEnabled = pvpEnabled; save(); }
 
     public List<String> getMembers() { return members; }
+
     public void addMember(String player) {
         if(!members.contains(player)) {
             members.add(player);
@@ -100,13 +106,14 @@ public class Team {
             save();
         }
     }
+
     public void removeMember(String player) {
-        if(members.contains(player)) {
-            members.remove(player);
-            save();
-        }
+        if(members.remove(player)) save();
     }
-    public boolean isMember(String player) { return members.contains(player); }
+
+    public boolean isMember(String player) {
+        return members.contains(player);
+    }
 
     public void invite(String player) {
         if(!invited.contains(player) && !members.contains(player)) {
@@ -123,5 +130,7 @@ public class Team {
         return invited.contains(player);
     }
 
-    public long getLastTagChange() { return lastTagChange; }
+    public long getLastTagChange() {
+        return lastTagChange;
+    }
 }

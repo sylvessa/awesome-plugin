@@ -6,16 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.java.JavaPlugin;
 import sylvessa.cb1337.Discord.Bot;
-import sylvessa.cb1337.Duels.Listeners.DuelBlockListener;
-import sylvessa.cb1337.Duels.Listeners.DuelEntityListener;
-import sylvessa.cb1337.Duels.Listeners.DuelPlayerListener;
+import sylvessa.cb1337.Duels.DuelListener;
 import sylvessa.cb1337.Listeners.*;
-import sylvessa.cb1337.Listeners.Lobby.LobbyBlockListener;
-import sylvessa.cb1337.Listeners.Lobby.LobbyEntityListener;
-import sylvessa.cb1337.Listeners.Lobby.LobbyPlayerListener;
-import sylvessa.cb1337.Minigames.Listeners.MinigameBlockListener;
-import sylvessa.cb1337.Minigames.Listeners.MinigameEntityListener;
-import sylvessa.cb1337.Minigames.Listeners.MinigamePlayerListener;
+import sylvessa.cb1337.Minigames.MinigameListener;
 import sylvessa.cb1337.Teams.TeamManager;
 import sylvessa.cb1337.Types.PluginCommand;
 import sylvessa.cb1337.Types.TpaRequest;
@@ -120,58 +113,17 @@ public class Main extends JavaPlugin {
             Log.info("FAILED TO REGISTER COMMANDS");
         }
 
-        getServer().getPluginManager().registerEvent(Event.Type.CREATURE_SPAWN, new EntitySpawnListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, new ChatListener(), Event.Priority.Normal,this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, new JoinListener(this), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, new JoinListener(this), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHANGED_WORLD, new JoinListener(this), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.SIGN_CHANGE, new SignColorListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new DamageListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, new DeathListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.LEAVES_DECAY, new LeafDecayListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_PORTAL, new PortalListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvents(new SignColorListener(), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new EntitySpawnListener(), this);
+        getServer().getPluginManager().registerEvents(new DeathListener(), this);
+        getServer().getPluginManager().registerEvents(new ChatListener(), this);
+        getServer().getPluginManager().registerEvents(new LeafDecayListener(), this);
+        getServer().getPluginManager().registerEvents(new PortalListener(), this);
 
-        // duel listeners
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_MOVE, new DuelPlayerListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, new DuelPlayerListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, new DuelPlayerListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_BREAK, new DuelBlockListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_PLACE, new DuelBlockListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new DuelEntityListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.FOOD_LEVEL_CHANGE, new DuelEntityListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, new DuelEntityListener(), Event.Priority.Normal, this);
-
-        // minigame listeners
-        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_BREAK, new MinigameBlockListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_PLACE, new MinigameBlockListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_MOVE, new MinigamePlayerListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, new MinigamePlayerListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, new MinigamePlayerListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_BUCKET_EMPTY, new MinigamePlayerListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new MinigameEntityListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.FOOD_LEVEL_CHANGE, new MinigameEntityListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, new MinigameEntityListener(), Event.Priority.Normal, this);
-
-        // custom pvp
-        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new CustomPvpEntityListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_FISH, new CustomPvpPlayerListener(), Event.Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_MOVE, new CustomPvpPlayerListener(), Event.Priority.Normal, this);
-
-        // lobby
-//        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, new LobbyEntityListener(), Event.Priority.Normal, this);
-//        getServer().getPluginManager().registerEvent(Event.Type.FOOD_LEVEL_CHANGE, new LobbyEntityListener(), Event.Priority.Normal, this);
-//        getServer().getPluginManager().registerEvent(Event.Type.FOOD_LEVEL_CHANGE, new LobbyEntityListener(), Event.Priority.Normal, this);
-//        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_BREAK, new LobbyBlockListener(), Event.Priority.Normal, this);
-//        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_PLACE, new LobbyBlockListener(), Event.Priority.Normal, this);
-//        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, new LobbyPlayerListener(), Event.Priority.Normal, this);
-//        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_PORTAL, new LobbyPlayerListener(), Event.Priority.Normal, this);
-
-
-//        getServer().getPluginManager().registerEvents(new ChatListener(), this);
-//        getServer().getPluginManager().registerEvents(new JoinListener(this), this);
-//        getServer().getPluginManager().registerEvents(new SignColorListener(), this);
-
-        //getServer().getPluginManager().registerEvent(Event.Type.SIGN_CHANGE, new SignColorListener(), Event.Priority.Normal, this);
+        getServer().getPluginManager().registerEvents(new CustomPVPListener(), this);
+        getServer().getPluginManager().registerEvents(new MinigameListener(), this);
+        getServer().getPluginManager().registerEvents(new DuelListener(), this);
 
         discordBot = new Bot(this);
         discordBot.start();

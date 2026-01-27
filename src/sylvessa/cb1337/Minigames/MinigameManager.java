@@ -1,9 +1,6 @@
 package sylvessa.cb1337.Minigames;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import sylvessa.cb1337.ChunkGenerators.Void;
@@ -221,7 +218,10 @@ public class MinigameManager {
         try {
             String name = "mg_lobby_" + g.getType().name().toLowerCase() + "_" + new Random().nextInt(100000);
             CustomWorldLoader.copyArenaToServerJar(g.lobbyTemplate, name);
-            g.world = Bukkit.createWorld(name, World.Environment.NORMAL, new Void());
+            g.world = Bukkit.createWorld(
+                    new WorldCreator(name)
+                            .environment(World.Environment.NORMAL)
+                            .generator(new Void()));
 
             freezeWorldTime(g.world, g.lobbyTime);
         } catch(Exception ignored) {}
@@ -232,7 +232,10 @@ public class MinigameManager {
         try {
             String name = "mg_game_" + g.getType().name().toLowerCase() + "_" + new Random().nextInt(100000);
             CustomWorldLoader.copyArenaToServerJar(g.arenaTemplate, name);
-            g.world = Bukkit.createWorld(name, World.Environment.NORMAL, new Void());
+            g.world = Bukkit.createWorld(
+                    new WorldCreator(name)
+                            .environment(World.Environment.NORMAL)
+                            .generator(new Void()));
 
             freezeWorldTime(g.world, g.arenaTime);
         } catch(Exception ignored) {}
@@ -266,6 +269,7 @@ public class MinigameManager {
                 p.getLocation().clone(),
                 p.getInventory().getContents(),
                 p.getInventory().getArmorContents(),
+                p.getLevel(),
                 p.getExp()
         ));
     }
@@ -279,6 +283,7 @@ public class MinigameManager {
         p.setGameMode(GameMode.SURVIVAL);
         p.getInventory().setArmorContents(s.armor);
         p.setExp(s.experience);
+        p.setLevel(s.level);
         p.setFallDistance(0f);
     }
 

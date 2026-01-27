@@ -1,15 +1,12 @@
 package sylvessa.cb1337.Listeners;
 
-import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.NetServerHandler;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
-import org.bukkit.util.Vector;
 import sylvessa.cb1337.Log;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.UserConfig;
-import sylvessa.cb1337.Util.SurvivalHelper;
 import sylvessa.cb1337.commands.CreativeCommand;
 
 import java.io.OutputStream;
@@ -18,18 +15,19 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import static sylvessa.cb1337.Util.Helpers.buildDisplayName;
 
-public class JoinListener extends PlayerListener {
+public class JoinListener implements Listener {
     private final Main plugin;
 
     public JoinListener(Main plugin) {
         this.plugin = plugin;
     }
 
-    @Override
+    @EventHandler
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
         //Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> SurvivalHelper.handleWorldChange(event), 1L);
     }
 
+    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         // hook
 //        Player p = event.getPlayer();
@@ -70,6 +68,7 @@ public class JoinListener extends PlayerListener {
         //Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> SurvivalHelper.handleJoin(event.getPlayer()), 1L);
     }
 
+    @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         //SurvivalHelper.handleQuit(event.getPlayer());
         String name = event.getPlayer().getName();

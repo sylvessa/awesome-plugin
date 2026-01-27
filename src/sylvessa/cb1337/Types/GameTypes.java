@@ -8,12 +8,14 @@ public class GameTypes {
         public Location loc;
         public ItemStack[] inv;
         public ItemStack[] armor;
-        public Float experience;
+        public int level;
+        public float experience;
 
-        public SavedState(Location l, ItemStack[] i, ItemStack[] a, Float exp) {
+        public SavedState(Location l, ItemStack[] i, ItemStack[] a, int lvl, float exp) {
             loc = l;
             inv = i;
             armor = a;
+            level = lvl;
             experience = exp;
         }
     }

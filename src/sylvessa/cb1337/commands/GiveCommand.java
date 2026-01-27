@@ -45,16 +45,16 @@ public class GiveCommand implements PluginCommand {
             return;
         }
 
-        if (amount < -127) amount = -127;
+        //if (amount < -127) amount = -127;
         if (amount > 127) amount = 127;
 
         ItemStack item = new ItemStack(id, amount, data);
         target.getInventory().addItem(item);
 
-        sender.sendMessage("§aGave §e" + amount + " §aof §e" + id + ":" + data + " §ato §e" + target.getName());
-        if (!sender.equals(target)) {
-            target.sendMessage("§aYou received §e" + amount + " §aof §e" + id + ":" + data);
-        }
+//        sender.sendMessage("§aGave §e" + amount + " §aof §e" + id + ":" + data + " §ato §e" + target.getName());
+//        if (!sender.equals(target)) {
+//            target.sendMessage("§aYou received §e" + amount + " §aof §e" + id + ":" + data);
+//        }
     }
 }
 

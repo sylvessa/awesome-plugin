@@ -48,7 +48,10 @@ public class SumoDuel extends DuelGame {
 
     private void createWorld() {
         String name = "duel_sumo_" + new Random().nextInt(1000000);
-        world = Bukkit.createWorld(name, World.Environment.NORMAL, new Void());
+        world = Bukkit.createWorld(
+                new WorldCreator(name)
+                        .environment(World.Environment.NORMAL)
+                        .generator(new Void()));
     }
 
     private void buildArena() {

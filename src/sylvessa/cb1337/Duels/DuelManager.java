@@ -98,6 +98,7 @@ public class DuelManager {
                         p.getLocation().clone(),
                         p.getInventory().getContents(),
                         p.getInventory().getArmorContents(),
+                        p.getLevel(),
                         p.getExp()
                 )
         );
@@ -111,6 +112,7 @@ public class DuelManager {
         p.getInventory().setContents(s.inv);
         p.getInventory().setArmorContents(s.armor);
         p.setExp(s.experience);
+        p.setLevel(s.level);
         p.setFallDistance(0f);
     }
 

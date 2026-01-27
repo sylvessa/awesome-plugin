@@ -3,10 +3,10 @@ package sylvessa.cb1337.Listeners;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityListener;
 import sylvessa.cb1337.Duels.DuelGame;
 import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Log;
@@ -15,7 +15,7 @@ import sylvessa.cb1337.Types.Team;
 
 import java.util.HashMap;
 
-public class DamageListener extends EntityListener {
+public class DamageListener implements Listener {
     private static final HashMap<String, EntityDamageEvent.DamageCause> lastCause = new HashMap<>();
     private static final HashMap<String, String> lastAttacker = new HashMap<>();
 
@@ -27,6 +27,7 @@ public class DamageListener extends EntityListener {
         return lastAttacker.get(p.getName().toLowerCase());
     }
 
+    @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player)) return;
 
