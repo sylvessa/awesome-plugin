@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import sylvessa.cb1337.Duels.DuelGame;
@@ -12,6 +13,9 @@ import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Types.PluginCommand;
 import sylvessa.cb1337.UserConfig;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeCommand implements PluginCommand {
 
@@ -47,7 +51,6 @@ public class HomeCommand implements PluginCommand {
             return;
         }
 
-        // /home -> own home
         if (args.length == 0) {
             UserConfig uc = Main.getInstance().getUserConfig(p.getName());
             if (uc == null) {
@@ -58,10 +61,18 @@ public class HomeCommand implements PluginCommand {
             return;
         }
 
-        // /home <username>
-        String targetName = args[0];
-        UserConfig targetUc = Main.getInstance().getUserConfig(targetName);
+        String resolvedName = resolveName(args[0]);
+        if (resolvedName == null) {
+            p.sendMessage("§cNo matching player found.");
+            return;
+        }
 
+        if (resolvedName.equals("__ambiguous__")) {
+            p.sendMessage("§cThat name matches multiple players.");
+            return;
+        }
+
+        UserConfig targetUc = Main.getInstance().getUserConfig(resolvedName);
         if (targetUc == null) {
             p.sendMessage("§cThat player does not exist or is not loaded.");
             return;
@@ -91,10 +102,27 @@ public class HomeCommand implements PluginCommand {
         float pitch = (float) targetUc.getDouble("home.pitch", 0);
 
         String color = targetUc.getString("color", "f");
-        String name = "§" + color + targetName + "§f";
+        String name = "§" + color + resolvedName + "§f";
 
         p.teleport(new Location(w, x, y, z, yaw, pitch));
         p.sendMessage("§aTeleported to " + name + "§a's home.");
+    }
+
+    private String resolveName(String input) {
+        String lower = input.toLowerCase();
+        List<String> matches = new ArrayList<>();
+
+        for (OfflinePlayer op : Bukkit.getOfflinePlayers()) {
+            String name = op.getName();
+            if (name == null) continue;
+            if (name.toLowerCase().startsWith(lower)) {
+                matches.add(name);
+            }
+        }
+
+        if (matches.size() == 0) return null;
+        if (matches.size() > 1) return "__ambiguous__";
+        return matches.get(0);
     }
 
     private void teleportToHome(Player p, UserConfig uc, String successMsg) {

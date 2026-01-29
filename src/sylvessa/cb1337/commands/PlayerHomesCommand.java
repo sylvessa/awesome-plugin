@@ -13,7 +13,7 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class PlayerHomesCommand implements PluginCommand {
     public String name() {
-        return "playerhomes";
+        return "homes";
     }
 
     public String description() {
