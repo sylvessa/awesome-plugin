@@ -113,6 +113,7 @@ public class Main extends JavaPlugin {
             Log.info("FAILED TO REGISTER COMMANDS");
         }
 
+        getServer().getPluginManager().registerEvents(new TestListener(), this);
         getServer().getPluginManager().registerEvents(new SignColorListener(), this);
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
         getServer().getPluginManager().registerEvents(new EntitySpawnListener(), this);

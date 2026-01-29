@@ -1,6 +1,6 @@
 name: SylvessaPlugin
 main: sylvessa.cb1337.Main
-version: 1.1
+version: 1.2.5
 
 commands:
   testc:
@@ -17,10 +17,6 @@ commands:
     description: a
   home:
     description: a
-  createworld:
-    description: a
-  gwsdf:
-    description: a
   tpa:
     description: a
   tpahere:
@@ -35,7 +31,7 @@ commands:
     description: a
   setting:
     description: a
-  playerhomes:
+  homes:
     description: a
   rtp:
     description: a

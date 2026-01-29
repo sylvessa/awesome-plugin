@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="SylvessaPlugin">
-    <output-path>$PROJECT_DIR$/../craftbukkit 1.8.1/plugins</output-path>
+    <output-path>$PROJECT_DIR$/../craftbukkit 1.2.5/plugins</output-path>
     <root id="archive" name="SylvessaPlugin.jar">
       <element id="module-output" name="CB1337 Test" />
       <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
