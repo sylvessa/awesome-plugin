@@ -7,18 +7,14 @@ import java.util.Random;
 
 public class Void extends ChunkGenerator {
 
-    private final byte[] airChunk = new byte[16 * 128 * 16];
-
     @Override
-    public byte[] generate(World world, Random random, int chunkX, int chunkZ) {
-        byte[] chunk = new byte[airChunk.length];
-        System.arraycopy(airChunk, 0, chunk, 0, airChunk.length);
-        return chunk;
+    public byte[][] generateBlockSections(World world, Random random, int chunkX, int chunkZ, BiomeGrid biomes) {
+        return new byte[8][];
     }
 
     @Override
     public boolean canSpawn(World world, int x, int z) {
-        world.setSpawnLocation(0, 128, 0);
+        world.setSpawnLocation(5192, 128, 5192);
         return true;
     }
 }

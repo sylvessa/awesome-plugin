@@ -4,7 +4,7 @@ import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
+import sylvessa.cb1337.ChunkGenerators.FlatWorld;
 import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Minigames.MinigameManager;
@@ -13,7 +13,6 @@ import sylvessa.cb1337.UserConfig;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class CreativeCommand implements PluginCommand {
 
@@ -22,6 +21,8 @@ public class CreativeCommand implements PluginCommand {
     private static final Map<Player, ItemStack[]> savedInventories = new HashMap<>();
     private static final Map<Player, ItemStack[]> savedArmor = new HashMap<>();
     private static final Map<Player, Location> savedLocations = new HashMap<>();
+
+    World creativeWorld;
 
     public String name() {
         return "creative";
@@ -41,27 +42,12 @@ public class CreativeCommand implements PluginCommand {
             return;
         }
 
-        World creativeWorld = Bukkit.getWorld(WORLD_NAME);
+        creativeWorld = Bukkit.getWorld(WORLD_NAME);
 
         if (creativeWorld == null) {
             WorldCreator wc = new WorldCreator(WORLD_NAME);
             wc.environment(World.Environment.NORMAL);
-            wc.generator(new org.bukkit.generator.ChunkGenerator() {
-                @Override
-                public byte[] generate(World world, Random random, int cx, int cz) {
-                    byte[] chunk = new byte[32768]; // 16*128*16
-                    for (int x = 0; x < 16; x++) {
-                        for (int z = 0; z < 16; z++) {
-                            chunk[x * 128 + 0 + z * 128 * 16] = (byte) Material.BEDROCK.getId();
-                            for (int y = 1; y <= 49; y++) {
-                                chunk[x * 128 + y + z * 128 * 16] = (byte) Material.DIRT.getId();
-                            }
-                            chunk[x * 128 + 50 + z * 128 * 16] = (byte) Material.GRASS.getId();
-                        }
-                    }
-                    return chunk;
-                }
-            });
+            wc.generator(new FlatWorld());
             creativeWorld = Bukkit.createWorld(wc);
         }
 
