@@ -3,7 +3,6 @@ package sylvessa.cb1337;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.plugin.java.JavaPlugin;
 import sylvessa.cb1337.Discord.Bot;
 import sylvessa.cb1337.Duels.DuelListener;
@@ -115,7 +114,7 @@ public class Main extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new TestListener(), this);
         getServer().getPluginManager().registerEvents(new SignColorListener(), this);
-        getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(), this);
         getServer().getPluginManager().registerEvents(new EntitySpawnListener(), this);
         getServer().getPluginManager().registerEvents(new DeathListener(), this);
         getServer().getPluginManager().registerEvents(new ChatListener(), this);

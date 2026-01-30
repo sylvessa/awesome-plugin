@@ -16,16 +16,10 @@ import java.nio.charset.StandardCharsets;
 import static sylvessa.cb1337.Util.Helpers.buildDisplayName;
 
 public class JoinListener implements Listener {
-    private final Main plugin;
-
-    public JoinListener(Main plugin) {
-        this.plugin = plugin;
-    }
-
-    @EventHandler
-    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-        //Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> SurvivalHelper.handleWorldChange(event), 1L);
-    }
+//    @EventHandler
+//    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+//        //Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> SurvivalHelper.handleWorldChange(event), 1L);
+//    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
