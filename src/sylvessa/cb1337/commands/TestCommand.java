@@ -1,6 +1,7 @@
 package sylvessa.cb1337.commands;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import sylvessa.cb1337.Types.PluginCommand;
 
@@ -21,7 +22,8 @@ public class TestCommand implements PluginCommand {
         if (!(sender instanceof Player)) return;
 
         Player p = (Player) sender;
-
+        //int ping = ((CraftPlayer)p).getHandle().ping;
+        //p.sendMessage("§aPing: §f" + ping + "ms");
 
 //        FakePlayer npc = new FakePlayer("gawg", p.getLocation());
 //        npc.spawn();

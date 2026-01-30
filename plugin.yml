@@ -61,3 +61,7 @@ commands:
     description: a
   enchantitem:
     description: a
+  ping:
+    description: a
+  tps:
+    description: a
