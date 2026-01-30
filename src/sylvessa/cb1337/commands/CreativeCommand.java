@@ -6,8 +6,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import sylvessa.cb1337.Duels.DuelManager;
+import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Types.PluginCommand;
+import sylvessa.cb1337.UserConfig;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +42,7 @@ public class CreativeCommand implements PluginCommand {
         }
 
         World creativeWorld = Bukkit.getWorld(WORLD_NAME);
+
         if (creativeWorld == null) {
             WorldCreator wc = new WorldCreator(WORLD_NAME);
             wc.environment(World.Environment.NORMAL);
@@ -77,13 +80,39 @@ public class CreativeCommand implements PluginCommand {
         p.getInventory().setArmorContents(new ItemStack[4]);
         p.setGameMode(GameMode.CREATIVE);
 
-        p.teleport(creativeWorld.getSpawnLocation());
+        UserConfig uc = Main.getInstance().getUserConfig(p.getName());
+
+        if (uc.get("creative.x", null) != null) {
+            Location l = new Location(
+                    creativeWorld,
+                    uc.getDouble("creative.x", creativeWorld.getSpawnLocation().getX()),
+                    uc.getDouble("creative.y", creativeWorld.getSpawnLocation().getY()),
+                    uc.getDouble("creative.z", creativeWorld.getSpawnLocation().getZ()),
+                    uc.getFloat("creative.yaw", 0f),
+                    uc.getFloat("creative.pitch", 0f)
+            );
+
+            p.teleport(l);
+        } else {
+            p.teleport(creativeWorld.getSpawnLocation());
+        }
+
         p.sendMessage(ChatColor.GREEN + "Teleported to the creative world. Run /creative again to return to overworld.");
     }
 
     public static void returnFromCreative(Player p) {
         if (!p.getWorld().getName().equals(WORLD_NAME)) return;
         if (!savedInventories.containsKey(p)) return;
+
+        UserConfig uc = Main.getInstance().getUserConfig(p.getName());
+        Location l = p.getLocation();
+
+        uc.set("creative.x", l.getX());
+        uc.set("creative.y", l.getY());
+        uc.set("creative.z", l.getZ());
+        uc.set("creative.yaw", l.getYaw());
+        uc.set("creative.pitch", l.getPitch());
+        uc.save();
 
         p.getInventory().clear();
         p.getInventory().setContents(savedInventories.remove(p));
