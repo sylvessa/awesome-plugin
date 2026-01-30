@@ -89,7 +89,7 @@ public class PlayerHomesCommand implements PluginCommand {
         }
 
         if (totalPages > 1) {
-            sender.sendMessage("§7Use §e/playerhomes <page> §7to view more.");
+            sender.sendMessage("§7Use §e/homes <page> §7to view more.");
         }
         sender.sendMessage("§7Teleport using §e/home <player>");
     }
