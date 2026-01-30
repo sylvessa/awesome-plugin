@@ -149,7 +149,8 @@ public class Main extends JavaPlugin {
             discordBot.stop();
         }
 
-        for(Player p : getServer().getOnlinePlayers()) {
+        for (Player p : getServer().getOnlinePlayers()) {
+            JoinListener.handleLeave(p, "left (server stopping)");
             p.kickPlayer("Server is shutting down");
         }
 

@@ -70,38 +70,42 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        //SurvivalHelper.handleQuit(event.getPlayer());
-        String name = event.getPlayer().getName();
+        event.setQuitMessage(null);
+        handleLeave(event.getPlayer(), "has left the game.");
+    }
 
-        CreativeCommand.returnFromCreative(event.getPlayer());
+    public static void handleLeave(Player player, String message) {
+        String name = player.getName();
+
+        CreativeCommand.returnFromCreative(player);
 
         Log.info("Saving " + name + "'s data.");
 
-        UserConfig uc = plugin.getUserConfigs().get(name.toLowerCase());
-        String color = "f"; // default
+        UserConfig uc = Main.getInstance().getUserConfigs().get(name.toLowerCase());
+        String color = "f";
 
         if(uc != null) {
             uc.save();
             color = uc.getString("color", "f");
-            //plugin.getUserConfigs().remove(name.toLowerCase());
             Log.info("Saved " + name + "'s data!");
         } else {
             Log.info("No user config found for " + name + ", using default color.");
         }
 
-        event.setQuitMessage("§e" + (!color.equals("f") ? "§" + color : "") + name + "§e has left the game.");
+        if(message != null) {
+            player.getServer().broadcastMessage(
+                    "§e" + (!color.equals("f") ? "§" + color : "") + name + "§e " + message
+            );
+        }
 
-        String webhook = plugin.getPluginConfig().getString("discord.webhook-url", "");
+        String webhook = Main.getInstance().getPluginConfig().getString("discord.webhook-url", "");
         if(!webhook.isEmpty()) {
             sendJoinLeaveWebhook(webhook, name, false);
         }
-
-//        int online = Bukkit.getOnlinePlayers().length - 1; // lol?
-//        BotUtil.updateChannelDescription(online + " player" + (online != 1 ? "s" : "") + " online | Site map: https://map.snep.lol/");
     }
 
     // PRIVATE
-    private void sendJoinLeaveWebhook(String url, String username, boolean joined) {
+    private static void sendJoinLeaveWebhook(String url, String username, boolean joined) {
         new Thread(() -> {
             try {
                 URL u = new URL(url);
@@ -138,7 +142,7 @@ public class JoinListener implements Listener {
         }).start();
     }
 
-    private String escape(String s) {
+    private static String escape(String s) {
         return s.replace("\\", "\\\\")
                 .replace("\"", "\\\"")
                 .replace("\n", "\\n")
