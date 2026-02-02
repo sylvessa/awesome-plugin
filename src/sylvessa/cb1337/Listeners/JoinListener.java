@@ -54,6 +54,11 @@ public class JoinListener implements Listener {
                         joins + " time" + (joins != 1 ? "s" : "") + ")§f"
         );
 
+        String displayName2 = buildDisplayName(name, false);
+        if(displayName2.length() > 16) displayName2 = displayName2.substring(0, 16);
+
+        event.getPlayer().setPlayerListName(displayName2);
+
         String webhook = plugin.getPluginConfig().getString("discord.webhook-url", "");
         if(!webhook.isEmpty()) {
             sendJoinLeaveWebhook(webhook, name, true);

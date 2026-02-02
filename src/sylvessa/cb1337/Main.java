@@ -125,6 +125,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MinigameListener(), this);
         getServer().getPluginManager().registerEvents(new DuelListener(), this);
         getServer().getPluginManager().registerEvents(new WeatherListener(), this);
+        getServer().getPluginManager().registerEvents(new BlockIceListener(), this);
 
         discordBot = new Bot(this);
         discordBot.start();
