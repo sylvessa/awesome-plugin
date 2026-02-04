@@ -120,12 +120,13 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
         getServer().getPluginManager().registerEvents(new LeafDecayListener(), this);
         getServer().getPluginManager().registerEvents(new PortalListener(), this);
-
         getServer().getPluginManager().registerEvents(new CustomPVPListener(), this);
         getServer().getPluginManager().registerEvents(new MinigameListener(), this);
         getServer().getPluginManager().registerEvents(new DuelListener(), this);
         getServer().getPluginManager().registerEvents(new WeatherListener(), this);
         getServer().getPluginManager().registerEvents(new BlockIceListener(), this);
+
+        CustomRecipes.registerAll();
 
         discordBot = new Bot(this);
         discordBot.start();
