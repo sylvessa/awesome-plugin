@@ -29,11 +29,11 @@ public class SleepListener implements Listener {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
             if (!player.isSleeping()) return;
+            if (world.getPlayers().size() < 2) return;
 
             votes.putIfAbsent(world, new HashSet<>());
             messageSent.putIfAbsent(world, false);
 
-            // count non-AFK players
             int nonAFK = 0;
             for (Player p : world.getPlayers()) {
                 if (!AFKListener.isAFK(p)) nonAFK++;
@@ -104,7 +104,7 @@ public class SleepListener implements Listener {
         if (!worldVotes.contains(player)) {
             worldVotes.add(player);
 
-            int totalNeeded = 0; // -1 cause deduct one for the player who inited vote
+            int totalNeeded = 0;
             int votesSoFar = worldVotes.size();
 
             for (Player p : world.getPlayers()) {
