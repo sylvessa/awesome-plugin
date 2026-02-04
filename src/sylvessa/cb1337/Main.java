@@ -1,5 +1,6 @@
 package sylvessa.cb1337;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -125,6 +126,9 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DuelListener(), this);
         getServer().getPluginManager().registerEvents(new WeatherListener(), this);
         getServer().getPluginManager().registerEvents(new BlockIceListener(), this);
+        getServer().getPluginManager().registerEvents(new SleepListener(), this);
+        getServer().getPluginManager().registerEvents(new AFKListener(), this);
+
 
         CustomRecipes.registerAll();
 
@@ -152,7 +156,7 @@ public class Main extends JavaPlugin {
 
         for (Player p : getServer().getOnlinePlayers()) {
             JoinListener.handleLeave(p, "left (server stopping)");
-            p.kickPlayer("Server is shutting down");
+            p.kickPlayer(ChatColor.RED + "Server is shutting down");
         }
 
         Log.info("Lol Bye");

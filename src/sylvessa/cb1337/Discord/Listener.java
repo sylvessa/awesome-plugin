@@ -33,7 +33,7 @@ public class Listener extends ListenerAdapter {
             }
         }
 
-        Log.info("[Discord][" + user + "] " + content);
+        //Log.info("[Discord][" + user + "] " + content);
 
         // this runs on main thread....
         String discordMessage = "§5[Discord] §d" + user + "§f: " + content;

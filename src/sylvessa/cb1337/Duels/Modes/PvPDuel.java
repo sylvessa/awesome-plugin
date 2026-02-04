@@ -109,8 +109,8 @@ public class PvPDuel extends DuelGame {
                     if(countdown == 0) {
                         started = true;
 
-                        p1.sendMessage("§aGO");
-                        p2.sendMessage("§aGO");
+                        p1.sendMessage(ChatColor.GREEN + "GO");
+                        p2.sendMessage(ChatColor.GREEN +"GO");
 
                         Bukkit.getScheduler().cancelTask(taskId);
 
@@ -122,8 +122,8 @@ public class PvPDuel extends DuelGame {
                         return;
                     }
 
-                    p1.sendMessage("§e" + countdown);
-                    p2.sendMessage("§e" + countdown);
+                    p1.sendMessage(ChatColor.YELLOW.toString() + countdown);
+                    p2.sendMessage(ChatColor.YELLOW.toString() + countdown);
 
                     p1.playNote(noteBlockP1, Instrument.PIANO, new Note((byte)1, Note.Tone.G, false));
                     p2.playNote(noteBlockP2, Instrument.PIANO, new Note((byte)1, Note.Tone.G, false));

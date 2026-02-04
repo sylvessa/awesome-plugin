@@ -18,12 +18,12 @@ public class DuelCommand implements PluginCommand {
         Player p = (Player)sender;
 
         if (p.getWorld().getName().equals("creative")) {
-            p.sendMessage(ChatColor.RED + "No");
+            p.sendMessage(ChatColor.RED + "Exit creative first");
             return;
         }
 
         if (MinigameManager.get(p) != null || MinigameManager.getQueued(p) != null || DuelManager.get(p) != null) {
-            p.sendMessage("§cYou cannot use this command right now!");
+            p.sendMessage(ChatColor.RED + "You cannot use this command right now!");
             return;
         }
 

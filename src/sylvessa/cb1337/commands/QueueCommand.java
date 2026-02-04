@@ -20,6 +20,11 @@ public class QueueCommand implements PluginCommand {
         if(!(sender instanceof Player)) return;
         Player p = (Player) sender;
 
+        if (p.getWorld().getName().equals("creative")) {
+            p.sendMessage(ChatColor.RED + "Exit creative first");
+            return;
+        }
+
         if (MinigameManager.get(p) != null || DuelManager.get(p) != null) {
             p.sendMessage(ChatColor.RED + "You cannot run this command at this time.");
             return;
