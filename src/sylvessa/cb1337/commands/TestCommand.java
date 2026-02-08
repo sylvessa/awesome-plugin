@@ -1,14 +1,16 @@
 package sylvessa.cb1337.commands;
 
-import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.Packet17EntityLocationAction;
-import net.minecraft.server.Packet70Bed;
+import net.minecraft.server.*;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import sylvessa.cb1337.Types.PluginCommand;
+import sylvessa.cb1337.Util.ItemNBT;
 
 import static org.bukkit.Bukkit.getServer;
 
@@ -28,20 +30,26 @@ public class TestCommand implements PluginCommand {
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) return;
 
-        //Player p = (Player) sender;
+        Player p = (Player) sender;
 
-        //layDown(p, p.getLocation());
-        //int ping = ((CraftPlayer)p).getHandle().ping;
-        //p.sendMessage("§aPing: §f" + ping + "ms");
+        // nbt demo
+        ItemStack inHand = p.getItemInHand();
 
-//        FakePlayer npc = new FakePlayer("gawg", p.getLocation());
-//        npc.spawn();
-//        Packet41MobEffect packet = new Packet41MobEffect(p.getEntityId(), new MobEffect(14, 20*30, 5));
-//        ((CraftPlayer)p).getHandle().netServerHandler.sendPacket(packet);
+        if (inHand == null || inHand.getType() == Material.AIR) {
+            ItemStack stick = new ItemStack(Material.STICK, 1);
+            stick = ItemNBT.setInt(stick, "cooltag", 195);
+            stick = ItemNBT.setString(stick, "owner", p.getName());
+            p.setItemInHand(stick);
+            return;
+        }
 
+        Integer tag = ItemNBT.getInt(inHand, "cooltag");
 
-        //p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20 * 30, 5));
-        //Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), npc::lookAtNearestPlayer, 0L, 5L);
+        if (tag != null) {
+            p.sendMessage("cooltag = " + tag);
+        } else {
+            p.sendMessage("no cooltag");
+        }
     }
 
 //    public void layDown(Player player, Location block) {

@@ -128,6 +128,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockIceListener(), this);
         getServer().getPluginManager().registerEvents(new SleepListener(), this);
         getServer().getPluginManager().registerEvents(new AFKListener(), this);
+        getServer().getPluginManager().registerEvents(new CraftingListener(), this);
 
 
         CustomRecipes.registerAll();
