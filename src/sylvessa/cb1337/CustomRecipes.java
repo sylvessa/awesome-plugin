@@ -119,17 +119,17 @@ public class CustomRecipes {
                 'L', new MaterialData(Material.INK_SACK, (byte)4)
         );
 
-        ItemStack wheat = new ItemStack(Material.WHEAT, 1);
+        ItemStack wheat = new ItemStack(Material.MUSHROOM_SOUP, 1);
 
-        shaped(
-                wheat,
-                new String[] {
-                        " W ",
-                        "W  "
-                },
-                item -> ItemNBT.setInt(item, "cooltag", 195),
-                'W', Material.WOOL
-        );
+//        shaped(
+//                wheat,
+//                new String[] {
+//                        " W ",
+//                        "W  "
+//                },
+//                item -> ItemNBT.setInt(item, "isFlightSoup", 1),
+//                'W', Material.WOOL
+//        );
     }
 
     private static void shaped(ItemStack result, String[] shape, NbtApplier nbt, Object... ingredients) {
