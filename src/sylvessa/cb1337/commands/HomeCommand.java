@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeCommand implements PluginCommand {
-
     public String name() {
         return "home";
     }

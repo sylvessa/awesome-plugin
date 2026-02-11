@@ -33,15 +33,11 @@ commands:
     description: a
   homes:
     description: a
-  rtp:
-    description: a
   give2:
     description: a
   team:
     description: a
   teams:
-    description: a
-  spleef:
     description: a
   summon:
     description: a
