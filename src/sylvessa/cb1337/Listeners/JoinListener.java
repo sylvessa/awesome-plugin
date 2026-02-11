@@ -28,8 +28,8 @@ public class JoinListener implements Listener {
 //        CraftPlayer cp = (CraftPlayer)p;
 //        EntityPlayer ep = cp.getHandle();
 //
-//        NetServerHandler old = ep.netServerHandler;
-//        ep.netServerHandler = new EnchantPreviewListener(old, ep, p);
+//        playerConnection old = ep.playerConnection;
+//        ep.playerConnection = new EnchantPreviewListener(old, ep, p);
 
 
         Player player = event.getPlayer();

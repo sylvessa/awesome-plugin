@@ -5,7 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.util.Vector;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Minigames.Minigame;
@@ -229,7 +229,7 @@ public class GuessTheBuildMinigame extends Minigame {
     }
 
     @Override
-    public void onChat(Player p, PlayerChatEvent e) {
+    public void onChat(Player p, AsyncPlayerChatEvent e) {
         if(!roundActive || p == builder || guessed.contains(p) || ended) return;
 
         String guess = e.getMessage().toLowerCase().replace(" ", "");

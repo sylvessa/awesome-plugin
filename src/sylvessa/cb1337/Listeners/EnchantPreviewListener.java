@@ -1,22 +1,13 @@
 package sylvessa.cb1337.Listeners;
 
-import net.minecraft.server.*;
-import org.bukkit.entity.Player;
-import net.minecraft.server.ItemStack;
-import sylvessa.cb1337.Log;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 // todo: replace with InventoryClickEvent
 
-public class EnchantPreviewListener { // extends NetServerHandler
+public class EnchantPreviewListener { // extends playerConnection
 //    private final Player player;
 //    private final EntityPlayer eplayer;
 //    private Random random = new Random();
 //
-//    public EnchantPreviewListener(NetServerHandler old, EntityPlayer ep, Player p) {
+//    public EnchantPreviewListener(playerConnection old, EntityPlayer ep, Player p) {
 //        super(ep.b, old.networkManager, ep);
 //
 //        this.player = p;

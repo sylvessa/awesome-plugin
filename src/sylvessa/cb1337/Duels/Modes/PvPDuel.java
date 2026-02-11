@@ -1,8 +1,8 @@
 package sylvessa.cb1337.Duels.Modes;
 
-import net.minecraft.server.Packet9Respawn;
+import net.minecraft.server.v1_4_R1.Packet9Respawn;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_4_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -185,7 +185,7 @@ public class PvPDuel extends DuelGame {
         event.getDrops().clear();
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
-            ((CraftPlayer) p).getHandle().netServerHandler.a(new Packet9Respawn());
+            ((CraftPlayer) p).getHandle().playerConnection.a(new Packet9Respawn());
 
             Player winner = p == p1 ? p2 : p1;
             finish(winner, p);

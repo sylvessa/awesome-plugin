@@ -1,10 +1,10 @@
 package sylvessa.cb1337.Duels.Modes;
 
-import net.minecraft.server.MobEffect;
-import net.minecraft.server.Packet41MobEffect;
-import net.minecraft.server.Packet42RemoveMobEffect;
+import net.minecraft.server.v1_4_R1.MobEffect;
+import net.minecraft.server.v1_4_R1.Packet41MobEffect;
+import net.minecraft.server.v1_4_R1.Packet42RemoveMobEffect;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_4_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -119,10 +119,10 @@ public class SpleefDuel extends DuelGame {
         p2.setSaturation(20);
 
         Packet41MobEffect packet = new Packet41MobEffect(p1.getEntityId(), new MobEffect(3, 20*30, 2));
-        ((CraftPlayer)p1).getHandle().netServerHandler.sendPacket(packet);
+        ((CraftPlayer)p1).getHandle().playerConnection.sendPacket(packet);
 
         Packet41MobEffect packet2 = new Packet41MobEffect(p2.getEntityId(), new MobEffect(3, 20*30, 2));
-        ((CraftPlayer)p2).getHandle().netServerHandler.sendPacket(packet2);
+        ((CraftPlayer)p2).getHandle().playerConnection.sendPacket(packet2);
 
         noteBlockP1 = placeNoteBlockBehind(p1);
         noteBlockP2 = placeNoteBlockBehind(p2);
@@ -237,9 +237,9 @@ public class SpleefDuel extends DuelGame {
 
     private void cleanup() {
         Packet42RemoveMobEffect packet = new Packet42RemoveMobEffect(p1.getEntityId(), new MobEffect(3, 0, 0));
-        ((CraftPlayer)p1).getHandle().netServerHandler.sendPacket(packet);
+        ((CraftPlayer)p1).getHandle().playerConnection.sendPacket(packet);
         Packet42RemoveMobEffect packet2 = new Packet42RemoveMobEffect(p2.getEntityId(), new MobEffect(3, 0, 0));
-        ((CraftPlayer)p2).getHandle().netServerHandler.sendPacket(packet2);
+        ((CraftPlayer)p2).getHandle().playerConnection.sendPacket(packet2);
 
         DuelManager.end(this);
     }

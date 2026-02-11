@@ -1,12 +1,9 @@
 package sylvessa.cb1337.Listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import sylvessa.cb1337.Log;
-import sylvessa.cb1337.Main;
 
 public class EntitySpawnListener implements Listener {
     @EventHandler

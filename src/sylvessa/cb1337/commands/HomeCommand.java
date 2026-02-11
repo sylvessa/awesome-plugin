@@ -120,7 +120,7 @@ public class HomeCommand implements PluginCommand {
             }
         }
 
-        if (matches.size() == 0) return null;
+        if (matches.isEmpty()) return null;
         if (matches.size() > 1) return "__ambiguous__";
         return matches.get(0);
     }

@@ -1,16 +1,16 @@
 package sylvessa.cb1337.Listeners;
 
-import net.minecraft.server.Packet18ArmAnimation;
+import net.minecraft.server.v1_4_R1.Packet18ArmAnimation;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_4_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
-import org.bukkit.event.player.PlayerChatEvent;
 import sylvessa.cb1337.Main;
 
 import java.util.HashMap;
@@ -77,7 +77,7 @@ public class SleepListener implements Listener {
     }
 
     @EventHandler
-    public void onChatVote(PlayerChatEvent event) {
+    public void onChatVote(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         World world = player.getWorld();
 
@@ -129,7 +129,7 @@ public class SleepListener implements Listener {
 
         for (Player p : world.getPlayers()) {
             if (p.isSleeping()) {
-                ((CraftPlayer) p).getHandle().netServerHandler.sendPacket(new Packet18ArmAnimation(((CraftPlayer) p).getHandle(), 3));
+                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(new Packet18ArmAnimation(((CraftPlayer) p).getHandle(), 3));
             }
         }
 

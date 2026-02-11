@@ -3,7 +3,6 @@ package sylvessa.cb1337.Discord;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.Bukkit;
-import sylvessa.cb1337.Log;
 
 public class Listener extends ListenerAdapter {
     private final String channelId;

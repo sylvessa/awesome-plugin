@@ -8,6 +8,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
+@SuppressWarnings("EmptyMethod")
 public abstract class DuelGame {
 
     protected final Player p1;

@@ -9,7 +9,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import sylvessa.cb1337.Duels.DuelGame;
 import sylvessa.cb1337.Duels.DuelManager;
-import sylvessa.cb1337.Log;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Types.Team;
 

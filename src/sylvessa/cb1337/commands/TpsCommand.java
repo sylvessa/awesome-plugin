@@ -2,9 +2,9 @@ package sylvessa.cb1337.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.v1_4_R1.CraftServer;
 import sylvessa.cb1337.Types.PluginCommand;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.v1_4_R1.MinecraftServer;
 
 public class TpsCommand implements PluginCommand {
     long total = 0L;

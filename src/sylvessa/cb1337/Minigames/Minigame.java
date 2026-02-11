@@ -1,13 +1,12 @@
 package sylvessa.cb1337.Minigames;
 
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -58,7 +57,7 @@ public abstract class Minigame {
 
     public boolean canBreak(Player p, BlockBreakEvent e) { return false; }
     public boolean canPlace(Player p, BlockPlaceEvent e) { return false; }
-    public void onChat(Player p, PlayerChatEvent e) {}
+    public void onChat(Player p, AsyncPlayerChatEvent e) {}
     public void onDeath(Player p, EntityDeathEvent e) {}
 
     public boolean isPlaying(Player p) {

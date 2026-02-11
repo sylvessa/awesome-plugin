@@ -1,9 +1,9 @@
 package sylvessa.cb1337.Duels.Modes;
 
-import net.minecraft.server.Packet9Respawn;
+import net.minecraft.server.v1_4_R1.Packet9Respawn;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_4_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -15,7 +15,6 @@ import sylvessa.cb1337.ChunkGenerators.Void;
 import sylvessa.cb1337.Duels.DuelGame;
 import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Duels.DuelType;
-import sylvessa.cb1337.Log;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Util.CustomWorldLoader;
 import sylvessa.cb1337.Util.DiscordWebhook;
@@ -249,7 +248,7 @@ public class BridgeDuel extends DuelGame {
         event.getDrops().clear();
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
-            ((CraftPlayer) p).getHandle().netServerHandler.a(new Packet9Respawn());
+            ((CraftPlayer) p).getHandle().playerConnection.a(new Packet9Respawn());
         }, 2L);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {

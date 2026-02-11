@@ -1,9 +1,7 @@
 package sylvessa.cb1337.Duels;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import sylvessa.cb1337.Duels.Modes.BridgeDuel;
 import sylvessa.cb1337.Duels.Modes.PvPDuel;
 import sylvessa.cb1337.Duels.Modes.SpleefDuel;

@@ -1,10 +1,5 @@
 package sylvessa.cb1337.Listeners;
 
-import net.minecraft.server.Packet9Respawn;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

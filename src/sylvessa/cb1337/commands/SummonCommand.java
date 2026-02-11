@@ -40,14 +40,13 @@ public class SummonCommand implements PluginCommand {
         int count = 1;
         int lastArgIndex = args.length - 1;
 
-        // check if last arg is a number for count
         try {
             count = Integer.parseInt(args[lastArgIndex]);
             lastArgIndex--;
             if (count < 1) count = 1;
         } catch (Exception ignored) {}
 
-        Location loc = null;
+        Location loc;
 
         if (lastArgIndex == 0) { // only entity
             if (isScorner) {

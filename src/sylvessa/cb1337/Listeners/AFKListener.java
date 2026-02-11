@@ -20,7 +20,7 @@ public class AFKListener implements Listener {
     private final Map<String, Long> lastActivity = new HashMap<>();
 
     public AFKListener() {
-        Bukkit.getScheduler().scheduleAsyncRepeatingTask(Main.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskTimer(Main.getInstance(), () -> {
             long now = System.currentTimeMillis();
             for (Player p : Bukkit.getOnlinePlayers()) {
                 String name = p.getName();

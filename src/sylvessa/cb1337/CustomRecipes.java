@@ -7,7 +7,6 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.material.MaterialData;
 import sylvessa.cb1337.Types.CustomRecipe;
 import sylvessa.cb1337.Types.NbtApplier;
-import sylvessa.cb1337.Util.ItemNBT;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CustomRecipes {
-    private static final List<CustomRecipe> CUSTOM = new ArrayList<CustomRecipe>();
+    private static final List<CustomRecipe> CUSTOM = new ArrayList<>();
 
     public static void registerAll() {
 //        shaped(
@@ -136,7 +135,7 @@ public class CustomRecipes {
         ShapedRecipe recipe = new ShapedRecipe(result);
         recipe.shape(shape);
 
-        Map<Character, MaterialData> map = new HashMap<Character, MaterialData>();
+        Map<Character, MaterialData> map = new HashMap<>();
 
         for (int i = 0; i < ingredients.length; i += 2) {
             char key = (Character) ingredients[i];

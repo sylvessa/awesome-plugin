@@ -1,10 +1,10 @@
 package sylvessa.cb1337.Minigames.Games;
 
-import net.minecraft.server.Packet9Respawn;
+import net.minecraft.server.v1_4_R1.Packet9Respawn;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_4_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -289,7 +289,7 @@ public class SkywarsMinigame extends Minigame {
 
     public void onDeath(Player p, EntityDeathEvent e) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
-            ((CraftPlayer) p).getHandle().netServerHandler.a(new Packet9Respawn());
+            ((CraftPlayer) p).getHandle().playerConnection.a(new Packet9Respawn());
             onPlayerDeath(p);
         }, 2L);
     }

@@ -1,9 +1,9 @@
 package sylvessa.cb1337.commands;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_4_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import sylvessa.cb1337.Types.PluginCommand;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 
 public class PingCommand implements PluginCommand {
 

@@ -2,7 +2,6 @@ package sylvessa.cb1337.Minigames;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import sylvessa.cb1337.ChunkGenerators.Void;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Types.GameTypes.SavedState;

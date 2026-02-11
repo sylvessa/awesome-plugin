@@ -2,7 +2,7 @@ package sylvessa.cb1337.Listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import sylvessa.cb1337.Log;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Teams.TeamManager;
@@ -18,7 +18,7 @@ import static sylvessa.cb1337.Util.Helpers.buildDisplayName;
 
 public class ChatListener implements Listener {
     @EventHandler
-    public void onPlayerChat(PlayerChatEvent event) {
+    public void onPlayerChat(AsyncPlayerChatEvent event) {
         String username = event.getPlayer().getName();
         String message = event.getMessage();
 

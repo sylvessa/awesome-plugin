@@ -1,6 +1,5 @@
 package sylvessa.cb1337.Listeners;
 
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

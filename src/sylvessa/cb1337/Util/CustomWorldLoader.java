@@ -37,27 +37,21 @@ public class CustomWorldLoader {
         targetFolder.mkdirs();
 
         File pluginJar = new File(CustomWorldLoader.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-        JarFile jar = new JarFile(pluginJar);
-        try {
+        try (JarFile jar = new JarFile(pluginJar)) {
             Enumeration<JarEntry> entries = jar.entries();
-            while(entries.hasMoreElements()) {
+            while (entries.hasMoreElements()) {
                 JarEntry entry = entries.nextElement();
-                if(entry.getName().startsWith(jarPath.substring(1))) {
+                if (entry.getName().startsWith(jarPath.substring(1))) {
                     File f = new File(targetFolder, entry.getName().substring(jarPath.length()));
-                    if(entry.isDirectory()) {
+                    if (entry.isDirectory()) {
                         f.mkdirs();
                     } else {
-                        InputStream in = jar.getInputStream(entry);
-                        try {
+                        try (InputStream in = jar.getInputStream(entry)) {
                             Files.copy(in, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        } finally {
-                            in.close();
                         }
                     }
                 }
             }
-        } finally {
-            jar.close();
         }
     }
 }
