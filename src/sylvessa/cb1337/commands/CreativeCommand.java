@@ -8,6 +8,7 @@ import sylvessa.cb1337.ChunkGenerators.FlatWorld;
 import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Minigames.MinigameManager;
+import sylvessa.cb1337.Types.GameTypes.SavedState;
 import sylvessa.cb1337.Types.PluginCommand;
 import sylvessa.cb1337.UserConfig;
 
@@ -17,12 +18,9 @@ import java.util.Map;
 public class CreativeCommand implements PluginCommand {
 
     private static final String WORLD_NAME = "creative";
+    private static final Map<String, SavedState> saved = new HashMap<>();
 
-    private static final Map<Player, ItemStack[]> savedInventories = new HashMap<>();
-    private static final Map<Player, ItemStack[]> savedArmor = new HashMap<>();
-    private static final Map<Player, Location> savedLocations = new HashMap<>();
-
-    World creativeWorld;
+    private World creativeWorld;
 
     public String name() {
         return "creative";
@@ -56,14 +54,21 @@ public class CreativeCommand implements PluginCommand {
             return;
         }
 
-        if (!savedInventories.containsKey(p)) {
-            savedInventories.put(p, p.getInventory().getContents());
-            savedArmor.put(p, p.getInventory().getArmorContents());
-            savedLocations.put(p, p.getLocation());
+        if (!saved.containsKey(p.getName())) {
+            saved.put(
+                    p.getName(),
+                    new SavedState(
+                            p.getLocation().clone(),
+                            p.getInventory().getContents(),
+                            p.getInventory().getArmorContents(),
+                            p.getLevel(),
+                            p.getExp()
+                    )
+            );
         }
 
         p.getInventory().clear();
-        p.getInventory().setArmorContents(new ItemStack[4]);
+        p.getInventory().setArmorContents(null);
         p.setGameMode(GameMode.CREATIVE);
 
         UserConfig uc = Main.getInstance().getUserConfig(p.getName());
@@ -83,12 +88,14 @@ public class CreativeCommand implements PluginCommand {
             p.teleport(creativeWorld.getSpawnLocation());
         }
 
-        p.sendMessage(ChatColor.GREEN + "Teleported to the creative world. Run /creative again to return to overworld.");
+        p.sendMessage(ChatColor.GREEN + "Teleported to the creative world. Run /creative again to return.");
     }
 
     public static void returnFromCreative(Player p) {
         if (!p.getWorld().getName().equals(WORLD_NAME)) return;
-        if (!savedInventories.containsKey(p)) return;
+
+        SavedState s = saved.remove(p.getName());
+        if (s == null) return;
 
         UserConfig uc = Main.getInstance().getUserConfig(p.getName());
         Location l = p.getLocation();
@@ -101,13 +108,15 @@ public class CreativeCommand implements PluginCommand {
         uc.save();
 
         p.getInventory().clear();
-        p.getInventory().setContents(savedInventories.remove(p));
-        p.getInventory().setArmorContents(savedArmor.remove(p));
+        p.getInventory().setContents(s.inv);
+        p.getInventory().setArmorContents(s.armor);
+        p.setLevel(s.level);
+        p.setExp(s.experience);
+        p.setFallDistance(0f);
 
-        Location loc = savedLocations.remove(p);
-        if (loc != null) p.teleport(loc);
-
+        p.teleport(s.loc);
         p.setGameMode(GameMode.SURVIVAL);
+
         p.sendMessage(ChatColor.YELLOW + "Welcome back");
     }
 }
