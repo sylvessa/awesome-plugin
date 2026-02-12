@@ -1,9 +1,13 @@
 package sylvessa.cb1337.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import sylvessa.cb1337.Types.PluginCommand;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestCommand implements PluginCommand {
     public String name() {
@@ -44,20 +48,16 @@ public class TestCommand implements PluginCommand {
 //        }
     }
 
-//    public void layDown(Player player, Location block) {
-//        player.setAllowFlight(true);
-//        player.setFlying(true);
-//        player.teleport(block.add(0.5, 0.5, 0.5));
-//
-//        EntityPlayer entityPlayer = ((CraftPlayer)player).getHandle();
-//        Packet17EntityLocationAction packet = new Packet17EntityLocationAction(entityPlayer, 0, block.getBlockX(), block.getBlockY(), block.getBlockZ());
-//
-//        for(Player p : getServer().getOnlinePlayers())
-//            ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
-//
-//        Packet70Bed packt = new Packet70Bed(player.getEntityId(), 78);
-//
-//        for(Player p : getServer().getOnlinePlayers())
-//            ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packt);
-//    }
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+        if (!(sender instanceof Player)) return suggestions;
+        if (args.length == 1) {
+            String prefix = args[0].toLowerCase();
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getName().toLowerCase().startsWith(prefix)) suggestions.add(p.getName());
+            }
+        }
+        return suggestions;
+    }
 }
