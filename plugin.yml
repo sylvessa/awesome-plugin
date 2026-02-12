@@ -1,5 +1,5 @@
 name: SylvessaPlugin
-main: sylvessa.cb1337.Main
+main: sylvessa.spigot.Main
 version: 1.4.7
 
 commands:
