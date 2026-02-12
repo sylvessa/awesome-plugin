@@ -1,5 +1,6 @@
 package sylvessa.cb1337.commands;
 
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import sylvessa.cb1337.Main;
@@ -10,7 +11,7 @@ public class TpdenyCommand implements PluginCommand {
     public String name() { return "tpdeny"; }
     public String description() { return "Deny a teleport request"; }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if(!(sender instanceof Player)) return;
 
         Player p = (Player) sender;

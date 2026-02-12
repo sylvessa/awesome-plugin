@@ -1,22 +1,24 @@
 package sylvessa.cb1337.commands;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Minigames.MinigameType;
 import sylvessa.cb1337.Types.PluginCommand;
+import org.bukkit.command.TabCompleter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class QueueCommand implements PluginCommand {
     public String name() { return "queue"; }
+
     public String description() { return "Join a minigame queue"; }
 
-    public boolean hidden() {
-        return true;
-    }
-
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if(!(sender instanceof Player)) return;
         Player p = (Player) sender;
 
@@ -55,5 +57,17 @@ public class QueueCommand implements PluginCommand {
         }
 
         MinigameManager.queue(p, type);
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+        if(args.length == 1) {
+            for(MinigameType t : MinigameType.values()) {
+                String name = t.name().toLowerCase();
+                if(name.startsWith(args[0].toLowerCase())) suggestions.add(name);
+            }
+        }
+        return suggestions;
     }
 }

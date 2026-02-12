@@ -3,6 +3,7 @@ package sylvessa.cb1337;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import sylvessa.cb1337.Discord.Bot;
@@ -54,7 +55,10 @@ public class Main extends JavaPlugin {
                 if(!PluginCommand.class.isAssignableFrom(cls)) continue;
 
                 PluginCommand cmd = (PluginCommand) cls.getDeclaredConstructor().newInstance();
+                getCommand(cmd.name().toLowerCase()).setExecutor(cmd);
                 commands.put(cmd.name().toLowerCase(), cmd);
+                getCommand(cmd.name().toLowerCase()).setTabCompleter(cmd);
+
                 Log.info("Registered command: " + cmd.name());
             }
         }
@@ -131,23 +135,12 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CraftingListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
 
-
         CustomRecipes.registerAll();
 
         discordBot = new Bot(this);
         discordBot.start();
 
         Log.info("Done!");
-    }
-
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        PluginCommand command = commands.get(cmd.getName().toLowerCase());
-        if(command != null) {
-            command.execute(sender, args);
-            return true;
-        }
-
-        return false;
     }
 
     @Override

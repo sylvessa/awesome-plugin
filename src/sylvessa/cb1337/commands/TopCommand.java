@@ -7,12 +7,13 @@ import org.bukkit.entity.Player;
 import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Types.PluginCommand;
+import org.bukkit.command.Command;
 
 public class TopCommand implements PluginCommand {
     public String name() { return "top"; }
     public String description() { return "Teleports you to the surface"; }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if(!(sender instanceof Player)) return;
 
         Player p = (Player)sender;

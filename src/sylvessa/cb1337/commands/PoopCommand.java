@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Types.PluginCommand;
 import sylvessa.cb1337.UserConfig;
+import org.bukkit.command.Command;
 
 public class PoopCommand implements PluginCommand {
     public String name() { return "poop"; }
@@ -15,7 +16,7 @@ public class PoopCommand implements PluginCommand {
 
     private static final long COOLDOWN = 30 * 60 * 1000;
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("§cOnly players can use this command.");
             return;

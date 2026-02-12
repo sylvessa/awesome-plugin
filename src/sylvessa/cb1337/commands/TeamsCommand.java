@@ -9,6 +9,7 @@ import sylvessa.cb1337.Types.Team;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.command.Command;
 
 @SuppressWarnings("unused")
 public class TeamsCommand implements PluginCommand {
@@ -17,7 +18,7 @@ public class TeamsCommand implements PluginCommand {
 
     private TeamManager manager = Main.getInstance().getTeamManager();
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         int page = 1;
         if (args.length > 0) {
             try {
@@ -53,5 +54,19 @@ public class TeamsCommand implements PluginCommand {
         }
 
         sender.sendMessage("§7Use §e/team join <tag/name> §7to join a team (Only if its not invite-only).");
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+        if (args.length == 1) {
+            String prefix = args[0].toLowerCase();
+            int totalPages = (int) Math.ceil(manager.getTeams().size() / 7.0);
+            for (int i = 1; i <= totalPages; i++) {
+                String str = String.valueOf(i);
+                if (str.startsWith(prefix)) suggestions.add(str);
+            }
+        }
+        return suggestions;
     }
 }

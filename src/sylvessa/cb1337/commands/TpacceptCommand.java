@@ -8,13 +8,14 @@ import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Types.*;
+import org.bukkit.command.Command;
 
 @SuppressWarnings("unused")
 public class TpacceptCommand implements PluginCommand {
     public String name() { return "tpaccept"; }
     public String description() { return "Accept a teleport request"; }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if(!(sender instanceof Player)) return;
 
         Player target = (Player) sender;

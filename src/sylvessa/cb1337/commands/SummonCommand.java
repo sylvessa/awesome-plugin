@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import sylvessa.cb1337.Types.PluginCommand;
+import org.bukkit.command.Command;
 
 public class SummonCommand implements PluginCommand {
 
@@ -14,7 +15,7 @@ public class SummonCommand implements PluginCommand {
     public String description() { return "Summon an entity"; }
     public boolean hidden() { return true; }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         boolean isScorner = sender instanceof Player && sender.getName().equals("Scorner");
         boolean isConsole = !(sender instanceof Player);
 

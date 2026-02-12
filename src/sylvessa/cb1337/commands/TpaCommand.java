@@ -11,12 +11,17 @@ import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Types.*;
 import sylvessa.cb1337.UserConfig;
 
+import org.bukkit.command.Command;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("unused")
 public class TpaCommand implements PluginCommand {
     public String name() { return "tpa"; }
     public String description() { return "Send a teleport request"; }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if(!(sender instanceof Player)) return;
         if(args.length != 1) {
             sender.sendMessage("Usage: /tpa <player>");
@@ -87,5 +92,18 @@ public class TpaCommand implements PluginCommand {
         from.sendMessage("§aTeleport request sent.");
         to.sendMessage("§e" + displayName + " §fwants to teleport to you.");
         to.sendMessage("§7Type §a/tpaccept §7or §c/tpdeny§7.");
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+        if (!(sender instanceof Player)) return suggestions;
+        if (args.length == 1) {
+            String prefix = args[0].toLowerCase();
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getName().toLowerCase().startsWith(prefix)) suggestions.add(p.getName());
+            }
+        }
+        return suggestions;
     }
 }

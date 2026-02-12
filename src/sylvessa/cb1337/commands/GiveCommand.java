@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import sylvessa.cb1337.Types.PluginCommand;
+import org.bukkit.command.Command;
 
 @SuppressWarnings("unused")
 public class GiveCommand implements PluginCommand {
@@ -20,7 +21,7 @@ public class GiveCommand implements PluginCommand {
         return true;
     }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length < 2) {
             sender.sendMessage("§cUsage: /give2 <player> <id> [amount] [data]");
             return;

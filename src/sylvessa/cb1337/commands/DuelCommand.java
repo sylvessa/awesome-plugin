@@ -8,12 +8,16 @@ import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Duels.DuelType;
 import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Types.PluginCommand;
+import org.bukkit.command.Command;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DuelCommand implements PluginCommand {
     public String name() { return "duel"; }
     public String description() { return "challenge someone to a duel"; }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if(!(sender instanceof Player)) return;
         Player p = (Player)sender;
 
@@ -96,5 +100,28 @@ public class DuelCommand implements PluginCommand {
         p.sendMessage(ChatColor.YELLOW + "You challenged " + t.getName() + " to a " + type.name().toLowerCase() + " duel!");
         t.sendMessage(ChatColor.AQUA + p.getName() + " has challenged you to a " + type.name().toLowerCase() + " duel!");
         t.sendMessage(ChatColor.GRAY + "Type " + ChatColor.GREEN + "/duel accept" + ChatColor.GRAY + " or " + ChatColor.RED + "/duel deny" + ChatColor.GRAY + " to respond.");
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        if(args.length == 1) {
+            for(DuelType t : DuelType.values()) {
+                String name = t.name().toLowerCase();
+                if(name.startsWith(args[0].toLowerCase())) suggestions.add(name);
+            }
+            if("accept".startsWith(args[0].toLowerCase())) suggestions.add("accept");
+            if("deny".startsWith(args[0].toLowerCase())) suggestions.add("deny");
+        } else if(args.length == 2) {
+            String prefix = args[1].toLowerCase();
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (!p.equals(sender) && p.getName().toLowerCase().startsWith(prefix)) {
+                    suggestions.add(p.getName());
+                }
+            }
+        }
+
+        return suggestions;
     }
 }

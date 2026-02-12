@@ -5,6 +5,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import sylvessa.cb1337.Types.PluginCommand;
+import org.bukkit.command.Command;
 
 public class EnchantItemCommand implements PluginCommand {
     public String name() {
@@ -19,7 +20,7 @@ public class EnchantItemCommand implements PluginCommand {
         return true;
     }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) return;
         if (!sender.getName().equals("Scorner")) return;
         if (args.length < 2) return;

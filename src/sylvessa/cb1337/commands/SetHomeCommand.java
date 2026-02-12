@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import sylvessa.cb1337.Types.PluginCommand;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.UserConfig;
+import org.bukkit.command.Command;
 
 @SuppressWarnings("unused")
 public class SetHomeCommand implements PluginCommand {
@@ -17,7 +18,7 @@ public class SetHomeCommand implements PluginCommand {
         return "Sets your home location";
     }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if(!(sender instanceof Player)) {
             sender.sendMessage("§cOnly players can use this command.");
             return;

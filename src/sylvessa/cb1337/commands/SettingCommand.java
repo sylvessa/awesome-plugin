@@ -6,13 +6,17 @@ import sylvessa.cb1337.Main;
 import sylvessa.cb1337.SettingsRegistry;
 import sylvessa.cb1337.Types.*;
 import sylvessa.cb1337.UserConfig;
+import org.bukkit.command.Command;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class SettingCommand implements PluginCommand {
     public String name() { return "setting"; }
     public String description() { return "Change a specific setting"; }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("§cOnly players can use this command.");
             return;
@@ -83,5 +87,27 @@ public class SettingCommand implements PluginCommand {
         } catch (Exception e) {
             p.sendMessage("§cError setting " + target.alias + ": " + e.getMessage());
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+        if (!(sender instanceof Player)) return suggestions;
+
+        if (args.length == 1) {
+            String prefix = args[0].toLowerCase();
+            for (Setting s : SettingsRegistry.getAll()) {
+                if (s.alias.toLowerCase().startsWith(prefix)) suggestions.add(s.alias);
+            }
+        } else if (args.length == 2) {
+            String alias = args[0].toLowerCase();
+            Setting target = SettingsRegistry.getByAlias(alias);
+            if (target != null && target.type.equals("boolean")) {
+                String prefix = args[1].toLowerCase();
+                if ("true".startsWith(prefix)) suggestions.add("true");
+                if ("false".startsWith(prefix)) suggestions.add("false");
+            }
+        }
+        return suggestions;
     }
 }

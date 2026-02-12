@@ -14,6 +14,7 @@ import sylvessa.cb1337.UserConfig;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.bukkit.command.Command;
 
 public class CreativeCommand implements PluginCommand {
 
@@ -30,7 +31,7 @@ public class CreativeCommand implements PluginCommand {
         return "Teleport to the creative map";
     }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) return;
 
         Player p = (Player) sender;

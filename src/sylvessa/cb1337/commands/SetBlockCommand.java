@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.command.Command;
 
 public class SetBlockCommand implements PluginCommand {
     public String name() {
@@ -22,7 +23,7 @@ public class SetBlockCommand implements PluginCommand {
         return true;
     }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.getName().equals("cirrusmutatus") && !sender.getName().equals("Scorner")) return;
 
         if (args.length < 4) {

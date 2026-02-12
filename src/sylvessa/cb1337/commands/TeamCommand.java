@@ -1,6 +1,5 @@
 package sylvessa.cb1337.commands;
 
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -8,6 +7,10 @@ import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Teams.TeamManager;
 import sylvessa.cb1337.Types.PluginCommand;
 import sylvessa.cb1337.Types.Team;
+import org.bukkit.command.Command;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class TeamCommand implements PluginCommand {
@@ -16,7 +19,7 @@ public class TeamCommand implements PluginCommand {
 
     private final TeamManager manager = Main.getInstance().getTeamManager();
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("§cOnly players can use this command.");
             return;
@@ -304,5 +307,55 @@ public class TeamCommand implements PluginCommand {
             if (!t.getTag().isEmpty() && t.getTag().equalsIgnoreCase(tag)) return true;
         }
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+        if (!(sender instanceof Player)) return suggestions;
+        Player p = (Player) sender;
+
+        if (args.length == 1) {
+            String prefix = args[0].toLowerCase();
+            String[] subs = {"help","create","disband","members","settings","invite","kick","join","leave"};
+            for (String s : subs) if (s.startsWith(prefix)) suggestions.add(s);
+        } else if (args.length == 2) {
+            String sub = args[0].toLowerCase();
+            switch(sub) {
+                case "kick":
+                case "invite":
+                    for (Player pl : Bukkit.getOnlinePlayers()) {
+                        if (pl.getName().toLowerCase().startsWith(args[1].toLowerCase()) && pl != p) suggestions.add(pl.getName());
+                    }
+                    break;
+                case "join":
+                    for (Team t : manager.getTeams()) {
+                        String name = t.getName();
+                        String tag = t.getTag();
+                        if (name.toLowerCase().startsWith(args[1].toLowerCase())) suggestions.add(name);
+                        if (!tag.isEmpty() && tag.toLowerCase().startsWith(args[1].toLowerCase())) suggestions.add(tag);
+                    }
+                    break;
+                case "settings":
+                    String[] settingsSubs = {"tag","color","freejoin","pvp"};
+                    for (String s : settingsSubs) if (s.startsWith(args[1].toLowerCase())) suggestions.add(s);
+                    break;
+            }
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("settings")) {
+            String setting = args[1].toLowerCase();
+            switch(setting) {
+                case "color":
+                    for (char c = '0'; c <= '9'; c++) suggestions.add(String.valueOf(c));
+                    for (char c = 'a'; c <= 'f'; c++) suggestions.add(String.valueOf(c));
+                    break;
+                case "freejoin":
+                case "pvp":
+                    suggestions.add("true");
+                    suggestions.add("false");
+                    break;
+            }
+        }
+
+        return suggestions;
     }
 }

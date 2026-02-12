@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.bukkit.command.Command;
 
 @SuppressWarnings("unused")
 public class PlayerHomesCommand implements PluginCommand {
@@ -20,7 +21,7 @@ public class PlayerHomesCommand implements PluginCommand {
         return "View public player homes";
     }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         int page = 1;
         if (args.length > 0) {
             try {
@@ -93,5 +94,42 @@ public class PlayerHomesCommand implements PluginCommand {
         }
         sender.sendMessage("§7Teleport using §e/home <player>");
     }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+        Main plugin = Main.getInstance();
+
+        File usersFolder = new File(plugin.getDataFolder(), "users");
+        if (usersFolder.exists() && usersFolder.isDirectory()) {
+            for (File f : usersFolder.listFiles()) {
+                if (!f.getName().endsWith(".yml")) continue;
+                String name = f.getName().replace(".yml", "").toLowerCase();
+                if (!plugin.getUserConfigs().containsKey(name)) {
+                    plugin.getUserConfigs().put(name, new UserConfig(name, plugin));
+                }
+            }
+        }
+
+        int publicHomeCount = 0;
+        for (UserConfig uc : plugin.getUserConfigs().values()) {
+            if (uc.getBoolean("home.public", false)) publicHomeCount++;
+        }
+
+        int perPage = 7;
+        int totalPages = (int) Math.ceil(publicHomeCount / (double) perPage);
+        if (totalPages == 0) totalPages = 1;
+
+        if (args.length == 1) {
+            String prefix = args[0];
+            for (int i = 1; i <= totalPages; i++) {
+                String pageStr = String.valueOf(i);
+                if (pageStr.startsWith(prefix)) suggestions.add(pageStr);
+            }
+        }
+
+        return suggestions;
+    }
+
 }
 

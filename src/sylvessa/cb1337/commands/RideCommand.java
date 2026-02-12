@@ -9,8 +9,11 @@ import sylvessa.cb1337.Duels.DuelManager;
 import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Types.PluginCommand;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import org.bukkit.command.Command;
 
 @SuppressWarnings("unused")
 public class RideCommand implements PluginCommand {
@@ -21,7 +24,7 @@ public class RideCommand implements PluginCommand {
         return "ride";
     }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) return;
 
         Player rider = (Player) sender;
@@ -83,5 +86,23 @@ public class RideCommand implements PluginCommand {
         target.sendMessage(ChatColor.AQUA + rider.getName() + ChatColor.YELLOW + " wants to ride you.");
         target.sendMessage(ChatColor.GRAY + "Type " + ChatColor.GREEN + "/ride accept" + ChatColor.GRAY + " to accept it.");
     }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+        if (args.length == 1 && sender instanceof Player) {
+            String prefix = args[0].toLowerCase();
+            Player self = (Player) sender;
+
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p == self) continue;
+                if (p.getName().toLowerCase().startsWith(prefix)) suggestions.add(p.getName());
+            }
+
+            if ("accept".startsWith(prefix)) suggestions.add("accept");
+        }
+        return suggestions;
+    }
+
 }
 

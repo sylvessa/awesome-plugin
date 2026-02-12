@@ -7,14 +7,16 @@ import sylvessa.cb1337.SettingsRegistry;
 import sylvessa.cb1337.Types.*;
 import sylvessa.cb1337.UserConfig;
 
+import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.command.Command;
 
 @SuppressWarnings("unused")
 public class SettingsCommand implements PluginCommand {
     public String name() { return "settings"; }
     public String description() { return "View all settings"; }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("§cOnly players can use this command.");
             return;
@@ -61,5 +63,26 @@ public class SettingsCommand implements PluginCommand {
         }
 
         p.sendMessage("§7To change a setting: §e/setting <name> <value>");
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+        if (!(sender instanceof Player)) return suggestions;
+
+        List<Setting> settings = SettingsRegistry.getAll();
+        int perPage = 8;
+        int totalPages = (int) Math.ceil(settings.size() / (double) perPage);
+        if (totalPages == 0) totalPages = 1;
+
+        if (args.length == 1) {
+            String prefix = args[0];
+            for (int i = 1; i <= totalPages; i++) {
+                String pageStr = String.valueOf(i);
+                if (pageStr.startsWith(prefix)) suggestions.add(pageStr);
+            }
+        }
+
+        return suggestions;
     }
 }

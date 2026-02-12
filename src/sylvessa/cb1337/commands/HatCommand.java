@@ -1,9 +1,11 @@
 package sylvessa.cb1337.commands;
 
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import sylvessa.cb1337.Types.PluginCommand;
+import org.bukkit.command.Command;
 
 @SuppressWarnings("unused")
 public class HatCommand implements PluginCommand {
@@ -15,7 +17,7 @@ public class HatCommand implements PluginCommand {
         return "Makes the current item you're holding your helmet.";
     }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if(!(sender instanceof Player)) {
             sender.sendMessage("§cOnly players can use this command.");
             return;

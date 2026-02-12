@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import sylvessa.cb1337.Duels.DuelGame;
@@ -14,19 +14,17 @@ import sylvessa.cb1337.Minigames.MinigameManager;
 import sylvessa.cb1337.Types.PluginCommand;
 import sylvessa.cb1337.UserConfig;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class HomeCommand implements PluginCommand {
-    public String name() {
-        return "home";
-    }
+    public String name() { return "home"; }
 
-    public String description() {
-        return "Teleport to your home or another players public home";
-    }
+    public String description() { return "Teleport to your home or another player's public home"; }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("§cOnly players can use this command.");
             return;
@@ -34,8 +32,7 @@ public class HomeCommand implements PluginCommand {
 
         Player p = (Player) sender;
 
-        DuelGame fromGame = DuelManager.get(p);
-        if (fromGame != null) {
+        if (DuelManager.get(p) != null) {
             p.sendMessage("§cYou cannot use this command while in a duel!");
             return;
         }
@@ -50,92 +47,58 @@ public class HomeCommand implements PluginCommand {
             return;
         }
 
-        if (args.length == 0) {
-            UserConfig uc = Main.getInstance().getUserConfig(p.getName());
-            if (uc == null) {
-                p.sendMessage("§cConfig not loaded.");
-                return;
+        Main plugin = Main.getInstance();
+
+        // load configs if needed
+        File usersFolder = new File(plugin.getDataFolder(), "users");
+        if (usersFolder.exists() && usersFolder.isDirectory()) {
+            for (File f : usersFolder.listFiles()) {
+                if (!f.getName().endsWith(".yml")) continue;
+                String name = f.getName().replace(".yml", "").toLowerCase();
+                if (!plugin.getUserConfigs().containsKey(name)) {
+                    UserConfig uc = new UserConfig(name, plugin);
+                    plugin.getUserConfigs().put(name, uc);
+                }
             }
+        }
+
+        if (args.length == 0) {
+            UserConfig uc = plugin.getUserConfig(p.getName());
+            if (uc == null) { p.sendMessage("§cConfig not loaded."); return; }
             teleportToHome(p, uc, "§aTeleported home.");
             return;
         }
 
-        String resolvedName = resolveName(args[0]);
-        if (resolvedName == null) {
+        String input = args[0].toLowerCase();
+        List<String> matches = new ArrayList<>();
+        for (Map.Entry<String, UserConfig> entry : plugin.getUserConfigs().entrySet()) {
+            String username = entry.getKey();
+            UserConfig uc = entry.getValue();
+            if (username.equalsIgnoreCase(p.getName())) continue;
+            if (!uc.getBoolean("home.public", false)) continue;
+            if (username.startsWith(input)) matches.add(username);
+        }
+
+        if (matches.isEmpty()) {
             p.sendMessage("§cNo matching player found.");
             return;
         }
-
-        if (resolvedName.equals("__ambiguous__")) {
+        if (matches.size() > 1) {
             p.sendMessage("§cThat name matches multiple players.");
             return;
         }
 
-        UserConfig targetUc = Main.getInstance().getUserConfig(resolvedName);
-        if (targetUc == null) {
-            p.sendMessage("§cThat player does not exist or is not loaded.");
-            return;
-        }
+        UserConfig targetUc = plugin.getUserConfig(matches.get(0));
+        if (targetUc == null) { p.sendMessage("§cPlayer config not loaded."); return; }
 
-        if (!targetUc.getBoolean("home.public", false)) {
-            p.sendMessage("§cThat player's home is not public.");
-            return;
-        }
-
-        String worldName = targetUc.getString("home.world", null);
-        if (worldName == null) {
-            p.sendMessage("§eThat player does not have a home set.");
-            return;
-        }
-
-        World w = Bukkit.getWorld(worldName);
-        if (w == null) {
-            p.sendMessage("§cThat home world no longer exists.");
-            return;
-        }
-
-        double x = targetUc.getDouble("home.x", 0);
-        double y = targetUc.getDouble("home.y", 0);
-        double z = targetUc.getDouble("home.z", 0);
-        float yaw = (float) targetUc.getDouble("home.yaw", 0);
-        float pitch = (float) targetUc.getDouble("home.pitch", 0);
-
-        String color = targetUc.getString("color", "f");
-        String name = "§" + color + resolvedName + "§f";
-
-        p.teleport(new Location(w, x, y, z, yaw, pitch));
-        p.sendMessage("§aTeleported to " + name + "§a's home.");
+        teleportToHome(p, targetUc, "§aTeleported to §" + targetUc.getString("color", "f") + matches.get(0) + "§a's home.");
     }
 
-    private String resolveName(String input) {
-        String lower = input.toLowerCase();
-        List<String> matches = new ArrayList<>();
-
-        for (OfflinePlayer op : Bukkit.getOfflinePlayers()) {
-            String name = op.getName();
-            if (name == null) continue;
-            if (name.toLowerCase().startsWith(lower)) {
-                matches.add(name);
-            }
-        }
-
-        if (matches.isEmpty()) return null;
-        if (matches.size() > 1) return "__ambiguous__";
-        return matches.get(0);
-    }
-
-    private void teleportToHome(Player p, UserConfig uc, String successMsg) {
+    private void teleportToHome(Player p, UserConfig uc, String msg) {
         String worldName = uc.getString("home.world", null);
-        if (worldName == null) {
-            p.sendMessage("§eYou do not have a home set.");
-            return;
-        }
-
+        if (worldName == null) { p.sendMessage("§eHome not set."); return; }
         World w = Bukkit.getWorld(worldName);
-        if (w == null) {
-            p.sendMessage("§cHome world no longer exists.");
-            return;
-        }
+        if (w == null) { p.sendMessage("§cHome world no longer exists."); return; }
 
         double x = uc.getDouble("home.x", 0);
         double y = uc.getDouble("home.y", 0);
@@ -144,6 +107,25 @@ public class HomeCommand implements PluginCommand {
         float pitch = (float) uc.getDouble("home.pitch", 0);
 
         p.teleport(new Location(w, x, y, z, yaw, pitch));
-        p.sendMessage(successMsg);
+        p.sendMessage(msg);
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+        if (args.length == 1 && sender instanceof Player) {
+            String prefix = args[0].toLowerCase();
+            String selfName = ((Player)sender).getName().toLowerCase();
+
+            Main plugin = Main.getInstance();
+            for (Map.Entry<String, UserConfig> entry : plugin.getUserConfigs().entrySet()) {
+                String username = entry.getKey();
+                UserConfig uc = entry.getValue();
+                if (username.equalsIgnoreCase(selfName)) continue;
+                if (!uc.getBoolean("home.public", false)) continue;
+                if (username.startsWith(prefix)) suggestions.add(username);
+            }
+        }
+        return suggestions;
     }
 }

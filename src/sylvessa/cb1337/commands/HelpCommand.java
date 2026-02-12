@@ -1,31 +1,30 @@
 package sylvessa.cb1337.commands;
 
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.Types.PluginCommand;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class HelpCommand implements PluginCommand {
-    public String name() {
-        return "help";
-    }
 
-    public String description() {
-        return "Show a list of commands";
-    }
+    @Override
+    public String name() { return "help"; }
 
-    public void execute(CommandSender sender, String[] args) {
+    @Override
+    public String description() { return "Show a list of commands"; }
+
+    @Override
+    public void execute(CommandSender sender, Command c, String label, String[] args) {
         int page = 1;
         int perPage = 8;
 
         if(args.length > 0) {
-            try {
-                page = Integer.parseInt(args[0]);
-                if(page < 1) page = 1;
-            } catch(NumberFormatException ignored) {}
+            try { page = Integer.parseInt(args[0]); if(page < 1) page = 1; }
+            catch(NumberFormatException ignored) {}
         }
 
         List<PluginCommand> visibleCommands = new ArrayList<>();
@@ -46,8 +45,19 @@ public class HelpCommand implements PluginCommand {
             sender.sendMessage("§6/" + cmd.name() + " §f- " + cmd.description());
         }
 
-        if(totalPages > 1) {
+        if(totalPages > 1)
             sender.sendMessage("§eUse §6/help <page> §eto view other pages.");
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+        if(args.length == 1) {
+            int totalPages = (int) Math.ceil(
+                    Main.getCommands().values().stream().filter(c -> !c.hidden()).count() / 8.0
+            );
+            for(int i = 1; i <= totalPages; i++) suggestions.add(String.valueOf(i));
         }
+        return suggestions;
     }
 }

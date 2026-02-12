@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import sylvessa.cb1337.Types.PluginCommand;
 import sylvessa.cb1337.Main;
 import sylvessa.cb1337.UserConfig;
+import org.bukkit.command.Command;
 
 @SuppressWarnings("unused")
 public class PlayerListCommand implements PluginCommand {
@@ -16,7 +17,7 @@ public class PlayerListCommand implements PluginCommand {
         return "Shows the list of players online.";
     }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         Player[] players = Main.getInstance().getServer().getOnlinePlayers();
 
         sender.sendMessage("§eOnline Players (§f" + players.length + "§e):");

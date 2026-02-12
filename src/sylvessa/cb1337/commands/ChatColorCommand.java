@@ -1,5 +1,6 @@
 package sylvessa.cb1337.commands;
 
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import sylvessa.cb1337.Types.PluginCommand;
@@ -18,7 +19,7 @@ public class ChatColorCommand implements PluginCommand {
         return "Change your chat color";
     }
 
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("Only players can use this command.");
             return;
