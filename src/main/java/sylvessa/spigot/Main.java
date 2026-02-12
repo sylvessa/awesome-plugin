@@ -130,7 +130,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new SleepListener(), this);
         getServer().getPluginManager().registerEvents(new AFKListener(), this);
         getServer().getPluginManager().registerEvents(new CraftingListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
+        getServer().getPluginManager().registerEvents(new FlightSoupListener(), this);
 
         CustomRecipes.registerAll();
 

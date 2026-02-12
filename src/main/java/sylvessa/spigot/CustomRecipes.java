@@ -1,12 +1,15 @@
 package sylvessa.spigot;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 import sylvessa.spigot.Types.CustomRecipe;
 import sylvessa.spigot.Types.NbtApplier;
+import sylvessa.spigot.Util.ItemNBT;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,60 +20,6 @@ public class CustomRecipes {
     private static final List<CustomRecipe> CUSTOM = new ArrayList<>();
 
     public static void registerAll() {
-//        shaped(
-//                new ItemStack(Material.EXP_BOTTLE, 4),
-//                new String[] {
-//                        " L ",
-//                        "LBL",
-//                        " L "
-//                },
-//                'B', Material.GLASS_BOTTLE,
-//                'L', new MaterialData(Material.INK_SACK, (byte)4)
-//        );
-//
-//        shaped(
-//                new ItemStack(Material.SADDLE, 1),
-//                new String[] {
-//                        " L ",
-//                        "LIL"
-//                },
-//                'L', Material.LEATHER,
-//                'I', Material.IRON_INGOT
-//        );
-//
-//        shaped(
-//                new ItemStack(Material.MONSTER_EGG, 2, (short)50),
-//                new String[] {
-//                        " G ",
-//                        "GEG",
-//                        " G "
-//                },
-//                'G', Material.SULPHUR,
-//                'E', Material.EGG
-//        );
-//
-//        shaped(
-//                new ItemStack(Material.MONSTER_EGG, 2, (short)91),
-//                new String[] {
-//                        " W ",
-//                        "WEW",
-//                        " W "
-//                },
-//                'W', Material.WOOL,
-//                'E', Material.EGG
-//        );
-//
-//        ItemStack stick = new ItemStack(Material.WHEAT, 1);
-//
-//        shaped(
-//                stick,
-//                new String[] {
-//                        " W ",
-//                        "W  ",
-//                },
-//                'W', Material.WOOL
-//        );
-
         shaped(
                 new ItemStack(Material.SADDLE, 1),
                 new String[] {
@@ -118,17 +67,36 @@ public class CustomRecipes {
                 'L', new MaterialData(Material.INK_SACK, (byte)4)
         );
 
-        ItemStack wheat = new ItemStack(Material.MUSHROOM_SOUP, 1);
-
 //        shaped(
-//                wheat,
+//                new ItemStack(Material.MUSHROOM_SOUP, 1),
 //                new String[] {
 //                        " W ",
 //                        "W  "
 //                },
-//                item -> ItemNBT.setInt(item, "isFlightSoup", 1),
+//                item -> ItemNBT.setInt(item, "cooltag", 166),
 //                'W', Material.WOOL
 //        );
+
+        ItemStack shoup = new ItemStack(Material.MUSHROOM_SOUP, 1);
+
+        ItemMeta meta = shoup.getItemMeta();
+        meta.setDisplayName(ChatColor.RESET + ChatColor.GOLD.toString() + "Flight Soup");
+        ArrayList<String> description = new ArrayList<String>();
+        description.add(ChatColor.RESET + ChatColor.DARK_PURPLE.toString() + "Makes you fly for 2 hours");
+        meta.setLore(description);
+        shoup.setItemMeta(meta);
+
+        shaped(
+                shoup,
+                new String[] {
+                        "WF",
+                        "BF"
+                },
+                null,
+                'W', Material.NETHER_STAR,
+                'B', Material.BOWL,
+                'F', Material.FEATHER
+        );
     }
 
     private static void shaped(ItemStack result, String[] shape, NbtApplier nbt, Object... ingredients) {

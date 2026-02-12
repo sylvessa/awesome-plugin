@@ -1,5 +1,6 @@
 package sylvessa.spigot.Listeners;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,22 +17,8 @@ import java.nio.charset.StandardCharsets;
 import static sylvessa.spigot.Util.Helpers.buildDisplayName;
 
 public class JoinListener implements Listener {
-//    @EventHandler
-//    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-//        //Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> SurvivalHelper.handleWorldChange(event), 1L);
-//    }
-
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        // hook
-//        Player p = event.getPlayer();
-//        CraftPlayer cp = (CraftPlayer)p;
-//        EntityPlayer ep = cp.getHandle();
-//
-//        playerConnection old = ep.playerConnection;
-//        ep.playerConnection = new EnchantPreviewListener(old, ep, p);
-
-
         Player player = event.getPlayer();
         String name = player.getName();
         String key = name.toLowerCase();
@@ -45,26 +32,32 @@ public class JoinListener implements Listener {
         uc.set("joins", joins + 1);
         uc.save();
 
-        String displayName = buildDisplayName(name, true);
+        long remaining = uc.getLong("flight.remaining", 0L);
 
+        player.setAllowFlight(remaining > 0);
+
+        if (remaining > 0) {
+            long minutes = remaining / 60000;
+            long seconds = (remaining % 60000) / 1000;
+            player.sendMessage(ChatColor.AQUA + "(Flight remaining: " + minutes + "m " + seconds + "s)");
+        }
+
+        String displayName = buildDisplayName(name, true);
 
         event.setJoinMessage(
                 displayName +
-                        "§e joined the game. §8(Joined " +
-                        joins + " time" + (joins != 1 ? "s" : "") + ")§f"
+                        "§e joined the game. §8(Joined " + joins + " time" + (joins != 1 ? "s" : "") + ")§f"
         );
 
         String displayName2 = buildDisplayName(name, false);
         if(displayName2.length() > 16) displayName2 = displayName2.substring(0, 16);
 
-        event.getPlayer().setPlayerListName(displayName2);
+        player.setPlayerListName(displayName2);
 
         String webhook = plugin.getPluginConfig().getString("discord.webhook-url", "");
         if(!webhook.isEmpty()) {
             sendJoinLeaveWebhook(webhook, name, true);
         }
-
-        //Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> SurvivalHelper.handleJoin(event.getPlayer()), 1L);
     }
 
     @EventHandler
