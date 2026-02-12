@@ -1,13 +1,13 @@
-package sylvessa.spigot.Discord;
+package sylvessa.spigot.Discord.Events;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.Bukkit;
 
-public class Listener extends ListenerAdapter {
+public class MessageListener extends ListenerAdapter {
     private final String channelId;
 
-    public Listener(String channelId) {
+    public MessageListener(String channelId) {
         this.channelId = channelId;
     }
 

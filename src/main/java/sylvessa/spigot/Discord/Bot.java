@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.hooks.InterfacedEventManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.internal.utils.JDALogger;
+import sylvessa.spigot.Discord.Events.MessageListener;
 import sylvessa.spigot.Log;
 import sylvessa.spigot.Main;
 
@@ -30,15 +30,21 @@ public class Bot {
             try {
                 Log.info("Starting Discord bot...");
 
+                CommandManager manager = new CommandManager();
+
                 jda = JDABuilder.createDefault(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT)
                         .setAutoReconnect(true)
                         .setStatus(OnlineStatus.ONLINE)
                         .setEventManager(new InterfacedEventManager())
-                        .addEventListeners(new Listener(logChannel))
+                        .addEventListeners(
+                                new MessageListener(logChannel),
+                                manager
+                        )
                         .build();
 
                 jda.awaitReady();
                 Log.info("Discord bot online!");
+                manager.registerToDiscord(jda);
 
                 BotUtil.init(Main.getInstance(), jda);
 
@@ -54,6 +60,14 @@ public class Bot {
 
     public void stop() {
         if(jda != null) {
+            String logChannel = plugin.getPluginConfig().getString("discord.channel-id", "").trim();
+            if(!logChannel.isEmpty()) {
+                jda.getTextChannelById(logChannel).sendMessage("**Server shutting down..**").queue(
+                        success -> Log.info("Startup message sent to Discord."),
+                        error -> Log.info("Failed to send startup message: " + error)
+                );
+            }
+
             jda.shutdown();
             Log.info("Discord bot shut down.");
         }
