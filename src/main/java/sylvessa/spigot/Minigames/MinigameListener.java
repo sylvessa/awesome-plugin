@@ -60,7 +60,7 @@ public class MinigameListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player p = event.getPlayer();
-        Minigame g = sylvessa.spigot.Minigames.MinigameManager.get(p);
+        Minigame g = MinigameManager.get(p);
         Minigame q = MinigameManager.getQueued(p);
         if (g != null) g.onMove(p);
         if (q != null) q.onMoveInQueue(p);

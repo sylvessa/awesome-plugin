@@ -18,7 +18,6 @@ public class Bot {
     }
 
     public void start() {
-        JDALogger.setFallbackLoggerEnabled(false);
 
         String token = plugin.getPluginConfig().getString("discord.bot-token", "").trim();
         String logChannel = plugin.getPluginConfig().getString("discord.channel-id", "").trim();

@@ -3,7 +3,7 @@
     <output-path>$PROJECT_DIR$/../_spigot/plugins</output-path>
     <root id="archive" name="SylvessaPlugin.jar">
       <element id="module-output" name="CB1337 Test" />
-      <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/java/resources/plugin.yml" />
       <element id="extracted-dir" path="$PROJECT_DIR$/dep/JDA-6.2.1-withDependencies.jar" path-in-jar="/" />
       <element id="directory" name="arenas">
         <element id="dir-copy" path="$PROJECT_DIR$/arenas" />

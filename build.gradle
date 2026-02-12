@@ -1,0 +1,102 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group 'sylvessa'
+version '1.4.7'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'net.dv8tion:JDA:5.0.0-beta.23'
+    compileOnly files('dep/spigot-1.4.7-R1.1.jar')
+    compileOnly files('dep/bungeecord.jar')
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+tasks.register('spigotJar', ShadowJar) {
+    archiveBaseName.set('SylvessaPlugin')
+    archiveVersion.set('')
+
+    from(sourceSets.main.output) {
+        include 'sylvessa/spigot/**'
+    }
+
+    from(sourceSets.main.resources) {
+        exclude 'sylvessa/spigot/**'
+        exclude 'bungee.yml'
+    }
+
+    configurations = [project.configurations.runtimeClasspath]
+
+    relocate 'net.dv8tion.jda', 'sylvessa.lib.jda'
+    relocate 'org.slf4j', 'sylvessa.lib.slf4j'
+    relocate 'okhttp3', 'sylvessa.lib.okhttp3'
+    relocate 'com.fasterxml.jackson', 'sylvessa.lib.jackson'
+    relocate 'org.apache.commons', 'sylvessa.lib.commons'
+
+    mergeServiceFiles()
+    minimize()
+
+    doLast {
+        def targetDir = file('../_spigot/plugins')
+        if (targetDir.exists()) {
+            copy {
+                from archiveFile
+                into targetDir
+                rename { 'SylvessaPlugin.jar' }
+            }
+            println "SylvessaPlugin.jar copied to ../_spigot/plugins"
+        }
+    }
+}
+
+
+tasks.register('bungeeJar', Jar) {
+    archiveBaseName.set('SylvessaBungee')
+    archiveVersion.set('')
+
+    from(sourceSets.main.output) {
+        include 'sylvessa/bungee/**'
+    }
+
+    from('src/main/resources') {
+        include 'bungee.yml'
+        rename { 'plugin.yml' }
+    }
+
+    doLast {
+        def targetDir = file('../_bungeecord/plugins')
+        if (targetDir.exists()) {
+            copy {
+                from archiveFile
+                into targetDir
+                rename { 'SylvessaBungee.jar' }
+            }
+            println "SylvessaBungee.jar copied to ../_bungeecord/plugins"
+        }
+    }
+}
+
+
+tasks.build {
+    dependsOn spigotJar, bungeeJar
+}
