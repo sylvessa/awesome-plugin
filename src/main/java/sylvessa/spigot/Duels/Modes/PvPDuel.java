@@ -27,9 +27,6 @@ public class PvPDuel extends DuelGame {
     private int countdown = 5;
     private int taskId = -1;
 
-    private Location noteBlockP1;
-    private Location noteBlockP2;
-
     private static final double MIN_X = -230;
     private static final double MAX_X = -148;
     private static final double MIN_Z = 111;
@@ -71,9 +68,6 @@ public class PvPDuel extends DuelGame {
         resetPlayer(p1);
         resetPlayer(p2);
 
-        noteBlockP1 = placeNoteBlockBehind(p1);
-        noteBlockP2 = placeNoteBlockBehind(p2);
-
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> giveGear(p1), 2L);
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> giveGear(p2), 2L);
     }
@@ -114,41 +108,25 @@ public class PvPDuel extends DuelGame {
 
                         Bukkit.getScheduler().cancelTask(taskId);
 
-                        p1.playNote(noteBlockP1, Instrument.PIANO, new Note((byte)1, Note.Tone.C, false));
-                        p2.playNote(noteBlockP2, Instrument.PIANO, new Note((byte)1, Note.Tone.C, false));
-
-                        noteBlockP1.getBlock().setType(Material.AIR);
-                        noteBlockP2.getBlock().setType(Material.AIR);
+                        playNoteAll(p1.getLocation(), p2.getLocation(), 1.35f);
                         return;
                     }
 
                     p1.sendMessage(ChatColor.YELLOW.toString() + countdown);
                     p2.sendMessage(ChatColor.YELLOW.toString() + countdown);
 
-                    p1.playNote(noteBlockP1, Instrument.PIANO, new Note((byte)1, Note.Tone.G, false));
-                    p2.playNote(noteBlockP2, Instrument.PIANO, new Note((byte)1, Note.Tone.G, false));
+                    float basePitch = 0.6f;
+                    float maxPitch = 1.15f;
+                    int totalCountdown = 4;
+                    float pitch = basePitch + ((totalCountdown - countdown) / (float)totalCountdown) * (maxPitch - basePitch);
+
+                    playNoteAll(p1.getLocation(), p2.getLocation(), pitch);
 
                     countdown--;
                 },
                 0L,
                 20L
         );
-    }
-
-    private Location placeNoteBlockBehind(Player p) {
-        Location l = p.getLocation();
-        float yaw = l.getYaw();
-        int dx = 0;
-        int dz = 0;
-
-        if(yaw >= -45 && yaw < 45) dz = -1;
-        else if(yaw >= 45 && yaw < 135) dx = -1;
-        else if(yaw >= -135 && yaw < -45) dx = 1;
-        else dz = 1;
-
-        Location b = l.clone().add(dx, -2, dz);
-        b.getBlock().setType(Material.NOTE_BLOCK);
-        return b;
     }
 
     public void onMove(Player p) {
@@ -231,5 +209,10 @@ public class PvPDuel extends DuelGame {
         p2.setHealth(20);
 
         DuelManager.end(this);
+    }
+
+    private void playNoteAll(Location l1, Location l2, float pitch) {
+        p1.playSound(l1, Sound.NOTE_PLING, 1.0f, pitch);
+        p2.playSound(l2, Sound.NOTE_PLING, 1.0f, pitch);
     }
 }

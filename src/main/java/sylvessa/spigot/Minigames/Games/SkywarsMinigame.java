@@ -25,7 +25,6 @@ public class SkywarsMinigame extends Minigame {
     private final List<Location> spawnChests = new ArrayList<>();
     private final List<Location> midChests = new ArrayList<>();
     private final Map<Player, Long> fallImmunity = new HashMap<>();
-    private final Map<Player, Location> playerNoteBlocks = new HashMap<>();
     private final Random rand = new Random();
 
     private boolean refill1 = false;
@@ -88,7 +87,6 @@ public class SkywarsMinigame extends Minigame {
     public void startGame() {
         fillChests(spawnChests, true);
         fillChests(midChests, false);
-        spawnNoteBlocksOnce();
 
         final int[] taskId = new int[1];
         taskId[0] = Bukkit.getScheduler().scheduleSyncRepeatingTask(
@@ -107,17 +105,21 @@ public class SkywarsMinigame extends Minigame {
                             removeSpawnCages();
                             for(Player p : players) {
                                 p.sendMessage("§aGo!");
-                                p.playNote(playerNoteBlocks.get(p), Instrument.PIANO, new Note((byte)1, Note.Tone.C, false));
+                                p.playSound(p.getLocation(), Sound.NOTE_PLING, 1.0f, 1.4f);
                             }
 
                             startRefills();
                             Bukkit.getScheduler().cancelTask(taskId[0]);
-                            removeNoteBlocks();
                             return;
                         }
                         for(Player p : players) {
                             p.sendMessage("§cSkywars starting in " + time + "...");
-                            p.playNote(playerNoteBlocks.get(p), Instrument.PIANO, new Note((byte)1, Note.Tone.G, false));
+                            float basePitch = 0.5f;
+                            float maxPitch = 1.25f;
+                            int totalCountdown = 10;
+                            float pitch = basePitch + ((totalCountdown - time) / (float)totalCountdown) * (maxPitch - basePitch);
+
+                            p.playSound(p.getLocation(), Sound.NOTE_PLING, 1.0f, pitch);
                         }
                         time--;
                     }
@@ -273,7 +275,6 @@ public class SkywarsMinigame extends Minigame {
             Player winner = players.get(0);
             Bukkit.broadcastMessage("§6SkyWars winner: §a" + winner.getName());
         }
-        //for(Player p : players) p.sendMessage("§cGame over!");
     }
 
     public void onMove(Player p) {
@@ -331,35 +332,5 @@ public class SkywarsMinigame extends Minigame {
                 }
             }
         }
-    }
-
-    private void spawnNoteBlocksOnce() {
-        for (Player p : players) {
-            Location noteLoc = placeNoteBlockBehind(p);
-            playerNoteBlocks.put(p, noteLoc);
-        }
-    }
-
-    private void removeNoteBlocks() {
-        for (Location loc : playerNoteBlocks.values()) {
-            loc.getBlock().setType(Material.AIR);
-        }
-        playerNoteBlocks.clear();
-    }
-
-    private Location placeNoteBlockBehind(Player p) {
-        Location l = p.getLocation();
-        float yaw = l.getYaw();
-        int dx = 0;
-        int dz = 0;
-
-        if(yaw >= -45 && yaw < 45) dz = -1;
-        else if(yaw >= 45 && yaw < 135) dx = -1;
-        else if(yaw >= -135 && yaw < -45) dx = 1;
-        else dz = 1;
-
-        Location b = l.clone().add(dx, 4, dz);
-        b.getBlock().setType(Material.NOTE_BLOCK);
-        return b;
     }
 }

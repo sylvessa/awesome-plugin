@@ -3,6 +3,7 @@ package sylvessa.spigot.commands;
 import net.minecraft.server.v1_4_R1.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftItemStack;
@@ -33,6 +34,9 @@ public class TestCommand implements PluginCommand {
         if (!(sender instanceof Player)) return;
 
         Player player = (Player) sender;
+
+        //player.playSound(player.getLocation(), Sound.CAT_MEOW, 1.0f, 1.0f);
+
         player.sendMessage("hi");
 
 //        ItemStack inHand = player.getItemInHand();

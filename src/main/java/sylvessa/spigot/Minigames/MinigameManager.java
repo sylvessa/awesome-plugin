@@ -119,6 +119,7 @@ public class MinigameManager {
                     if(time[0] <= 5 || time[0] % 10 == 0) {
                         for(Player p : g.players) {
                             p.sendMessage("§eBeginning in " + time[0] + "...");
+                            p.playSound(p.getLocation(), Sound.NOTE_STICKS, 1.0f, 1.0f);
                         }
                     }
 

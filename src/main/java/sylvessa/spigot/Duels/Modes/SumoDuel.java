@@ -21,9 +21,6 @@ public class SumoDuel extends DuelGame {
     private int countdown = 5;
     private int taskId = -1;
 
-    private Location noteBlockP1;
-    private Location noteBlockP2;
-
     private boolean p1Fell;
     private boolean p2Fell;
 
@@ -83,9 +80,6 @@ public class SumoDuel extends DuelGame {
 
         p2.setFoodLevel(20);
         p2.setSaturation(20);
-
-        noteBlockP1 = placeNoteBlockBehind(p1);
-        noteBlockP2 = placeNoteBlockBehind(p2);
     }
 
     private void startCountdown() {
@@ -100,41 +94,24 @@ public class SumoDuel extends DuelGame {
 
                         Bukkit.getScheduler().cancelTask(taskId);
 
-                        p1.playNote(noteBlockP1, Instrument.PIANO, new Note((byte)1, Note.Tone.C, false));
-                        p2.playNote(noteBlockP2, Instrument.PIANO, new Note((byte)1, Note.Tone.C, false));
-
-                        noteBlockP1.getBlock().setType(Material.AIR);
-                        noteBlockP2.getBlock().setType(Material.AIR);
+                        playNoteAll(p1.getLocation(), p2.getLocation(), 1.35f);
                         return;
                     }
 
                     p1.sendMessage("§e" + countdown);
                     p2.sendMessage("§e" + countdown);
 
-                    p1.playNote(noteBlockP1, Instrument.PIANO, new Note((byte)1, Note.Tone.G, false));
-                    p2.playNote(noteBlockP2, Instrument.PIANO, new Note((byte)1, Note.Tone.G, false));
+                    float basePitch = 0.6f;
+                    float maxPitch = 1.15f;
+                    int totalCountdown = 4;
+                    float pitch = basePitch + ((totalCountdown - countdown) / (float)totalCountdown) * (maxPitch - basePitch);
 
+                    playNoteAll(p1.getLocation(), p2.getLocation(), pitch);
                     countdown--;
                 },
                 0L,
                 20L
         );
-    }
-
-    private Location placeNoteBlockBehind(Player p) {
-        Location l = p.getLocation();
-        float yaw = l.getYaw();
-        int dx = 0;
-        int dz = 0;
-
-        if(yaw >= -45 && yaw < 45) dz = -1;
-        else if(yaw >= 45 && yaw < 135) dx = -1;
-        else if(yaw >= -135 && yaw < -45) dx = 1;
-        else dz = 1;
-
-        Location b = l.clone().add(dx, -2, dz);
-        b.getBlock().setType(Material.NOTE_BLOCK);
-        return b;
     }
 
     public void onMove(Player p) {
@@ -207,5 +184,10 @@ public class SumoDuel extends DuelGame {
 
     private void cleanup() {
         DuelManager.end(this);
+    }
+
+    private void playNoteAll(Location l1, Location l2, float pitch) {
+        p1.playSound(l1, Sound.NOTE_PLING, 1.0f, pitch);
+        p2.playSound(l2, Sound.NOTE_PLING, 1.0f, pitch);
     }
 }

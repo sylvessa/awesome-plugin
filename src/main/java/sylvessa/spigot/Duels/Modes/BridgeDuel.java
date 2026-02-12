@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import sylvessa.spigot.ChunkGenerators.Void;
 import sylvessa.spigot.Duels.DuelGame;
 import sylvessa.spigot.Duels.DuelManager;
@@ -32,7 +33,6 @@ public class BridgeDuel extends DuelGame {
     private int taskId = -1;
     private final Random r = new Random();
 
-    private Location noteBlockP1, noteBlockP2;
     private Location player1Spawn, player2Spawn;
 
     private final Map<UUID, Long> bowCooldown = new HashMap<>();
@@ -97,28 +97,33 @@ public class BridgeDuel extends DuelGame {
 
         player1Spawn = player1Spawn.clone().add(0, -3, 0);
         player2Spawn = player2Spawn.clone().add(0, -3, 0);
-        noteBlockP1 = placeNoteBlockBehind(p1);
-        noteBlockP2 = placeNoteBlockBehind(p2);
     }
 
     private void startCountdown() {
         if (finished) return;
         taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), () -> {
-            if (finished) { Bukkit.getScheduler().cancelTask(taskId); return; }
+            if (finished) {
+                Bukkit.getScheduler().cancelTask(taskId);
+                return;
+            }
 
             if (countdown == 0) {
                 started = true;
                 sendMessageAll("§aGO");
-                playNoteAll(noteBlockP1, noteBlockP2, Note.Tone.C);
-                noteBlockP1.getBlock().setType(Material.AIR);
-                noteBlockP2.getBlock().setType(Material.AIR);
+                playNoteAll(p1.getLocation(), p2.getLocation(), 1.35f);
                 clearArenaAroundPlayers();
                 Bukkit.getScheduler().cancelTask(taskId);
                 return;
             }
 
             sendMessageAll("§e" + countdown);
-            playNoteAll(noteBlockP1, noteBlockP2, Note.Tone.G);
+
+            float basePitch = 0.6f;
+            float maxPitch = 1.15f;
+            int totalCountdown = 4;
+            float pitch = basePitch + ((totalCountdown - countdown) / (float)totalCountdown) * (maxPitch - basePitch);
+
+            playNoteAll(p1.getLocation(), p2.getLocation(), pitch);
             countdown--;
         }, 0L, 20L);
     }
@@ -135,17 +140,6 @@ public class BridgeDuel extends DuelGame {
                         if (b.getType() != Material.AIR) b.setType(Material.AIR);
                     }
         });
-    }
-
-    private Location placeNoteBlockBehind(Player p) {
-        Location l = p.getLocation(); float yaw = l.getYaw(); int dx = 0, dz = 0;
-        if (yaw >= -45 && yaw < 45) dz = -1;
-        else if (yaw >= 45 && yaw < 135) dx = -1;
-        else if (yaw >= -135 && yaw < -45) dx = 1;
-        else dz = 1;
-        Location b = l.clone().add(dx, -3, dz);
-        b.getBlock().setType(Material.NOTE_BLOCK);
-        return b;
     }
 
     public void onMove(Player p) {
@@ -312,23 +306,34 @@ public class BridgeDuel extends DuelGame {
 
     public void refillItems(Player p) {
         Team team = (p == p1 ? p1Team : p2Team);
-        p.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET, 1, (short)0));
-        p.getInventory().setChestplate(new ItemStack(Material.CHAINMAIL_CHESTPLATE, 1, (short)0));
-        p.getInventory().setLeggings(new ItemStack(Material.CHAINMAIL_LEGGINGS, 1, (short)0));
-        p.getInventory().setBoots(new ItemStack(Material.CHAINMAIL_BOOTS, 1, (short)0));
-        p.getInventory().setItem(0, new ItemStack(Material.IRON_SWORD, 1, (short)0));
-        p.getInventory().setItem(1, new ItemStack(Material.BOW, 1, (short)0));
-        p.getInventory().setItem(2, new ItemStack(Material.SHEARS, 1, (short)0));
+        Color color = (team == Team.RED ? Color.RED : Color.BLUE);
+
+        p.getInventory().setHelmet(createColoredArmor(Material.LEATHER_HELMET, color));
+        p.getInventory().setChestplate(createColoredArmor(Material.LEATHER_CHESTPLATE, color));
+        p.getInventory().setLeggings(createColoredArmor(Material.LEATHER_LEGGINGS, color));
+        p.getInventory().setBoots(createColoredArmor(Material.LEATHER_BOOTS, color));
+
+        p.getInventory().setItem(0, new ItemStack(Material.IRON_SWORD));
+        p.getInventory().setItem(1, new ItemStack(Material.BOW));
+        p.getInventory().setItem(2, new ItemStack(Material.SHEARS));
         byte woolData = team == Team.RED ? (byte)14 : (byte)11;
         for (int i = 3; i <= 5; i++) p.getInventory().setItem(i, new ItemStack(Material.WOOL, 64, woolData));
-        p.getInventory().setItem(6, new ItemStack(Material.GOLDEN_APPLE, 8, (short)0));
-        p.getInventory().setItem(8, new ItemStack(Material.ARROW, 64, (short)0));
+        p.getInventory().setItem(6, new ItemStack(Material.GOLDEN_APPLE, 8));
+        p.getInventory().setItem(8, new ItemStack(Material.ARROW, 64));
     }
 
     private void sendMessageAll(String msg) { p1.sendMessage(msg); p2.sendMessage(msg); }
-    private void playNoteAll(Location l1, Location l2, Note.Tone tone) {
-        p1.playNote(l1, Instrument.PIANO, new Note((byte)1, tone, false));
-        p2.playNote(l2, Instrument.PIANO, new Note((byte)1, tone, false));
+    private void playNoteAll(Location l1, Location l2, float pitch) {
+        p1.playSound(l1, Sound.NOTE_PLING, 1.0f, pitch);
+        p2.playSound(l2, Sound.NOTE_PLING, 1.0f, pitch);
+    }
+
+    private ItemStack createColoredArmor(Material type, Color color) {
+        ItemStack item = new ItemStack(type);
+        LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+        meta.setColor(color);
+        item.setItemMeta(meta);
+        return item;
     }
 
     private void cleanup() { DuelManager.end(this); }
