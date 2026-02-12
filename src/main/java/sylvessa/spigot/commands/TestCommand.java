@@ -1,9 +1,11 @@
 package sylvessa.spigot.commands;
 
+import net.minecraft.server.v1_4_R1.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -33,6 +35,23 @@ public class TestCommand implements PluginCommand {
         Player player = (Player) sender;
         player.sendMessage("hi");
 
+//        ItemStack inHand = player.getItemInHand();
+//
+//        if (inHand == null || inHand.getType() == Material.AIR) {
+//            ItemStack stick = new ItemStack(Material.STICK, 1);
+//            stick = ItemNBT.setInt(stick, "unc", 15);
+//            player.setItemInHand(stick);
+//            return;
+//        }
+//
+//        Integer tag = ItemNBT.getInt(inHand, "unc");
+//        if (tag != null) {
+//            player.sendMessage("has unc = " + tag);
+//        } else {
+//            player.sendMessage("no unc");
+//        }
+
+
 //        ItemStack item = new ItemStack(Material.STICK);
 //        ItemMeta meta = item.getItemMeta();
 //        meta.setDisplayName("whatever");
@@ -43,22 +62,20 @@ public class TestCommand implements PluginCommand {
 //        player.getInventory().addItem(item);
 
         // nbt demo
-//        ItemStack inHand = p.getItemInHand();
-
+//        ItemStack inHand = player.getItemInHand();
+//
 //        if (inHand == null || inHand.getType() == Material.AIR) {
 //            ItemStack stick = new ItemStack(Material.STICK, 1);
-//            stick = ItemNBT.setInt(stick, "cooltag", 195);
-//            stick = ItemNBT.setString(stick, "owner", p.getName());
-//            p.setItemInHand(stick);
+//            stick = ItemNBT.setInt(stick, "unc", 15);
+//            player.setItemInHand(stick);
 //            return;
 //        }
-//
-//        Integer tag = ItemNBT.getInt(inHand, "cooltag");
-//
+
+//        Integer tag = ItemNBT.getInt(inHand, "unc");
 //        if (tag != null) {
-//            p.sendMessage("cooltag = " + tag);
+//            player.sendMessage("has unc = " + tag);
 //        } else {
-//            p.sendMessage("no cooltag");
+//            player.sendMessage("no unc");
 //        }
     }
 

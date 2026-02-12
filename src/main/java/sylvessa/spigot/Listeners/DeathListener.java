@@ -23,7 +23,6 @@ public class DeathListener implements Listener {
 
         Player p = (Player) e;
 
-
         UserConfig uc = Main.getInstance().getUserConfig(p.getName());
         String color = uc != null ? uc.getString("color", "f") : "f";
         String pname = "§" + color + p.getName() + "§f";

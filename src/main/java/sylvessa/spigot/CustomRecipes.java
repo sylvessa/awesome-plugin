@@ -26,7 +26,6 @@ public class CustomRecipes {
                         " L ",
                         "LIL",
                 },
-                null,
                 'I', Material.IRON_INGOT,
                 'L', Material.LEATHER
         );
@@ -38,7 +37,6 @@ public class CustomRecipes {
                         "GEG",
                         " G "
                 },
-                null,
                 'G', Material.SULPHUR,
                 'E', Material.EGG
         );
@@ -50,7 +48,6 @@ public class CustomRecipes {
                         "WEW",
                         " W "
                 },
-                null,
                 'W', Material.WOOL,
                 'E', Material.EGG
         );
@@ -62,20 +59,9 @@ public class CustomRecipes {
                         "LBL",
                         " L "
                 },
-                null,
                 'B', Material.GLASS_BOTTLE,
                 'L', new MaterialData(Material.INK_SACK, (byte)4)
         );
-
-//        shaped(
-//                new ItemStack(Material.MUSHROOM_SOUP, 1),
-//                new String[] {
-//                        " W ",
-//                        "W  "
-//                },
-//                item -> ItemNBT.setInt(item, "cooltag", 166),
-//                'W', Material.WOOL
-//        );
 
         ItemStack shoup = new ItemStack(Material.MUSHROOM_SOUP, 1);
 
@@ -86,24 +72,23 @@ public class CustomRecipes {
         meta.setLore(description);
         shoup.setItemMeta(meta);
 
+        shoup = ItemNBT.setInt(shoup, "unc", 166);
+
         shaped(
                 shoup,
                 new String[] {
                         "WF",
                         "BF"
                 },
-                null,
                 'W', Material.NETHER_STAR,
                 'B', Material.BOWL,
                 'F', Material.FEATHER
         );
     }
 
-    private static void shaped(ItemStack result, String[] shape, NbtApplier nbt, Object... ingredients) {
+    private static void shaped(ItemStack result, String[] shape, Object... ingredients) {
         ShapedRecipe recipe = new ShapedRecipe(result);
         recipe.shape(shape);
-
-        Map<Character, MaterialData> map = new HashMap<>();
 
         for (int i = 0; i < ingredients.length; i += 2) {
             char key = (Character) ingredients[i];
@@ -112,26 +97,11 @@ public class CustomRecipes {
             if (val instanceof Material) {
                 MaterialData md = new MaterialData((Material) val);
                 recipe.setIngredient(key, md);
-                map.put(key, md);
             } else if (val instanceof MaterialData) {
                 recipe.setIngredient(key, (MaterialData) val);
-                map.put(key, (MaterialData) val);
             }
         }
 
         Bukkit.addRecipe(recipe);
-        CUSTOM.add(new CustomRecipe(shape, map, nbt));
-    }
-
-    public static ItemStack matchAndApply(ItemStack[] matrix, ItemStack result) {
-        for (CustomRecipe r : CUSTOM) {
-            if (r.matches(matrix)) {
-                if (r.nbt != null) {
-                    return r.nbt.apply(result);
-                }
-                return result;
-            }
-        }
-        return result;
     }
 }
