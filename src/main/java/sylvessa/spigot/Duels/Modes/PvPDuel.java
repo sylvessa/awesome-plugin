@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import sylvessa.spigot.ChunkGenerators.Void;
@@ -159,7 +159,7 @@ public class PvPDuel extends DuelGame {
         }
     }
 
-    public void onDeath(Player p, EntityDeathEvent event) {
+    public void onDeath(Player p, PlayerDeathEvent event) {
         event.getDrops().clear();
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
@@ -189,7 +189,7 @@ public class PvPDuel extends DuelGame {
     }
 
     public boolean canPlace(Player p, BlockPlaceEvent e) {
-        return false;
+        return started;
     }
 
     public void onQuit(Player p) {

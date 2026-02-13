@@ -5,8 +5,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -58,7 +61,10 @@ public abstract class Minigame {
     public boolean canBreak(Player p, BlockBreakEvent e) { return false; }
     public boolean canPlace(Player p, BlockPlaceEvent e) { return false; }
     public void onChat(Player p, AsyncPlayerChatEvent e) {}
-    public void onDeath(Player p, EntityDeathEvent e) {}
+    public void onDeath(Player p, PlayerDeathEvent e) {}
+    public void onBowShoot(Player p, EntityShootBowEvent e) {}
+    public void onPlayerPickupArrow(Player p, PlayerPickupItemEvent event) {}
+    public void onBucketEmpty(Player p, PlayerBucketEmptyEvent event) {}
 
     public boolean isPlaying(Player p) {
         return players.contains(p);

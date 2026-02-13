@@ -1,9 +1,11 @@
 package sylvessa.spigot;
 
+import net.minecraft.server.v1_4_R1.NBTTagCompound;
+import net.minecraft.server.v1_4_R1.NBTTagList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -74,7 +76,7 @@ public class CustomRecipes {
         shoup.setItemMeta(meta);
 
         //shoup = ItemNBT.setInt(shoup, "unc", 166);
-        
+
         shaped(
                 shoup,
                 new String[] {
@@ -85,6 +87,20 @@ public class CustomRecipes {
                 'B', Material.BOWL,
                 'F', Material.FEATHER
         );
+    }
+
+    public static ItemStack addGlow(ItemStack item){
+        net.minecraft.server.v1_4_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag = null;
+        if (!nmsStack.hasTag()) {
+            tag = new NBTTagCompound();
+            nmsStack.setTag(tag);
+        }
+        if (tag == null) tag = nmsStack.getTag();
+        NBTTagList ench = new NBTTagList();
+        tag.set("ench", ench);
+        nmsStack.setTag(tag);
+        return CraftItemStack.asCraftMirror(nmsStack);
     }
 
     private static void shaped(ItemStack result, String[] shape, Object... ingredients) {

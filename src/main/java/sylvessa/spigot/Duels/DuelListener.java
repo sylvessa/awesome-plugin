@@ -5,11 +5,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class DuelListener implements Listener {
@@ -35,9 +34,8 @@ public class DuelListener implements Listener {
     }
 
     @EventHandler
-    public void onEntityDeath(EntityDeathEvent e) {
-        if (!(e.getEntity() instanceof Player)) return;
-        Player p = (Player) e.getEntity();
+    public void onEntityDeath(PlayerDeathEvent e) {
+        Player p = e.getEntity();
         DuelGame g = DuelManager.get(p);
         if (g != null) g.onDeath(p, e);
     }
@@ -66,5 +64,19 @@ public class DuelListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent e) {
         DuelGame g = DuelManager.get(e.getPlayer());
         if (g == null) return;
+    }
+
+    @EventHandler
+    public void onPlayerShootBow(EntityShootBowEvent e) {
+        if (!(e.getEntity() instanceof Player)) return;
+        Player p = (Player) e.getEntity();
+        DuelGame g = DuelManager.get(p);
+        if (g != null) g.onBowShoot(p, e);
+    }
+
+    @EventHandler
+    public void onPlayerPickupArrow(PlayerPickupItemEvent e) {
+        DuelGame g = DuelManager.get(e.getPlayer());
+        if (g != null) g.onPlayerPickupArrow(e.getPlayer(), e);
     }
 }

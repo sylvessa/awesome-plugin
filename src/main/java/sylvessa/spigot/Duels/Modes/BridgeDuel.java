@@ -7,15 +7,15 @@ import org.bukkit.craftbukkit.v1_4_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import sylvessa.spigot.ChunkGenerators.Void;
 import sylvessa.spigot.Duels.DuelGame;
 import sylvessa.spigot.Duels.DuelManager;
 import sylvessa.spigot.Duels.DuelType;
+import sylvessa.spigot.Log;
 import sylvessa.spigot.Main;
 import sylvessa.spigot.Util.CustomWorldLoader;
 import sylvessa.spigot.Util.DiscordWebhook;
@@ -238,7 +238,7 @@ public class BridgeDuel extends DuelGame {
     }
 
     @Override
-    public void onDeath(Player p, EntityDeathEvent event) {
+    public void onDeath(Player p, PlayerDeathEvent event) {
         event.getDrops().clear();
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
@@ -286,21 +286,25 @@ public class BridgeDuel extends DuelGame {
         cleanup();
     }
 
-//    public void onBowShoot(Player p) {
-//        Log.info("Player shot arrow");
-//        long now = System.currentTimeMillis();
-//        Long last = bowCooldown.get(p.getUniqueId());
-//
-//        if (last != null && now - last < 3500) return;
-//
-//        bowCooldown.put(p.getUniqueId(), now);
-//
-//        Bukkit.getScheduler().scheduleSyncDelayedTask(
-//                Main.getInstance(),
-//                () -> p.getInventory().setItem(8, new ItemStack(Material.ARROW, 1)),
-//                70L
-//        );
-//    }
+    public void onBowShoot(Player p, EntityShootBowEvent e) {
+        Log.info("Player shot arrow");
+        long now = System.currentTimeMillis();
+        Long last = bowCooldown.get(p.getUniqueId());
+
+        if (last != null && now - last < 3500) return;
+
+        bowCooldown.put(p.getUniqueId(), now);
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(
+                Main.getInstance(),
+                () -> p.getInventory().setItem(8, new ItemStack(Material.ARROW, 1)),
+                70L
+        );
+    }
+
+    public void onPlayerPickupArrow(Player p, PlayerPickupItemEvent event) {
+        event.setCancelled(true);
+    }
 
     public void onFoodLevelChange(Player p, FoodLevelChangeEvent event) { event.setCancelled(true); }
 
@@ -319,7 +323,7 @@ public class BridgeDuel extends DuelGame {
         byte woolData = team == Team.RED ? (byte)14 : (byte)11;
         for (int i = 3; i <= 5; i++) p.getInventory().setItem(i, new ItemStack(Material.WOOL, 64, woolData));
         p.getInventory().setItem(6, new ItemStack(Material.GOLDEN_APPLE, 8));
-        p.getInventory().setItem(8, new ItemStack(Material.ARROW, 64));
+        p.getInventory().setItem(8, new ItemStack(Material.ARROW, 1));
     }
 
     private void sendMessageAll(String msg) { p1.sendMessage(msg); p2.sendMessage(msg); }

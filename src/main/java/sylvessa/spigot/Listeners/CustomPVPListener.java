@@ -1,5 +1,6 @@
 package sylvessa.spigot.Listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Egg;
@@ -12,6 +13,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
+import sylvessa.spigot.Main;
+import sylvessa.spigot.UserConfig;
 
 public class CustomPVPListener implements Listener {
     @EventHandler
@@ -87,5 +90,41 @@ public class CustomPVPListener implements Listener {
         if (to.getY() >= -5) return;
 
         p.teleport(p.getWorld().getSpawnLocation());
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerHitByBow(EntityDamageByEntityEvent e) {
+        if (!(e.getEntity() instanceof Player)) return;
+        if (!(e.getDamager() instanceof org.bukkit.entity.Arrow)) return;
+
+        org.bukkit.entity.Arrow arrow = (org.bukkit.entity.Arrow) e.getDamager();
+        if (!(arrow.getShooter() instanceof Player)) return;
+
+        Player victim = (Player) e.getEntity();
+        Player attacker = (Player) arrow.getShooter();
+
+        if (victim.getGameMode() == GameMode.CREATIVE) return;
+
+        if (victim == attacker) return;
+
+        Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
+            if (!victim.isOnline()) return;
+
+            double health = Math.max(0, victim.getHealth());
+
+            Main plugin = Main.getInstance();
+            UserConfig uc = plugin.getUserConfig(victim.getName());
+
+            String playerColor = "f";
+            if (uc != null)
+                playerColor = uc.getString("color", "f");
+
+            attacker.sendMessage(
+                    "§" + playerColor + victim.getName()
+                            + "§7 is on §c"
+                            + String.format("%.1f", health)
+                            + "§7 HP"
+            );
+        });
     }
 }

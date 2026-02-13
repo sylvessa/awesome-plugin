@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import sylvessa.spigot.Main;
@@ -288,7 +288,7 @@ public class SkywarsMinigame extends Minigame {
         if(players.size() < minPlayers()) MinigameManager.end(this);
     }
 
-    public void onDeath(Player p, EntityDeathEvent e) {
+    public void onDeath(Player p, PlayerDeathEvent e) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
             ((CraftPlayer) p).getHandle().playerConnection.a(new Packet9Respawn());
             onPlayerDeath(p);

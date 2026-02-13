@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.util.Vector;
 import sylvessa.spigot.Main;
 import sylvessa.spigot.Minigames.Minigame;
@@ -344,6 +345,11 @@ public class GuessTheBuildMinigame extends Minigame {
                 || item == Material.WATER_BUCKET) return false;
 
         return true;
+    }
+
+    @Override
+    public void onBucketEmpty(Player p, PlayerBucketEmptyEvent event) {
+        event.setCancelled(true);
     }
 
     private boolean allBuiltTwice() {

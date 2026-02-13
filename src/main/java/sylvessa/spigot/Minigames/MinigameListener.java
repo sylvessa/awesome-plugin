@@ -5,13 +5,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.player.*;
 
 public class MinigameListener implements Listener {
 
@@ -41,9 +36,8 @@ public class MinigameListener implements Listener {
     }
 
     @EventHandler
-    public void onEntityDeath(EntityDeathEvent event) {
-        if (!(event.getEntity() instanceof Player)) return;
-        Player p = (Player) event.getEntity();
+    public void onEntityDeath(PlayerDeathEvent event) {
+        Player p = event.getEntity();
         Minigame g = MinigameManager.get(p);
         if (g != null) g.onDeath(p, event);
     }
@@ -83,6 +77,20 @@ public class MinigameListener implements Listener {
     @EventHandler
     public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
         Minigame g = MinigameManager.get(event.getPlayer());
-        if (g != null) event.setCancelled(true);
+        if (g != null) g.onBucketEmpty(event.getPlayer(), event);
+    }
+
+    @EventHandler
+    public void onPlayerPickupArrow(PlayerPickupItemEvent event) {
+        Minigame g = MinigameManager.get(event.getPlayer());
+        if (g != null) g.onPlayerPickupArrow(event.getPlayer(), event);
+    }
+
+    @EventHandler
+    public void onEntityShootBow(EntityShootBowEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        Player p = (Player) event.getEntity();
+        Minigame g = MinigameManager.get(p);
+        if (g != null) g.onBowShoot(p, event);
     }
 }

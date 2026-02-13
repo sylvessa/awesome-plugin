@@ -4,9 +4,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 
 @SuppressWarnings("EmptyMethod")
 public abstract class DuelGame {
@@ -29,9 +28,10 @@ public abstract class DuelGame {
     public abstract void onQuit(Player p);
     public abstract boolean canBreak(Player p, BlockBreakEvent e);
     public abstract boolean canPlace(Player p, BlockPlaceEvent e);
-    public void onBowShoot(Player p) {}
+    public void onBowShoot(Player p, EntityShootBowEvent e) {}
     public void onFoodLevelChange(Player p, FoodLevelChangeEvent event) {}
-    public void onDeath(Player p, EntityDeathEvent event) {}
+    public void onDeath(Player p, PlayerDeathEvent event) {}
+    public void onPlayerPickupArrow(Player p, PlayerPickupItemEvent event) {}
 
 
     public boolean isParticipant(Player p) {

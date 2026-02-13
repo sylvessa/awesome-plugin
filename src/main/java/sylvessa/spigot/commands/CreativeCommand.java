@@ -20,8 +20,6 @@ public class CreativeCommand implements PluginCommand {
     private static final String WORLD_NAME = "creative";
     private static final Map<String, SavedState> saved = new HashMap<>();
 
-    private World creativeWorld;
-
     public String name() {
         return "creative";
     }
@@ -40,7 +38,7 @@ public class CreativeCommand implements PluginCommand {
             return;
         }
 
-        creativeWorld = Bukkit.getWorld(WORLD_NAME);
+        World creativeWorld = Bukkit.getWorld(WORLD_NAME);
 
         if (creativeWorld == null) {
             WorldCreator wc = new WorldCreator(WORLD_NAME);
