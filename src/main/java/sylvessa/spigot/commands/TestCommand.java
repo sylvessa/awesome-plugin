@@ -1,11 +1,15 @@
 package sylvessa.spigot.commands;
 
+import net.minecraft.server.v1_4_R1.EntityPlayer;
 import net.minecraft.server.v1_4_R1.NBTTagCompound;
+import net.minecraft.server.v1_4_R1.Packet17EntityLocationAction;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_4_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -82,6 +86,18 @@ public class TestCommand implements PluginCommand {
 //            player.sendMessage("no unc");
 //        }
     }
+
+//    public void layDown(Player player, Block block) {
+//        player.setAllowFlight(true);
+//        player.setFlying(true);
+//        player.teleport(block.getLocation().add(0.5, 0.5, 0.5));
+//
+//        EntityPlayer entityPlayer = ((CraftPlayer)player).getHandle();
+//        Packet17EntityLocationAction packet = new Packet17EntityLocationAction(
+//                entityPlayer, 0, block.getX(), block.getY(), block.getZ()
+//        );
+//        entityPlayer.playerConnection.sendPacket(packet);
+//    }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {

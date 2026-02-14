@@ -1,23 +1,17 @@
 package sylvessa.spigot;
 
-import net.minecraft.server.v1_4_R1.NBTTagCompound;
-import net.minecraft.server.v1_4_R1.NBTTagList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftItemStack;
+import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 import sylvessa.spigot.Types.CustomRecipe;
-import sylvessa.spigot.Types.NbtApplier;
-import sylvessa.spigot.Util.ItemNBT;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CustomRecipes {
     private static final List<CustomRecipe> CUSTOM = new ArrayList<>();
@@ -87,20 +81,8 @@ public class CustomRecipes {
                 'B', Material.BOWL,
                 'F', Material.FEATHER
         );
-    }
 
-    public static ItemStack addGlow(ItemStack item){
-        net.minecraft.server.v1_4_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag = null;
-        if (!nmsStack.hasTag()) {
-            tag = new NBTTagCompound();
-            nmsStack.setTag(tag);
-        }
-        if (tag == null) tag = nmsStack.getTag();
-        NBTTagList ench = new NBTTagList();
-        tag.set("ench", ench);
-        nmsStack.setTag(tag);
-        return CraftItemStack.asCraftMirror(nmsStack);
+        furnace(Material.ROTTEN_FLESH, Material.LEATHER);
     }
 
     private static void shaped(ItemStack result, String[] shape, Object... ingredients) {
@@ -119,6 +101,24 @@ public class CustomRecipes {
             }
         }
 
+        Bukkit.addRecipe(recipe);
+    }
+
+
+    private static void furnace(ItemStack input, ItemStack output) {
+        furnace(input.getType(), output, input.getData().getData());
+    }
+
+    private static void furnace(Material input, Material output) {
+        furnace(input, new ItemStack(output), 0);
+    }
+
+    private static void furnace(Material input, Material output, int data) {
+        furnace(input, new ItemStack(output), data);
+    }
+
+    private static void furnace(Material input, ItemStack output, int data) {
+        FurnaceRecipe recipe = new FurnaceRecipe(output, input, data);
         Bukkit.addRecipe(recipe);
     }
 }

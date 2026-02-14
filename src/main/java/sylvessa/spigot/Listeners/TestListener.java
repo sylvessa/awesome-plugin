@@ -1,6 +1,21 @@
 package sylvessa.spigot.Listeners;
 
+import net.minecraft.server.v1_4_R1.EntityMinecart;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_4_R1.entity.CraftMinecart;
+import org.bukkit.entity.Minecart;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.util.Vector;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TestListener implements Listener {
 //    private final Map<String, Minecart> sitting = new HashMap<>();
@@ -22,9 +37,14 @@ public class TestListener implements Listener {
 //        Location l = b.getLocation().add(0.5, 0.0, 0.5);
 //
 //        Minecart cart = b.getWorld().spawn(l, Minecart.class);
+//
+//        EntityMinecart nms = ((CraftMinecart) cart).getHandle();
+//        nms.setInvisible(true);
+//
 //        cart.setDamage(0);
 //        cart.setMaxSpeed(0);
 //        cart.setPassenger(p);
+//        cart.setVelocity(new Vector(0, 0, 0));
 //
 //        sitting.put(p.getName(), cart);
 //    }
