@@ -1,9 +1,8 @@
 package sylvessa.spigot.Listeners;
 
-import net.minecraft.server.v1_4_R1.EntityMinecart;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_4_R1.entity.CraftMinecart;
+import org.bukkit.craftbukkit.v1_5_R3.entity.CraftMinecart;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

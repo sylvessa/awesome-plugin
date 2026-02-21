@@ -1,10 +1,10 @@
 package sylvessa.spigot.Duels.Modes;
 
-import net.minecraft.server.v1_4_R1.MobEffect;
-import net.minecraft.server.v1_4_R1.Packet41MobEffect;
-import net.minecraft.server.v1_4_R1.Packet42RemoveMobEffect;
+import net.minecraft.server.v1_5_R3.MobEffect;
+import net.minecraft.server.v1_5_R3.Packet41MobEffect;
+import net.minecraft.server.v1_5_R3.Packet42RemoveMobEffect;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_4_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
