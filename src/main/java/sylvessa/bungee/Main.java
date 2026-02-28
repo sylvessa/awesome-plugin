@@ -7,7 +7,7 @@ import sylvessa.bungee.Listeners.ServerKickListener;
 public class Main extends Plugin {
     @Override
     public void onEnable() {
-        BungeeCord.getInstance().getPluginManager().registerListener(new ServerKickListener());
+        BungeeCord.getInstance().getPluginManager().registerListener(this, new ServerKickListener());
         Log.info("Up!");
     }
 }
