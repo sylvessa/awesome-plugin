@@ -1,10 +1,10 @@
 package sylvessa.spigot.Minigames.Games;
 
-import net.minecraft.server.v1_6_R3.Packet9Respawn;
+import net.minecraft.server.v1_7_R4.Packet9Respawn;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
