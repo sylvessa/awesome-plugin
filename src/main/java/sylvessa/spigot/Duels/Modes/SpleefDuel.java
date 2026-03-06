@@ -1,8 +1,6 @@
 package sylvessa.spigot.Duels.Modes;
 
 import net.minecraft.server.v1_7_R4.MobEffect;
-import net.minecraft.server.v1_7_R4.Packet41MobEffect;
-import net.minecraft.server.v1_7_R4.Packet42RemoveMobEffect;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -11,6 +9,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import sylvessa.spigot.ChunkGenerators.Void;
 import sylvessa.spigot.Duels.DuelGame;
 import sylvessa.spigot.Duels.DuelManager;
@@ -115,11 +115,8 @@ public class SpleefDuel extends DuelGame {
         p2.setFoodLevel(20);
         p2.setSaturation(20);
 
-        Packet41MobEffect packet = new Packet41MobEffect(p1.getEntityId(), new MobEffect(3, 20*30, 2));
-        ((CraftPlayer)p1).getHandle().playerConnection.sendPacket(packet);
-
-        Packet41MobEffect packet2 = new Packet41MobEffect(p2.getEntityId(), new MobEffect(3, 20*30, 2));
-        ((CraftPlayer)p2).getHandle().playerConnection.sendPacket(packet2);
+        p1.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 20 * 30, 2));
+        p2.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 20 * 30, 2));
     }
 
     private void startCountdown() {
@@ -213,10 +210,8 @@ public class SpleefDuel extends DuelGame {
     public void onFoodLevelChange(Player p, FoodLevelChangeEvent event) { event.setCancelled(true); }
 
     private void cleanup() {
-        Packet42RemoveMobEffect packet = new Packet42RemoveMobEffect(p1.getEntityId(), new MobEffect(3, 0, 0));
-        ((CraftPlayer)p1).getHandle().playerConnection.sendPacket(packet);
-        Packet42RemoveMobEffect packet2 = new Packet42RemoveMobEffect(p2.getEntityId(), new MobEffect(3, 0, 0));
-        ((CraftPlayer)p2).getHandle().playerConnection.sendPacket(packet2);
+        p1.removePotionEffect(PotionEffectType.FAST_DIGGING);
+        p2.removePotionEffect(PotionEffectType.FAST_DIGGING);
 
         DuelManager.end(this);
     }

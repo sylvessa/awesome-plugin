@@ -1,6 +1,5 @@
 package sylvessa.spigot.Duels.Modes;
 
-import net.minecraft.server.v1_7_R4.Packet9Respawn;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
@@ -242,7 +241,7 @@ public class BridgeDuel extends DuelGame {
         event.getDrops().clear();
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
-            ((CraftPlayer) p).getHandle().playerConnection.a(new Packet9Respawn());
+            p.spigot().respawn();
         }, 2L);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {

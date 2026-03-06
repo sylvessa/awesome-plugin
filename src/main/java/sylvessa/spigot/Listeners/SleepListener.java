@@ -1,6 +1,5 @@
 package sylvessa.spigot.Listeners;
 
-import net.minecraft.server.v1_7_R4.Packet18ArmAnimation;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -127,11 +126,11 @@ public class SleepListener implements Listener {
         world.setTime(time + ticksToDay);
         world.setStorm(false);
 
-        for (Player p : world.getPlayers()) {
-            if (p.isSleeping()) {
-                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(new Packet18ArmAnimation(((CraftPlayer) p).getHandle(), 3));
-            }
-        }
+//        for (Player p : world.getPlayers()) {
+//            if (p.isSleeping()) {
+//                ((CraftPlayer) p).getHandle().a(true, true, true);
+//            }
+//        }
 
         Bukkit.broadcastMessage(ChatColor.GREEN + "Night skipped!");
     }

@@ -1,6 +1,5 @@
 package sylvessa.spigot.Duels.Modes;
 
-import net.minecraft.server.v1_7_R4.Packet9Respawn;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -163,7 +162,7 @@ public class PvPDuel extends DuelGame {
         event.getDrops().clear();
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
-            ((CraftPlayer) p).getHandle().playerConnection.a(new Packet9Respawn());
+            p.spigot().respawn();
 
             Player winner = p == p1 ? p2 : p1;
             finish(winner, p);

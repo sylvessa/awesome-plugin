@@ -1,6 +1,5 @@
 package sylvessa.spigot.Minigames.Games;
 
-import net.minecraft.server.v1_7_R4.Packet9Respawn;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -290,7 +289,7 @@ public class SkywarsMinigame extends Minigame {
 
     public void onDeath(Player p, PlayerDeathEvent e) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
-            ((CraftPlayer) p).getHandle().playerConnection.a(new Packet9Respawn());
+            p.spigot().respawn();
             onPlayerDeath(p);
         }, 2L);
     }
