@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'sylvessa'
-version '1.7.10'
+version '1.8.9'
 
 repositories {
     mavenCentral()
@@ -14,8 +14,8 @@ repositories {
 
 dependencies {
     implementation 'net.dv8tion:JDA:5.0.0-beta.23'
-    compileOnly files('dep/spigot-1.7.10.jar')
-    compileOnly files('dep/BungeeCord-1.7.10.jar')
+    compileOnly files('dep/spigot-1.8.8.jar')
+    compileOnly files('dep/BungeeCord.jar')
 }
 
 sourceSets {

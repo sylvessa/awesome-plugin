@@ -1,6 +1,6 @@
 name: SylvessaPlugin
 main: sylvessa.spigot.Main
-version: 1.7.10
+version: 1.8.9
 
 commands:
   testc:

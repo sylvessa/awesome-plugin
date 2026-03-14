@@ -1,7 +1,7 @@
 package sylvessa.spigot.commands;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import sylvessa.spigot.Types.PluginCommand;
 import org.bukkit.command.Command;

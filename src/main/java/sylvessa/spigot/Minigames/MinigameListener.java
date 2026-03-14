@@ -1,5 +1,6 @@
 package sylvessa.spigot.Minigames;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,6 +17,7 @@ public class MinigameListener implements Listener {
         Minigame g = MinigameManager.get(p);
         if (MinigameManager.isQueued(p)) event.setCancelled(true);
         if (g != null && !g.canBreak(p, event)) event.setCancelled(true);
+
     }
 
     @EventHandler

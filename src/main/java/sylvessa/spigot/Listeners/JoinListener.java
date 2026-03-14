@@ -23,6 +23,7 @@ public class JoinListener implements Listener {
         String name = player.getName();
         String key = name.toLowerCase();
 
+
         Main plugin = Main.getInstance();
 
         UserConfig uc = new UserConfig(player, plugin);

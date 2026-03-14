@@ -18,7 +18,7 @@ public class PlayerListCommand implements PluginCommand {
     }
 
     public void execute(CommandSender sender, Command cmd, String label, String[] args) {
-        Player[] players = Main.getInstance().getServer().getOnlinePlayers();
+        Player[] players = Main.getInstance().getServer().getOnlinePlayers().toArray(new Player[0]);
 
         sender.sendMessage("§eOnline Players (§f" + players.length + "§e):");
 

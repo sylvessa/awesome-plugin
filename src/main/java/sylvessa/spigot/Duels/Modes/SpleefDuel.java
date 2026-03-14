@@ -1,8 +1,8 @@
 package sylvessa.spigot.Duels.Modes;
 
-import net.minecraft.server.v1_7_R4.MobEffect;
+import net.minecraft.server.v1_8_R3.MobEffect;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
